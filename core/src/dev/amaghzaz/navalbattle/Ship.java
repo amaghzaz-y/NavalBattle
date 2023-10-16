@@ -37,7 +37,7 @@ public class Ship extends Sprite {
         if (direction == Direction.Horizontal) {
             this.rotation = 90.0F;
         }
-        this.texture = new Texture(Gdx.files.internal("Boats_color1/Boat_color1_1.png"));
+        this.texture = new Texture(Gdx.files.internal("Boats/Boat1_water_frame1.png"));
     }
 
     @Override
