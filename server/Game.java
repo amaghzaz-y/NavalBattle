@@ -47,7 +47,6 @@ public class Game {
                 if (position == 1) {
 
                 }
-
         }
     }
 }
