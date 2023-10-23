@@ -1,6 +1,7 @@
 package dev.amaghzaz.navalbattle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -27,42 +28,44 @@ public class Ship extends Sprite {
     private int hitpoints;
     private Vector2 position = new Vector2();
     private int id;
-    private Direction direction = Direction.Horizontal;
-    private Type type = Type.VerySmall;
+    private Direction direction;
+    private Type type;
     private Array<Vector2> collisionBox;
     private float rotation;
 
     public Ship(Type type, Direction direction, Vector2 position) {
         super();
-        stateTime = 0.0F;
+        this.stateTime = 0.0F;
         this.position = position;
         this.type = type;
-        this.direction = direction;
-        if (direction == Direction.Horizontal) {
-            this.rotation = 90.0F;
+        if(this.direction == Direction.Horizontal){
+            this.setRotation(90.0F);
         }
-        switch (type){
-            case VerySmall:
-                this.animation =  Assets.Ships.VerySmall();
-            case Small:
-                this.animation =  Assets.Ships.Small();
-            case Medium:
-                this.animation =  Assets.Ships.Medium();
-            case Big:
-                this.animation =  Assets.Ships.Big();
+        this.rotation = 30.0F;
+        if(type == Type.VerySmall){
+            this.animation = Assets.Ships.VerySmall();
         }
+        if(type == Type.Small){
+            this.animation = Assets.Ships.Small();
+        }
+        if(type == Type.Medium){
+            this.animation = Assets.Ships.Medium();
+        }
+        if(type == Type.Big){
+            this.animation = Assets.Ships.Big();
+        }
+        this.setPosition(this.position.x, this.position.y);
+        this.setColor(Color.RED);
     }
 
     @Override
     public void draw(Batch batch) {
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         Texture currentFrame = animation.getKeyFrame(stateTime, true);
-        this.setPosition(this.position.x, this.position.y);
-        this.setRotation(this.rotation);
         batch.draw(currentFrame, position.x, position.y);
     }
 
     public void dispose(){
-        
+
     }
 }
