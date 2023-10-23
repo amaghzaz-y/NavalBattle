@@ -24,7 +24,6 @@ public class Ship extends Sprite {
     }
     float stateTime;
     Animation<Texture> animation;
-    private final Texture texture;
     private int hitpoints;
     private Vector2 position = new Vector2();
     private int id;
@@ -52,7 +51,6 @@ public class Ship extends Sprite {
             case Big:
                 this.animation =  Assets.Ships.Big();
         }
-        this.texture = new Texture(Gdx.files.internal("Boats/Boat1_water_frame1.png"));
     }
 
     @Override
@@ -65,6 +63,6 @@ public class Ship extends Sprite {
     }
 
     public void dispose(){
-        texture.dispose();
+        
     }
 }
