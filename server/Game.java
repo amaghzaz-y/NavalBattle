@@ -26,7 +26,7 @@ public class Game {
         }
     }
 
-    /*
+/*
     // Pour montrer les plateaux de jeu (pour les programmeurs)
     private void printBoard(int[][] board) {
         int i, j;
@@ -37,16 +37,42 @@ public class Game {
             System.out.println();
         }
     }
-     */
+*/
 
     // x -> colonne / y -> ligne
+    // position 1 -> vertical / position 2 -> horizontal
     public void PlaceBoatBoard1 (int x, int y, int type, int position) {
+
+        private int i;
 
         switch (type) {
             case 1 :
-                if (position == 1) {
+                if (position == 1) for (i = 0; i < 5; i++) BoardPlayerOne [x] [y + i] = 1;
+                else if (position == 2) for (i = 0; i < 5; i++) BoardPlayerOne [x + i] [y] = 1;
+                break;
 
-                }
+            case 2 :
+                if (position == 1) for (i = 0; i < 4; i++) BoardPlayerOne [x] [y + i] = 2;
+                else if (position == 2) for (i = 0; i < 4; i++) BoardPlayerOne [x + i] [y] = 2;
+                break;
+
+            case 3 :
+                if (position == 1) for (i = 0; i < 3; i++) BoardPlayerOne [x] [y + i] = 3;
+                else if (position == 2) for (i = 0; i < 3; i++) BoardPlayerOne [x + i] [y] = 3;
+                break;
+
+            case 4 :
+                if (position == 1) for (i = 0; i < 3; i++) BoardPlayerOne [x] [y + i] = 4;
+                else if (position == 2) for (i = 0; i < 3; i++) BoardPlayerOne [x + i] [y] = 4;
+                break;
+
+            case 5 :
+                if (position == 1) for (i = 0; i < 2; i++) BoardPlayerOne [x] [y + i] = 5;
+                else if (position == 2) for (i = 0; i < 2; i++) BoardPlayerOne [x + i] [y] = 5;
+                break;
+
+            default :
+                System.exit (0);
         }
     }
 }
