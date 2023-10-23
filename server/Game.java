@@ -26,7 +26,7 @@ public class Game {
         }
     }
 
-    /*
+/*
     // Pour montrer les plateaux de jeu (pour les programmeurs)
     private void printBoard(int[][] board) {
         int i, j;
@@ -37,16 +37,223 @@ public class Game {
             System.out.println();
         }
     }
-     */
+*/
 
     // x -> colonne / y -> ligne
+    // position 1 -> vertical / position 2 -> horizontal
     public void PlaceBoatBoard1 (int x, int y, int type, int position) {
+
+        int i, resultat;
+
+        resultat = 0;
 
         switch (type) {
             case 1 :
                 if (position == 1) {
-
+                    if (y > 5) System.exit (0);
+                    else {
+                        for (i = 0; i < 5; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 5; i++) BoardPlayerOne[x][y + i] = 1;
+                        else System.exit (0);
+                    }
                 }
+                else if (position == 2) {
+                    if (x > 5) System.exit (0);
+                    else {
+                        for (i = 0; i < 5; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 5; i++) BoardPlayerOne[x + i][y] = 1;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 2 :
+                if (position == 1) {
+                    if (y > 6) System.exit (0);
+                    else {
+                        for (i = 0; i < 4; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 4; i++) BoardPlayerOne[x][y + i] = 2;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 6) System.exit (0);
+                    else {
+                        for (i = 0; i < 4; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 4; i++) BoardPlayerOne[x + i][y] = 2;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 3 :
+                if (position == 1) {
+                    if (y > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x][y + i] = 3;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x + i][y] = 3;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 4 :
+                if (position == 1) {
+                    if (y > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x][y + i] = 4;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x + i][y] = 4;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 5 :
+                if (position == 1) {
+                    if (y > 8) System.exit (0);
+                    else {
+                        for (i = 0; i < 2; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 2; i++) BoardPlayerOne[x][y + i] = 5;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 8) System.exit (0);
+                    else {
+                        for (i = 0; i < 2; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 2; i++) BoardPlayerOne[x + i][y] = 5;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            default :
+                System.exit (0);
         }
     }
+
+    public void PlaceBoatBoard2 (int x, int y, int type, int position) {
+
+        int i, resultat;
+
+        resultat = 0;
+
+        switch (type) {
+            case 1 :
+                if (position == 1) {
+                    if (y > 5) System.exit (0);
+                    else {
+                        for (i = 0; i < 5; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 5; i++) BoardPlayerOne[x][y + i] = 1;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 5) System.exit (0);
+                    else {
+                        for (i = 0; i < 5; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 5; i++) BoardPlayerOne[x + i][y] = 1;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 2 :
+                if (position == 1) {
+                    if (y > 6) System.exit (0);
+                    else {
+                        for (i = 0; i < 4; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 4; i++) BoardPlayerOne[x][y + i] = 2;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 6) System.exit (0);
+                    else {
+                        for (i = 0; i < 4; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 4; i++) BoardPlayerOne[x + i][y] = 2;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 3 :
+                if (position == 1) {
+                    if (y > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x][y + i] = 3;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x + i][y] = 3;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 4 :
+                if (position == 1) {
+                    if (y > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x][y + i] = 4;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 7) System.exit (0);
+                    else {
+                        for (i = 0; i < 3; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 3; i++) BoardPlayerOne[x + i][y] = 4;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            case 5 :
+                if (position == 1) {
+                    if (y > 8) System.exit (0);
+                    else {
+                        for (i = 0; i < 2; i++) resultat = BoardPlayerOne[x][y + i];
+                        if (resultat == 0) for (i = 0; i < 2; i++) BoardPlayerOne[x][y + i] = 5;
+                        else System.exit (0);
+                    }
+                }
+                else if (position == 2) {
+                    if (x > 8) System.exit (0);
+                    else {
+                        for (i = 0; i < 2; i++) resultat = BoardPlayerOne[x + i][y];
+                        if (resultat == 0) for (i = 0; i < 2; i++) BoardPlayerOne[x + i][y] = 5;
+                        else System.exit (0);
+                    }
+                }
+                break;
+
+            default :
+                System.exit (0);
+        }
+    }
+
+
 }
