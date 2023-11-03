@@ -1,7 +1,0 @@
-type - Nom - Nb cases
-
-1 - Porte-Avion - 5
-2 - Croiseur    - 4
-3 - Contre Torpilleur - 3
-4 - Contre Torpilleur - 3
-5 - Torpilleur - 2

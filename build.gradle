@@ -42,6 +42,7 @@ project(":client") {
     
     dependencies {
         implementation project(":core")
+        implementation project(":common")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
@@ -53,6 +54,24 @@ project(":client") {
 
 
 project(":core") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        implementation project(":common")
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        
+    }
+}
+
+
+project(":common") {
     apply plugin: "java-library"
 
 
