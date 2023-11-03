@@ -2,7 +2,7 @@ sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
-project.ext.mainClassName = "dev.amaghzaz.navalbattle.DesktopLauncher"
+project.ext.mainClassName = "DesktopLauncher"
 project.ext.assetsDir = new File("../assets")
 
 import org.gradle.internal.os.OperatingSystem
@@ -46,4 +46,4 @@ tasks.register('dist', Jar) {
 
 dist.dependsOn classes
 
-eclipse.project.name = appName + "-desktop"
+eclipse.project.name = appName + "-3"

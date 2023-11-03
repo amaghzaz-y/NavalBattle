@@ -1,4 +1,3 @@
-package dev.amaghzaz.navalbattle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-
 
 public class Ship extends Sprite {
 
@@ -23,6 +21,7 @@ public class Ship extends Sprite {
         Medium,
         Big
     }
+
     float stateTime;
     Animation<Texture> animation;
     private int hitpoints;
@@ -38,20 +37,20 @@ public class Ship extends Sprite {
         this.stateTime = 0.0F;
         this.position = position;
         this.type = type;
-        if(this.direction == Direction.Horizontal){
+        if (this.direction == Direction.Horizontal) {
             this.setRotation(90.0F);
         }
         this.rotation = 30.0F;
-        if(type == Type.VerySmall){
+        if (type == Type.VerySmall) {
             this.animation = Assets.Ships.VerySmall();
         }
-        if(type == Type.Small){
+        if (type == Type.Small) {
             this.animation = Assets.Ships.Small();
         }
-        if(type == Type.Medium){
+        if (type == Type.Medium) {
             this.animation = Assets.Ships.Medium();
         }
-        if(type == Type.Big){
+        if (type == Type.Big) {
             this.animation = Assets.Ships.Big();
         }
         this.setPosition(this.position.x, this.position.y);
@@ -65,7 +64,7 @@ public class Ship extends Sprite {
         batch.draw(currentFrame, position.x, position.y);
     }
 
-    public void dispose(){
+    public void dispose() {
 
     }
 }
