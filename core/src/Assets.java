@@ -2,8 +2,6 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.utils.Array;
-import org.w3c.dom.Text;
 
 public class Assets {
     public static final float FRAME_DURATION = 0.1f;

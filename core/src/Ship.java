@@ -1,4 +1,3 @@
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,13 +23,13 @@ public class Ship extends Sprite {
 
     float stateTime;
     Animation<Texture> animation;
-    private int hitpoints;
-    private Vector2 position = new Vector2();
-    private int id;
-    private Direction direction;
-    private Type type;
-    private Array<Vector2> collisionBox;
-    private float rotation;
+    public int hitpoints;
+    public Vector2 position = new Vector2();
+    public int id;
+    public Direction direction;
+    public Type type;
+    public Array<Vector2> collisionBox;
+    public float rotation;
 
     public Ship(Type type, Direction direction, Vector2 position) {
         super();
