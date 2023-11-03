@@ -106,6 +106,11 @@ public class ShipBase {
         return false;
     }
 
+    public boolean isIntersectWithShip(ShipBase other) {
+        // TODO!
+        return false;
+    }
+
     public boolean isSunk() {
         if (health <= 0) {
             return true;
