@@ -1,9 +1,11 @@
 ## Java
-
+build
 *.class
 *.war
 *.ear
 hs_err_pid*
+
+gradle/wrapper
 
 ## Robovm
 /ios/robovm-build/
