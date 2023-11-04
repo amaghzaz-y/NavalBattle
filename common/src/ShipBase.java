@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -34,6 +31,17 @@ public class ShipBase {
         this.type = type;
         this.size = getSize();
         this.health = size;
+        for (int i = 0; i < size; i++) {
+            switch (direction) {
+                case Vertical:
+                    hitpoints.add(position.add(0, i));
+                    break;
+
+                case Horizontal:
+                    hitpoints.add(position.add(i, 0));
+                    break;
+            }
+        }
     }
 
     public int getId() {
@@ -108,42 +116,15 @@ public class ShipBase {
         return false;
     }
 
-    public Array<Vector2> getBoundingBox() {
-        var array = new Array<Vector2>();
-        // head position
-        array.add(position);
-        // tail position
-        switch (direction) {
-            case Vertical:
-                array.add(position.add(0, -size));
-                break;
-            case Horizontal:
-                array.add(position.add(size, 0));
-                break;
-        }
-        return array;
-    }
-
-    public Set<Vector2> usedCells() {
-        Set<Vector2> cells = new HashSet<>();
-        for (int i = 0; i < size; i++) {
-            switch (direction) {
-                case Vertical:
-                    cells.add(position.add(0, i));
-                    break;
-
-                case Horizontal:
-                    cells.add(position.add(i, 0));
-                    break;
+    public boolean isCollision(ShipBase other) {
+        for (Vector2 selfcell : hitpoints) {
+            for (Vector2 othercell : other.getHitpoints()) {
+                if (selfcell.equals(othercell)) {
+                    return true;
+                }
             }
         }
-        return cells;
-    }
-
-    public boolean isCollision(ShipBase other) {
-        var usedcells = usedCells();
-        usedcells.retainAll(other.usedCells());
-        return !usedcells.isEmpty();
+        return false;
     }
 
     public boolean isSunk() {
