@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -18,13 +21,12 @@ public class ShipBase {
     private int id;
     private int size;
     private int health; // mutable size that represents health
-    private Vector2 position; // in board cases
+    private Vector2 position; // head of the boat, top to bottom, pos in board cases
     private Array<Vector2> hitpoints; // hull of the boat
     private Array<Vector2> sunkParts; // parts of the ship that are destroyed
 
     private Direction direction;
     private Type type;
-    public Vector2 canvasPosition; // in pixels
 
     ShipBase(Vector2 position, Direction directon, Type type) {
         this.position = position;
@@ -106,9 +108,42 @@ public class ShipBase {
         return false;
     }
 
-    public boolean isIntersectWithShip(ShipBase other) {
-        // TODO!
-        return false;
+    public Array<Vector2> getBoundingBox() {
+        var array = new Array<Vector2>();
+        // head position
+        array.add(position);
+        // tail position
+        switch (direction) {
+            case Vertical:
+                array.add(position.add(0, -size));
+                break;
+            case Horizontal:
+                array.add(position.add(size, 0));
+                break;
+        }
+        return array;
+    }
+
+    public Set<Vector2> usedCells() {
+        Set<Vector2> cells = new HashSet<>();
+        for (int i = 0; i < size; i++) {
+            switch (direction) {
+                case Vertical:
+                    cells.add(position.add(0, i));
+                    break;
+
+                case Horizontal:
+                    cells.add(position.add(i, 0));
+                    break;
+            }
+        }
+        return cells;
+    }
+
+    public boolean isCollision(ShipBase other) {
+        var usedcells = usedCells();
+        usedcells.retainAll(other.usedCells());
+        return !usedcells.isEmpty();
     }
 
     public boolean isSunk() {
