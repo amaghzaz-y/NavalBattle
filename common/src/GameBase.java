@@ -1,8 +1,5 @@
 import java.util.HashMap;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-
 public class GameBase {
 	public int GameId;
 	public static final int missileImpactArea = 20;
@@ -17,27 +14,24 @@ public class GameBase {
 	}
 
 	public boolean AddShipToPlayer(String playerName, ShipBase ship) {
-		// TODO!
-		// NOT FULLY IMPLEMENTED
-
-		if (!players.containsKey(playerName)) {
+		if (!players.containsKey(playerName))
 			return false;
-		}
 		var player = players.get(playerName);
+		if (!isPositionAvailable(ship))
+			return false;
 		player.addShip(ship);
 		players.put(playerName, player);
 		return true;
 	}
 
 	public boolean isPositionAvailable(ShipBase ship) {
-		// TODO!
-		// NOT FULLY IMPLEMENTED
-		players.values().forEach(player -> {
-			player.getShips().forEach(playerShip -> {
-				var pos = playerShip.getPosition();
-				// TODO!
-			});
-		});
-		return false;
+		for (PlayerBase player : players.values()) {
+			for (ShipBase otherShip : player.getShips()) {
+				if (ship.isCollision(otherShip)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
