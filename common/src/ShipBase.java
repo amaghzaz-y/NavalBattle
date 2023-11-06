@@ -15,15 +15,15 @@ public class ShipBase {
         Big // size 5
     }
 
-    private int id;
-    private int size;
-    private int health; // mutable size that represents health
-    private Vector2 position; // head of the boat, top to bottom, pos in board cases
-    private Array<Vector2> hitpoints; // hull of the boat
-    private Array<Vector2> sunkParts; // parts of the ship that are destroyed
+    public int id = 0;
+    public int size = 0;
+    public int health = 0; // mutable size that represents health
+    public Vector2 position = new Vector2(0, 0); // head of the boat, top to bottom, pos in board cases
+    public Array<Vector2> hitpoints = new Array<>(); // hull of the boat
+    public Array<Vector2> sunkParts = new Array<>(); // parts of the ship that are destroyed
 
-    private Direction direction;
-    private Type type;
+    public Direction direction = Direction.Horizontal;
+    public Type type = Type.VerySmall;
 
     ShipBase(Vector2 position, Direction directon, Type type) {
         this.position = position;
@@ -31,6 +31,7 @@ public class ShipBase {
         this.type = type;
         this.size = getSize();
         this.health = size;
+
         for (int i = 0; i < size; i++) {
             switch (direction) {
                 case Vertical:
@@ -97,7 +98,7 @@ public class ShipBase {
         return health;
     }
 
-    public boolean isHit(Vector2 missile) {
+    public boolean computeHitCheck(Vector2 missile) {
         // we ignore the hit if the part is already destoryed
         for (Vector2 sunkpart : sunkParts) {
             if (sunkpart.equals(missile)) {

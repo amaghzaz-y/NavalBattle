@@ -5,7 +5,6 @@ public class Game {
 
     // Hidden board for attack
     int[][] BoardAttackPlayerOne = new int [10][10];
-
     // Board with the boats of Player 2
     int[][] BoardPlayerTwo = new int [10][10];
 
@@ -15,7 +14,6 @@ public class Game {
     // Pour tout initialiser
     private void initializeBoards() {
         int i, j;
-
         for (i = 0; i < 10; i++) {
             for (j = 0; j < 10; j++) {
                 BoardPlayerOne[j][i] = 0;
@@ -123,7 +121,7 @@ public class Game {
                     }
                 }
                 break;
-
+            
             case 5 :
                 if (position == 1) {
                     if (y > 8) System.exit (0);
