@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-public class Ship extends Sprite {
-	private ShipBase base;
+public class Ship extends ShipBase {
 	float stateTime;
 	Animation<Texture> animation;
+	Sprite sprite;
 
-	public Ship(Vector2 position, ShipBase.Direction direction, ShipBase.Type type) {
-		super();
-		this.base = new ShipBase(position, direction, type);
+	public Ship(Vector2 position, Direction direction, Type type) {
+		super(position, direction, type);
 		switch (type) {
 			case VerySmall:
 				this.animation = Assets.Ships.VerySmall();
@@ -27,14 +26,20 @@ public class Ship extends Sprite {
 				this.animation = Assets.Ships.Big();
 				break;
 		}
-		this.stateTime = 0.0F;
+		Texture currentFrame = animation.getKeyFrames()[0];
+		sprite = new Sprite(currentFrame);
+		sprite.setPosition(position.x, position.y);
+		stateTime = 0.0F;
+		if (direction == Direction.Horizontal)
+			sprite.rotate90(true);
+
 	}
 
-	@Override
 	public void draw(Batch batch) {
 		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 		Texture currentFrame = animation.getKeyFrame(stateTime, true);
-		batch.draw(currentFrame, base.getPosition().x, base.getPosition().y);
+		sprite.setTexture(currentFrame);
+		sprite.draw(batch);
 	}
 
 	public void dispose() {

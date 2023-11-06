@@ -18,7 +18,7 @@ public class NavalBattle extends ApplicationAdapter {
 		ships.add(new Ship(new Vector2(300, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
 		ships.add(new Ship(new Vector2(400, 50), ShipBase.Direction.Vertical,
 				ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(300, 250), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(300, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 
 		ships.add(new Ship(new Vector2(400, 250), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		bounds = new Bounds();
@@ -35,7 +35,7 @@ public class NavalBattle extends ApplicationAdapter {
 			ships.get(i).draw(batch);
 		}
 		batch.end();
-		bounds.render(shapeRenderer);
+		bounds.draw(shapeRenderer);
 	}
 
 	@Override

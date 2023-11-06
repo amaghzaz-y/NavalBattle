@@ -3,7 +3,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Bounds {
-	public void render(ShapeRenderer renderer) {
+	public void draw(ShapeRenderer renderer) {
 		var width = 960;
 		var height = 520;
 		var cellSize = 40; // 10, 12, 20, 40, 30... are possible
