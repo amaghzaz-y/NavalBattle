@@ -9,7 +9,7 @@ public class NavalBattle extends ApplicationAdapter {
 	SpriteBatch batch;
 	Array<Ship> ships = new Array<>();
 	Sea sea;
-	Cells cells;
+	Bounds bounds;
 	ShapeRenderer shapeRenderer;
 
 	@Override
@@ -21,8 +21,7 @@ public class NavalBattle extends ApplicationAdapter {
 		ships.add(new Ship(new Vector2(300, 250), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
 
 		ships.add(new Ship(new Vector2(400, 250), ShipBase.Direction.Vertical, ShipBase.Type.Big));
-
-		cells = new Cells();
+		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
 	}
@@ -36,7 +35,7 @@ public class NavalBattle extends ApplicationAdapter {
 			ships.get(i).draw(batch);
 		}
 		batch.end();
-		cells.render(shapeRenderer);
+		bounds.render(shapeRenderer);
 	}
 
 	@Override
