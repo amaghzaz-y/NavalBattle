@@ -11,6 +11,7 @@ public class NavalBattle extends ApplicationAdapter {
 	Sea sea;
 	Bounds bounds;
 	ShapeRenderer shapeRenderer;
+	MainScene scene;
 
 	@Override
 	public void create() {
@@ -24,6 +25,13 @@ public class NavalBattle extends ApplicationAdapter {
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
+		bounds.addShapeRenderer(shapeRenderer);
+		for (Ship ship : ships) {
+			ship.addShapeRenderer(shapeRenderer);
+		}
+		scene = new MainScene();
+		scene.create();
+
 	}
 
 	@Override
@@ -31,11 +39,15 @@ public class NavalBattle extends ApplicationAdapter {
 		batch.begin();
 		ScreenUtils.clear(0, 0, 1, 1);
 		sea.draw(batch);
-		for (int i = 0; i < ships.size; i++) {
-			ships.get(i).draw(batch);
+		for (Ship ship : ships) {
+			ship.draw(batch);
 		}
 		batch.end();
-		bounds.draw(shapeRenderer);
+		bounds.draw();
+		for (Ship ship : ships) {
+			ship.boundingBox(true);
+		}
+		scene.render();
 	}
 
 	@Override

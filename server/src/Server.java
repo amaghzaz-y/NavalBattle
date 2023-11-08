@@ -1,17 +1,16 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import com.badlogic.gdx.utils.Array;
 
 public class Server {
 	private static final int PORT = 6969;
-	private HashMap<String, ObjectOutputStream> messenger;
-	private Array<Client> clients = new Array<>();
+	public HashMap<String, PrintWriter> messenger;
 
-	public static void main(String[] args) throws Exception {
+	public Server() throws Exception {
 		ServerSocket listener = new ServerSocket(PORT);
 		try {
 			while (true) {
@@ -26,38 +25,53 @@ public class Server {
 
 	private static class ClientHandler extends Thread {
 		private Socket socket;
-		private ObjectInputStream input;
-		private ObjectOutputStream output;
+		private BufferedReader reader;
+		private PrintWriter writer;
 
 		public ClientHandler(Socket socket) throws IOException {
 			this.socket = socket;
-			var istream = socket.getInputStream();
-			var ossteam = socket.getOutputStream();
-			this.input = new ObjectInputStream(istream);
-			this.output = new ObjectOutputStream(ossteam);
 		}
 
 		@Override
 		public void run() {
-			// try {
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-
-		}
-
-		private void send(String msg) throws IOException {
-			this.output.writeUTF(msg);
-			this.output.flush();
-		}
-
-		private void receive(String msg) throws IOException {
-			while (true) {
-				var incoming = this.input.readUTF();
-				if (incoming.isEmpty() || incoming.isBlank())
-					continue;
-				// TODO! Add Message Handler
+			try {
+				var input = socket.getInputStream();
+				reader = new BufferedReader(new InputStreamReader(input));
+				var outputStream = socket.getOutputStream();
+				writer = new PrintWriter(outputStream);
+				handleInput();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+		}
+
+		private void send(String msg) {
+			writer.println(msg);
+			writer.flush();
+		}
+
+		// handle socket read
+		private String read() throws IOException {
+			String line = reader.readLine();
+			return line;
+		}
+
+		private void handleInput() throws IOException {
+			// username is the first thing to say
+			String username = "";
+			while (username.isEmpty()) {
+				var x = read();
+				if (x.startsWith("username:")) {
+					username = x.replace("username:", "");
+				}
+			}
+			while (socket.isConnected()) {
+				var line = read();
+				System.out.println("Client " + username + ":" + line);
+				send(line);
+				// TODO! handler client
+			}
+			socket.close();
 		}
 	}
 }
