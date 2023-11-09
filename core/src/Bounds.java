@@ -16,8 +16,8 @@ public class Bounds {
 		renderer.setColor(Color.BLACK);
 		renderer.setAutoShapeType(true);
 		renderer.begin(ShapeType.Line);
-		for (int i = 0; i < width; i += cellSize) {
-			for (int e = 0; e < height; e += cellSize) {
+		for (int i = 0; i < 640; i += cellSize) {
+			for (int e = 0; e < height - 80; e += cellSize) {
 				renderer.rect(i, e, cellSize, cellSize);
 			}
 		}

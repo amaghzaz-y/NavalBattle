@@ -7,6 +7,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(30);
 		config.setWindowedMode(960, 520);
 		config.setTitle("Naval Battle 2D - By AMAGHZAZ and LEON");
+		config.setResizable(false);
 		new Lwjgl3Application(new NavalBattle(), config);
 	}
 }

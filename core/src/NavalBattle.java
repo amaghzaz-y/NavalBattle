@@ -30,7 +30,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		ships.add(new Ship(new Vector2(150, 60), ShipBase.Direction.Horizontal,
 
 				ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(20, 370), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(20, 20), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
 		ships.add(new Ship(new Vector2(150, 350), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		bounds = new Bounds();
 		sea = new Sea();
@@ -47,13 +47,16 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render() {
+		// for Sprite Batch : Textures
 		batch.begin();
 		ScreenUtils.clear(0, 0, 1, 1);
 		sea.draw(batch);
 		for (Ship ship : ships) {
 			ship.draw(batch);
 		}
+		gui.drawFont(batch);
 		batch.end();
+		// for ShapeRenderer
 		bounds.draw();
 		gui.draw();
 		for (Ship ship : ships) {
@@ -69,7 +72,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		System.out.println(screenX + ":" + screenY + ":" + pointer + ":" + button);
 		for (Ship ship : ships) {
 			ship.handleClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
 		}
