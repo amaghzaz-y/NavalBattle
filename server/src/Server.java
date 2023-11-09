@@ -11,16 +11,16 @@ public class Server {
 	public static HashMap<String, PrintWriter> messenger;
 
 	public Server() throws Exception {
-		ServerSocket listener = new ServerSocket(PORT);
+		ServerSocket serverSocket = new ServerSocket(PORT);
 		messenger = new HashMap<>();
 		try {
 			while (true) {
-				new ClientHandler(listener.accept()).start();
+				new ClientHandler(serverSocket.accept()).start();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			listener.close();
+			serverSocket.close();
 		}
 	}
 

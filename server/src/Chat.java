@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class Chat {
 	private Set<String> clients;
-	private HashMap<String, Vector<String>> messages; // client username name as key
+	private HashMap<String, Vector<String>> messages; // client username's as keys -> messages
 
 	public Chat() {
 		clients = new HashSet<>();

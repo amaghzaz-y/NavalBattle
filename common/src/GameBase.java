@@ -3,9 +3,9 @@ import java.util.HashMap;
 public class GameBase {
 	public int GameId;
 	public static final int missileImpactArea = 20;
-	public static final int boardWidth = 720;
-	public static final int boardHeight = 720;
-	public static final int cellSize = 20;
+	public static final int boardWidth = 960;
+	public static final int boardHeight = 520;
+	public static final int cellSize = 40;
 	public HashMap<String, PlayerBase> players;
 
 	public GameBase(PlayerBase firstPlayer, PlayerBase secondPlayer) {
