@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Server {
-	private static final int PORT = 6969;
+	private static final int PORT = 6700;
 	public static HashMap<String, PrintWriter> messenger;
 
 	public Server() throws Exception {

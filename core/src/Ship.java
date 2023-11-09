@@ -68,8 +68,4 @@ public class Ship extends ShipBase {
 		sprite.setTexture(currentFrame);
 		sprite.draw(batch);
 	}
-
-	public void dispose() {
-
-	}
 }
