@@ -10,7 +10,6 @@ public class Bounds {
 	}
 
 	public void draw() {
-		var width = 960;
 		var height = 520;
 		var cellSize = 40; // 10, 12, 20, 40, 30... are possible
 		renderer.setColor(Color.BLACK);
