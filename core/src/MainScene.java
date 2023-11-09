@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainScene extends Group {
 	public Array<Actor> actors;
@@ -29,12 +28,7 @@ public class MainScene extends Group {
 		// Add widgets to the table here.
 	}
 
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-
 	public void render() {
-		ScreenUtils.clear(0, 0, 0, 1);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}

@@ -8,10 +8,11 @@ import java.util.HashMap;
 
 public class Server {
 	private static final int PORT = 6969;
-	public HashMap<String, PrintWriter> messenger;
+	public static HashMap<String, PrintWriter> messenger;
 
 	public Server() throws Exception {
 		ServerSocket listener = new ServerSocket(PORT);
+		messenger = new HashMap<>();
 		try {
 			while (true) {
 				new ClientHandler(listener.accept()).start();
@@ -45,11 +46,6 @@ public class Server {
 			}
 		}
 
-		private void send(String msg) {
-			writer.println(msg);
-			writer.flush();
-		}
-
 		// handle socket read
 		private String read() throws IOException {
 			String line = reader.readLine();
@@ -57,21 +53,38 @@ public class Server {
 		}
 
 		private void handleInput() throws IOException {
-			// username is the first thing to say
-			String username = "";
-			while (username.isEmpty()) {
-				var x = read();
-				if (x.startsWith("username:")) {
-					username = x.replace("username:", "");
+			try {
+				// username is the first thing to say
+				String username = "";
+				while (username.isEmpty()) {
+					var x = read();
+					if (x.startsWith("username:")) {
+						username = x.replace("username:", "");
+					}
 				}
+				messenger.put(username, writer);
+				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
+					var line = read();
+					String recipient = "";
+					while (recipient.isEmpty()) {
+						var x = read();
+						if (x.startsWith("to:")) {
+							recipient = x.replace("to:", "");
+						}
+					}
+					System.out.println("Client " + username + ":" + line);
+					var pipe = messenger.get(recipient);
+					pipe.println("from: " + username + " - message: " + line);
+					pipe.flush();
+					messenger.put(recipient, pipe);
+					// TODO! handler client - Game Logic
+				}
+
+			} catch (Exception e) {
+				reader.close();
+				writer.close();
+				socket.close();
 			}
-			while (socket.isConnected()) {
-				var line = read();
-				System.out.println("Client " + username + ":" + line);
-				send(line);
-				// TODO! handler client
-			}
-			socket.close();
 		}
 	}
 }
