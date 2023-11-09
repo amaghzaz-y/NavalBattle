@@ -30,7 +30,7 @@ public class Gui {
 	}
 
 	public void drawFont(Batch batch) {
-		font.draw(batch, "Naval Battle 2.0", 670, 480);
+		font.draw(batch, "Naval Battle 2D", 670, 480);
 		font.draw(batch, "Score : 0", 670, 440);
 		// chat
 		font.draw(batch, "Chat :", 670, 380);
