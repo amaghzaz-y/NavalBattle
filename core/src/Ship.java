@@ -18,6 +18,7 @@ public class Ship extends ShipBase {
 
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
+
 		switch (type) {
 			case VerySmall:
 				this.animation = Assets.Ships.VerySmall();

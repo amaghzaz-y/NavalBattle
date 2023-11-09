@@ -12,18 +12,26 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Array<Ship> ships = new Array<>();
 	Sea sea;
 	Bounds bounds;
+	Gui gui;
 	ShapeRenderer shapeRenderer;
 
 	@Override
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		ships.add(new Ship(new Vector2(300, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(400, 50), ShipBase.Direction.Vertical,
+		// 1
+		ships.add(new Ship(new Vector2(350, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		ships.add(new Ship(new Vector2(500, 50), ShipBase.Direction.Vertical,
 				ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(300, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(350, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(550, 250), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+		// 2
+		ships.add(new Ship(new Vector2(50, 200), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		ships.add(new Ship(new Vector2(150, 60), ShipBase.Direction.Horizontal,
 
-		ships.add(new Ship(new Vector2(400, 250), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+				ShipBase.Type.Small));
+		ships.add(new Ship(new Vector2(20, 370), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(150, 350), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
@@ -31,6 +39,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		for (Ship ship : ships) {
 			ship.addShapeRenderer(shapeRenderer);
 		}
+		gui = new Gui();
+		gui.addShapeRenderer(shapeRenderer);
 		// scene = new MainScene();
 		// scene.create();
 	}
@@ -45,6 +55,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		}
 		batch.end();
 		bounds.draw();
+		gui.draw();
 		for (Ship ship : ships) {
 			ship.drawBoundingBox();
 		}
