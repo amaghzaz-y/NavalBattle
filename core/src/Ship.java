@@ -44,23 +44,16 @@ public class Ship extends ShipBase {
 		this.renderer = renderer;
 	}
 
-	public boolean contains(float x, float y) {
-		return sprite.getX() <= x && sprite.getX() + sprite.getWidth() >= x && sprite.getY() <= y
-				&& sprite.getY() + sprite.getHeight() >= y;
-	}
-
 	public void handleClick(Vector2 mouse) {
-		System.out.println(sprite.getBoundingRectangle().x + " : " + sprite.getBoundingRectangle().y);
-		if (sprite.getBoundingRectangle().contains(mouse)) {
+		if (sprite.getBoundingRectangle().contains(mouse.x, mouse.y)) {
 			bboxState = true;
-			System.out.println("Ship got clicked");
 		} else {
 			bboxState = false;
 		}
 	}
 
-	public void drawBoundingBox(boolean state) {
-		if (state) {
+	public void drawBoundingBox() {
+		if (bboxState) {
 			Rectangle rec = sprite.getBoundingRectangle();
 			renderer.begin(ShapeType.Line);
 			renderer.setColor(Color.RED);
@@ -74,8 +67,6 @@ public class Ship extends ShipBase {
 		Texture currentFrame = animation.getKeyFrame(stateTime, true);
 		sprite.setTexture(currentFrame);
 		sprite.draw(batch);
-		drawBoundingBox(bboxState);
-		// actor.draw(batch, 0.5f);
 	}
 
 	public void dispose() {

@@ -47,9 +47,9 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		}
 		batch.end();
 		bounds.draw();
-		// for (Ship ship : ships) {
-		// ship.set(false);
-		// }
+		for (Ship ship : ships) {
+			ship.drawBoundingBox();
+		}
 		// scene.render();
 	}
 
@@ -62,7 +62,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		System.out.println(screenX + ":" + screenY + ":" + pointer + ":" + button);
 		for (Ship ship : ships) {
-			ship.handleClick(new Vector2(screenX, screenY));
+			ship.handleClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
 		}
 		return true;
 	}
