@@ -35,6 +35,10 @@ public class Ship extends ShipBase {
 		this.renderer = renderer;
 	}
 
+	public int touches() {
+		return cells.size();
+	}
+
 	public boolean isDead() {
 		switch (type) {
 			case VerySmall:
