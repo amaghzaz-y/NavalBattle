@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,14 +19,15 @@ public class Ship extends ShipBase {
 	Sprite sprite;
 	ShapeRenderer renderer;
 	boolean bboxState = false;
-	Array<Vector2> hp;
+	Set<Rectangle> cells;
+
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
 		setAnimation(type);
 		autoScale(direction, type);
 		stateTime = 0.0F;
 		setTransform(position, direction);
-		hp = new Array<>();
+		cells = new HashSet<>();
 	}
 
 	public void addShapeRenderer(ShapeRenderer renderer) {
@@ -32,18 +36,20 @@ public class Ship extends ShipBase {
 
 	public void handleClick(Vector2 mouse) {
 		if (sprite.getBoundingRectangle().contains(mouse.x, mouse.y)) {
+			cells.add(new Rectangle(mouse.x, mouse.y, 40, 40));
 			bboxState = true;
 		} else {
 			bboxState = false;
 		}
 	}
 
-	public void drawBoundingBox() {
+	public void render() {
 		if (bboxState) {
-			Rectangle rec = sprite.getBoundingRectangle();
-			renderer.set(ShapeType.Line);
-			renderer.setColor(Color.RED);
-			renderer.rect(rec.x, rec.y, rec.width, rec.height);
+			for (Rectangle cell : cells) {
+				renderer.set(ShapeType.Line);
+				renderer.setColor(Color.RED);
+				renderer.rect(cell.x, cell.y, cell.width,cell.height);
+			}
 		}
 	}
 

@@ -3,14 +3,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Bounds {
-	ShapeRenderer renderer;
+	private ShapeRenderer renderer;
 	final int cellSize = 40;
+
 	public void addShapeRenderer(ShapeRenderer renderer) {
 		this.renderer = renderer;
 	}
 
-
-	public void draw() {
+	public void render() {
 		var height = 520;
 		renderer.setColor(Color.BLACK);
 		renderer.set(ShapeType.Line);

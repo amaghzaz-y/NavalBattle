@@ -61,10 +61,10 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		// for ShapeRenderer
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setAutoShapeType(true);
-		bounds.draw();
-		gui.draw();
+		bounds.render();
+		gui.render();
 		for (Ship ship : ships) {
-			ship.drawBoundingBox();
+			ship.render();
 		}
 		shapeRenderer.end();
 		// scene.render();

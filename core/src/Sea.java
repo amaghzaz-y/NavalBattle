@@ -24,10 +24,8 @@ public class Sea extends Sprite {
                 batch.draw(currentFrame, x, y);
             }
         }
-
     }
 
     public void dispose() {
-
     }
 }

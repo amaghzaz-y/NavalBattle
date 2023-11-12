@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Gui {
-	ShapeRenderer renderer;
-	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("roboto.ttf"));
-	FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-	BitmapFont font;
-	BitmapFont fontSmall;
-	BitmapFont fontVerySmall;
+	private ShapeRenderer renderer;
+	private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("roboto.ttf"));
+	private FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+	private BitmapFont font;
+	private BitmapFont fontSmall;
+	private BitmapFont fontVerySmall;
 
 	public Gui() {
 		parameter.size = 36;
@@ -43,7 +43,7 @@ public class Gui {
 		font.draw(batch, "Player 2 : ", 400, 500);
 	}
 
-	public void draw() {
+	public void render() {
 		var height = 520;
 		renderer.set(ShapeType.Line);
 		renderer.setColor(Color.WHITE);
