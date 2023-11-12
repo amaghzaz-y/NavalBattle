@@ -40,8 +40,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		}
 		gui = new Gui();
 		gui.addShapeRenderer(shapeRenderer);
-		// scene = new MainScene();
-		// scene.create();
 	}
 
 	@Override

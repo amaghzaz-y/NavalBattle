@@ -35,6 +35,20 @@ public class Ship extends ShipBase {
 		this.renderer = renderer;
 	}
 
+	public boolean isDead() {
+		switch (type) {
+			case VerySmall:
+				return cells.size() == 2;
+			case Small:
+				return cells.size() == 4;
+			case Medium:
+				return cells.size() == 6;
+			case Big:
+				return cells.size() == 4;
+		}
+		return false;
+	}
+
 	private void autoPosition() {
 		if (direction == Direction.Vertical) {
 			if (type == Type.Medium) {
@@ -63,6 +77,9 @@ public class Ship extends ShipBase {
 			bboxState = true;
 		} else {
 			bboxState = false;
+		}
+		if (isDead()) {
+			sprite.setColor(Color.NAVY);
 		}
 	}
 
@@ -203,7 +220,7 @@ public class Ship extends ShipBase {
 	}
 
 	public void render() {
-		if (bboxState) {
+		if (!isDead()) {
 			for (Rectangle cell : cells) {
 				renderer.set(ShapeType.Line);
 				renderer.setColor(Color.RED);
