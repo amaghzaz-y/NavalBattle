@@ -16,16 +16,16 @@ public class Player extends PlayerBase {
 		for (Ship ship : ships) {
 			ship.handleClick(mouse);
 		}
-		Score();
+		HitsUpdate();
 	}
 
-	public int Score() {
-		int score = 0;
+	public int HitsUpdate() {
+		int hits = 0;
 		for (Ship ship : ships) {
-			score += ship.touches();
+			hits += ship.touches();
 		}
-		System.out.println(getPlayerName() + ":" + score);
-		return score;
+		System.out.println(getPlayerName() + ":" + hits);
+		return hits;
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {

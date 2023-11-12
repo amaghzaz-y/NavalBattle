@@ -22,13 +22,13 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		// 1
-		player1 = new Player("ElonMusk");
+		player1 = new Player("Elon");
 		player1.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
 		player1.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
 		player1.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
 		player1.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		// 2
-		player2 = new Player("JeffBezos");
+		player2 = new Player("Jeff");
 		player2.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
 		player2.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
 		player2.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
@@ -40,6 +40,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		player1.setRenderer(shapeRenderer);
 		player2.setRenderer(shapeRenderer);
 		gui = new Gui();
+		gui.setPlayerOne(player1);
+		gui.setPlayerTwo(player2);
 		gui.addShapeRenderer(shapeRenderer);
 	}
 

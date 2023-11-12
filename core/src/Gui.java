@@ -14,6 +14,8 @@ public class Gui {
 	private BitmapFont font;
 	private BitmapFont fontSmall;
 	private BitmapFont fontVerySmall;
+	private Player player1;
+	private Player player2;
 
 	public Gui() {
 		parameter.size = 36;
@@ -23,6 +25,14 @@ public class Gui {
 		parameter.size = 16;
 		fontVerySmall = generator.generateFont(parameter); // font size 20 pixels
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+	}
+
+	public void setPlayerOne(Player player) {
+		player1 = player;
+	}
+
+	public void setPlayerTwo(Player player) {
+		player2 = player;
 	}
 
 	public void addShapeRenderer(ShapeRenderer renderer) {
@@ -39,8 +49,8 @@ public class Gui {
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		// players
-		font.draw(batch, "Player 1 : ", 100, 500);
-		font.draw(batch, "Player 2 : ", 400, 500);
+		font.draw(batch, player1.getPlayerName() + ":" + player2.HitsUpdate(), 100, 500);
+		font.draw(batch, player2.getPlayerName() + ":" + player1.HitsUpdate(), 400, 500);
 	}
 
 	public void render() {
