@@ -22,9 +22,12 @@ public class Ship extends ShipBase {
 
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
+		this.position = normalizeVector2(position);
 		setAnimation();
 		autoScale();
 		setTransform();
+		sprite.setCenterX(this.position.x + 20);
+		sprite.setCenterY(this.position.y + 20);
 		stateTime = 0.0F;
 		cells = new HashSet<>();
 	}
@@ -35,7 +38,7 @@ public class Ship extends ShipBase {
 
 	public void handleClick(Vector2 mouse) {
 		if (sprite.getBoundingRectangle().contains(mouse.x, mouse.y)) {
-			mouse = normalizedClick(mouse);
+			mouse = normalizeVector2(mouse);
 			cells.add(new Rectangle(mouse.x, mouse.y, 40, 40));
 			bboxState = true;
 		} else {
@@ -43,7 +46,7 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public Vector2 normalizedClick(Vector2 click) {
+	public Vector2 normalizeVector2(Vector2 click) {
 		int rX = (int) click.x % 40; // 40 is the cell size
 		int rY = (int) click.y % 40;
 		return new Vector2(click.x - rX, click.y - rY);
@@ -83,19 +86,62 @@ public class Ship extends ShipBase {
 
 	public Rectangle getBounds() {
 		var rect = new Rectangle();
-		rect.x = sprite.getX();
-		rect.y = sprite.getY();
-		rect.width = 40 * 3;
-		rect.height = 40 * 3;
-		// switch (type) {
-		// case VerySmall:
-		// rect.x = sprite.getX();
-		// rect.y = sprite.getY();
-		// if (direction == Direction.Vertical) {
-
-		// }
-		// break;
-		// }
+		rect.x = sprite.getBoundingRectangle().x + 45;
+		rect.y = sprite.getBoundingRectangle().y + 15;
+		switch (type) {
+			case VerySmall:
+				if (direction == Direction.Vertical) {
+					rect.x = sprite.getX() + 40;
+					rect.y = sprite.getY() + 25;
+					rect.width = 40;
+					rect.height = 40 * 2f;
+				} else {
+					rect.x = sprite.getX() + 25;
+					rect.y = sprite.getY() + 40;
+					rect.width = 40 * 2f;
+					rect.height = 40;
+				}
+				break;
+			case Small:
+				if (direction == Direction.Vertical) {
+					rect.x = sprite.getX() + 45;
+					rect.y = sprite.getY() + 5;
+					rect.width = 40;
+					rect.height = 40 * 3f;
+				} else {
+					rect.x = sprite.getX() + 5;
+					rect.y = sprite.getY() + 45;
+					rect.width = 40 * 3f;
+					rect.height = 40;
+				}
+				break;
+			case Medium:
+				if (direction == Direction.Vertical) {
+					rect.x = sprite.getX() + 25;
+					rect.y = sprite.getY();
+					rect.width = 40 * 2f;
+					rect.height = 40 * 3f;
+				} else {
+					rect.x = sprite.getX();
+					rect.y = sprite.getY() + 25;
+					rect.width = 40 * 3f;
+					rect.height = 40 * 2f;
+				}
+				break;
+			case Big:
+				if (direction == Direction.Vertical) {
+					rect.x = sprite.getX() + 45;
+					rect.y = sprite.getY() - 10;
+					rect.width = 40;
+					rect.height = 40 * 4f;
+				} else {
+					rect.x = sprite.getX() - 10;
+					rect.y = sprite.getY() + 45;
+					rect.width = 40 * 4f;
+					rect.height = 40;
+				}
+				break;
+		}
 		return rect;
 	}
 

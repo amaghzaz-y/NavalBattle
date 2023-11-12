@@ -22,18 +22,15 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		// 1
-		ships.add(new Ship(new Vector2(350, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(500, 50), ShipBase.Direction.Vertical,
-				ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(350, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
-		ships.add(new Ship(new Vector2(550, 250), ShipBase.Direction.Vertical, ShipBase.Type.Big));
-		// 2
 		ships.add(new Ship(new Vector2(50, 200), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(150, 60), ShipBase.Direction.Horizontal,
-
-				ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(20, 20), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		ships.add(new Ship(new Vector2(150, 350), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
+		ships.add(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
+		ships.add(new Ship(new Vector2(80, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(150, 240), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
+		// 2
+		ships.add(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		ships.add(new Ship(new Vector2(500, 50), ShipBase.Direction.Vertical, ShipBase.Type.Small));
+		ships.add(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
