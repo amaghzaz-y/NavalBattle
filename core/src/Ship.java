@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class Ship extends ShipBase {
 	float stateTime;
@@ -23,10 +22,10 @@ public class Ship extends ShipBase {
 
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
-		setAnimation(type);
-		autoScale(direction, type);
+		setAnimation();
+		autoScale();
+		setTransform();
 		stateTime = 0.0F;
-		setTransform(position, direction);
 		cells = new HashSet<>();
 	}
 
@@ -36,6 +35,7 @@ public class Ship extends ShipBase {
 
 	public void handleClick(Vector2 mouse) {
 		if (sprite.getBoundingRectangle().contains(mouse.x, mouse.y)) {
+			mouse = normalizedClick(mouse);
 			cells.add(new Rectangle(mouse.x, mouse.y, 40, 40));
 			bboxState = true;
 		} else {
@@ -43,23 +43,19 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public void render() {
-		if (bboxState) {
-			for (Rectangle cell : cells) {
-				renderer.set(ShapeType.Line);
-				renderer.setColor(Color.RED);
-				renderer.rect(cell.x, cell.y, cell.width,cell.height);
-			}
-		}
+	public Vector2 normalizedClick(Vector2 click) {
+		int rX = (int) click.x % 40; // 40 is the cell size
+		int rY = (int) click.y % 40;
+		return new Vector2(click.x - rX, click.y - rY);
 	}
 
-	public void setTransform(Vector2 position, Direction direction) {
+	public void setTransform() {
 		sprite.setPosition(position.x, position.y);
 		if (direction == Direction.Horizontal)
 			sprite.rotate90(true);
 	}
 
-	public void setAnimation(Type type) {
+	public void setAnimation() {
 		switch (type) {
 			case VerySmall:
 				animation = Assets.Ships.VerySmall();
@@ -78,7 +74,32 @@ public class Ship extends ShipBase {
 		sprite = new Sprite(currentFrame);
 	}
 
-	public void autoScale(Direction direction, Type type) {
+	public void renderBounds() {
+		var rect = getBounds();
+		renderer.set(ShapeType.Line);
+		renderer.setColor(Color.RED);
+		renderer.rect(rect.x, rect.y, rect.width, rect.height);
+	}
+
+	public Rectangle getBounds() {
+		var rect = new Rectangle();
+		rect.x = sprite.getX();
+		rect.y = sprite.getY();
+		rect.width = 40 * 3;
+		rect.height = 40 * 3;
+		// switch (type) {
+		// case VerySmall:
+		// rect.x = sprite.getX();
+		// rect.y = sprite.getY();
+		// if (direction == Direction.Vertical) {
+
+		// }
+		// break;
+		// }
+		return rect;
+	}
+
+	public void autoScale() {
 		switch (type) {
 			case VerySmall:
 				if (direction == Direction.Vertical)
@@ -114,5 +135,15 @@ public class Ship extends ShipBase {
 		Texture currentFrame = animation.getKeyFrame(stateTime, true);
 		sprite.setTexture(currentFrame);
 		sprite.draw(batch);
+	}
+
+	public void render() {
+		if (bboxState) {
+			for (Rectangle cell : cells) {
+				renderer.set(ShapeType.Line);
+				renderer.setColor(Color.RED);
+				renderer.rect(cell.x, cell.y, cell.width, cell.height);
+			}
+		}
 	}
 }

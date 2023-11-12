@@ -65,6 +65,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.render();
 		for (Ship ship : ships) {
 			ship.render();
+			ship.renderBounds();
 		}
 		shapeRenderer.end();
 		// scene.render();
