@@ -11,33 +11,35 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
-	Array<Ship> ships = new Array<>();
 	Sea sea;
 	Bounds bounds;
 	Gui gui;
 	ShapeRenderer shapeRenderer;
+	Player player1;
+	Player player2;
 
 	@Override
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		// 1
-		ships.add(new Ship(new Vector2(50, 200), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		ships.add(new Ship(new Vector2(200, 240), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
+		player1 = new Player("ElonMusk");
+		player1.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
+		player1.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
+		player1.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		player1.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		// 2
-		ships.add(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
-		ships.add(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+		player2 = new Player("JeffBezos");
+		player2.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		player2.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
+		player2.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
+		player2.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
 		bounds.addShapeRenderer(shapeRenderer);
-		for (Ship ship : ships) {
-			ship.addShapeRenderer(shapeRenderer);
-		}
+		player1.setRenderer(shapeRenderer);
+		player2.setRenderer(shapeRenderer);
 		gui = new Gui();
 		gui.addShapeRenderer(shapeRenderer);
 	}
@@ -48,9 +50,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		batch.begin();
 		ScreenUtils.clear(Color.SLATE);
 		sea.draw(batch);
-		for (Ship ship : ships) {
-			ship.draw(batch);
-		}
+		player1.drawShips(batch);
+		player2.drawShips(batch);
 		gui.drawFont(batch);
 		batch.end();
 		// for ShapeRenderer
@@ -58,10 +59,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		shapeRenderer.setAutoShapeType(true);
 		bounds.render();
 		gui.render();
-		for (Ship ship : ships) {
-			ship.render();
-			// ship.renderBounds();
-		}
+		player1.renderShips();
+		player2.renderShips();
 		shapeRenderer.end();
 		// scene.render();
 	}
@@ -73,7 +72,10 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		for (Ship ship : ships) {
+		for (Ship ship : player1.Ships()) {
+			ship.handleClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
+		}
+		for (Ship ship : player2.Ships()) {
 			ship.handleClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
 		}
 		return true;
