@@ -25,15 +25,35 @@ public class Ship extends ShipBase {
 		this.position = normalizeVector2(position);
 		setAnimation();
 		autoScale();
-		setTransform();
-		sprite.setCenterX(this.position.x + 20);
-		sprite.setCenterY(this.position.y + 20);
+		autoPosition();
+		autoRotation();
 		stateTime = 0.0F;
 		cells = new HashSet<>();
 	}
 
 	public void addShapeRenderer(ShapeRenderer renderer) {
 		this.renderer = renderer;
+	}
+
+	private void autoPosition() {
+		if (direction == Direction.Vertical) {
+			if (type == Type.Medium) {
+				sprite.setCenterX(this.position.x);
+				sprite.setCenterY(this.position.y + 20);
+			} else {
+				sprite.setCenterX(this.position.x + 20);
+				sprite.setCenterY(this.position.y);
+			}
+
+		} else {
+			if (type == Type.Medium) {
+				sprite.setCenterX(this.position.x + 20);
+				sprite.setCenterY(this.position.y);
+			} else {
+				sprite.setCenterX(this.position.x);
+				sprite.setCenterY(this.position.y + 20);
+			}
+		}
 	}
 
 	public void handleClick(Vector2 mouse) {
@@ -52,8 +72,7 @@ public class Ship extends ShipBase {
 		return new Vector2(click.x - rX, click.y - rY);
 	}
 
-	public void setTransform() {
-		sprite.setPosition(position.x, position.y);
+	public void autoRotation() {
 		if (direction == Direction.Horizontal)
 			sprite.rotate90(true);
 	}
@@ -91,13 +110,13 @@ public class Ship extends ShipBase {
 		switch (type) {
 			case VerySmall:
 				if (direction == Direction.Vertical) {
-					rect.x = sprite.getX() + 40;
+					rect.x = sprite.getX() + 45;
 					rect.y = sprite.getY() + 25;
 					rect.width = 40;
 					rect.height = 40 * 2f;
 				} else {
 					rect.x = sprite.getX() + 25;
-					rect.y = sprite.getY() + 40;
+					rect.y = sprite.getY() + 45;
 					rect.width = 40 * 2f;
 					rect.height = 40;
 				}
@@ -105,24 +124,24 @@ public class Ship extends ShipBase {
 			case Small:
 				if (direction == Direction.Vertical) {
 					rect.x = sprite.getX() + 45;
-					rect.y = sprite.getY() + 5;
+					rect.y = sprite.getY() - 15;
 					rect.width = 40;
-					rect.height = 40 * 3f;
+					rect.height = 40 * 4f;
 				} else {
-					rect.x = sprite.getX() + 5;
+					rect.x = sprite.getX() - 15;
 					rect.y = sprite.getY() + 45;
-					rect.width = 40 * 3f;
+					rect.width = 40 * 4f;
 					rect.height = 40;
 				}
 				break;
 			case Medium:
 				if (direction == Direction.Vertical) {
 					rect.x = sprite.getX() + 25;
-					rect.y = sprite.getY();
+					rect.y = sprite.getY() + 5;
 					rect.width = 40 * 2f;
 					rect.height = 40 * 3f;
 				} else {
-					rect.x = sprite.getX();
+					rect.x = sprite.getX() + 5;
 					rect.y = sprite.getY() + 25;
 					rect.width = 40 * 3f;
 					rect.height = 40 * 2f;
@@ -131,11 +150,11 @@ public class Ship extends ShipBase {
 			case Big:
 				if (direction == Direction.Vertical) {
 					rect.x = sprite.getX() + 45;
-					rect.y = sprite.getY() - 10;
+					rect.y = sprite.getY() - 15;
 					rect.width = 40;
 					rect.height = 40 * 4f;
 				} else {
-					rect.x = sprite.getX() - 10;
+					rect.x = sprite.getX() - 15;
 					rect.y = sprite.getY() + 45;
 					rect.width = 40 * 4f;
 					rect.height = 40;
@@ -155,9 +174,9 @@ public class Ship extends ShipBase {
 				break;
 			case Small:
 				if (direction == Direction.Vertical)
-					sprite.setScale(1.0f, 1.3f);
+					sprite.setScale(0.8f, 1.7f);
 				else
-					sprite.setScale(1.3f, 1.0f);
+					sprite.setScale(1.7f, 0.8f);
 				break;
 			case Medium:
 				if (direction == Direction.Vertical)

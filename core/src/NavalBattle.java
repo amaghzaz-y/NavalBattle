@@ -24,11 +24,11 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		// 1
 		ships.add(new Ship(new Vector2(50, 200), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
 		ships.add(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
-		ships.add(new Ship(new Vector2(80, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		ships.add(new Ship(new Vector2(150, 240), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
+		ships.add(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		ships.add(new Ship(new Vector2(200, 240), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		// 2
 		ships.add(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		ships.add(new Ship(new Vector2(500, 50), ShipBase.Direction.Vertical, ShipBase.Type.Small));
+		ships.add(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
 		ships.add(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 		ships.add(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		bounds = new Bounds();
