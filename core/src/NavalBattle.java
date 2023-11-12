@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -58,11 +59,14 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.drawFont(batch);
 		batch.end();
 		// for ShapeRenderer
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setAutoShapeType(true);
 		bounds.draw();
 		gui.draw();
 		for (Ship ship : ships) {
 			ship.drawBoundingBox();
 		}
+		shapeRenderer.end();
 		// scene.render();
 	}
 

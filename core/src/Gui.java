@@ -45,10 +45,8 @@ public class Gui {
 
 	public void draw() {
 		var height = 520;
-
-		renderer.begin(ShapeType.Line);
+		renderer.set(ShapeType.Line);
 		renderer.setColor(Color.WHITE);
 		renderer.rect(640, 0, 320, height);
-		renderer.end();
 	}
 }

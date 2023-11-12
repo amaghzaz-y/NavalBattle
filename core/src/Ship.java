@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Ship extends ShipBase {
 	float stateTime;
@@ -15,30 +16,14 @@ public class Ship extends ShipBase {
 	Sprite sprite;
 	ShapeRenderer renderer;
 	boolean bboxState = false;
-
+	Array<Vector2> hp;
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
-
-		switch (type) {
-			case VerySmall:
-				this.animation = Assets.Ships.VerySmall();
-				break;
-			case Small:
-				this.animation = Assets.Ships.Small();
-				break;
-			case Medium:
-				this.animation = Assets.Ships.Medium();
-				break;
-			case Big:
-				this.animation = Assets.Ships.Big();
-				break;
-		}
-		Texture currentFrame = animation.getKeyFrames()[0];
-		sprite = new Sprite(currentFrame);
-		sprite.setPosition(position.x, position.y);
+		setAnimation(type);
+		autoScale(direction, type);
 		stateTime = 0.0F;
-		if (direction == Direction.Horizontal)
-			sprite.rotate90(true);
+		setTransform(position, direction);
+		hp = new Array<>();
 	}
 
 	public void addShapeRenderer(ShapeRenderer renderer) {
@@ -56,10 +41,65 @@ public class Ship extends ShipBase {
 	public void drawBoundingBox() {
 		if (bboxState) {
 			Rectangle rec = sprite.getBoundingRectangle();
-			renderer.begin(ShapeType.Line);
+			renderer.set(ShapeType.Line);
 			renderer.setColor(Color.RED);
 			renderer.rect(rec.x, rec.y, rec.width, rec.height);
-			renderer.end();
+		}
+	}
+
+	public void setTransform(Vector2 position, Direction direction) {
+		sprite.setPosition(position.x, position.y);
+		if (direction == Direction.Horizontal)
+			sprite.rotate90(true);
+	}
+
+	public void setAnimation(Type type) {
+		switch (type) {
+			case VerySmall:
+				animation = Assets.Ships.VerySmall();
+				break;
+			case Small:
+				animation = Assets.Ships.Small();
+				break;
+			case Medium:
+				animation = Assets.Ships.Medium();
+				break;
+			case Big:
+				animation = Assets.Ships.Big();
+				break;
+		}
+		Texture currentFrame = animation.getKeyFrames()[0];
+		sprite = new Sprite(currentFrame);
+	}
+
+	public void autoScale(Direction direction, Type type) {
+		switch (type) {
+			case VerySmall:
+				if (direction == Direction.Vertical)
+					sprite.setScale(1.0f, 0.8f);
+				else
+					sprite.setScale(0.8f, 1.0f);
+				break;
+			case Small:
+				if (direction == Direction.Vertical)
+					sprite.setScale(1.0f, 1.3f);
+				else
+					sprite.setScale(1.3f, 1.0f);
+				break;
+			case Medium:
+				if (direction == Direction.Vertical)
+					sprite.setScale(1.0f, 1.3f);
+				else
+					sprite.setScale(1.3f, 1.0f);
+				break;
+			case Big:
+				if (direction == Direction.Vertical)
+					sprite.setScale(1.0f, 1.3f);
+				else
+					sprite.setScale(1.3f, 1.0f);
+				break;
+			default:
+				break;
 		}
 	}
 
