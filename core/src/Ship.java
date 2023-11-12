@@ -57,7 +57,7 @@ public class Ship extends ShipBase {
 	}
 
 	public void handleClick(Vector2 mouse) {
-		if (sprite.getBoundingRectangle().contains(mouse.x, mouse.y)) {
+		if (getBounds().contains(mouse.x, mouse.y)) {
 			mouse = normalizeVector2(mouse);
 			cells.add(new Rectangle(mouse.x, mouse.y, 40, 40));
 			bboxState = true;
