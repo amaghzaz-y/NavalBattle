@@ -14,34 +14,21 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Bounds bounds;
 	Gui gui;
 	ShapeRenderer shapeRenderer;
-	Player player1;
-	Player player2;
+	Session session;
 
 	@Override
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		// 1
-		player1 = new Player("Elon");
-		player1.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
-		player1.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
-		player1.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		player1.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
-		// 2
-		player2 = new Player("Jeff");
-		player2.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		player2.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
-		player2.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
-		player2.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+		session = new Session("Elon", "Musk");
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
 		bounds.addShapeRenderer(shapeRenderer);
-		player1.setRenderer(shapeRenderer);
-		player2.setRenderer(shapeRenderer);
+		session.setRenderer(shapeRenderer);
 		gui = new Gui();
-		gui.setPlayerOne(player1);
-		gui.setPlayerTwo(player2);
+		gui.setPlayerOne(session.getPlayer());
+		gui.setPlayerTwo(session.getOpponent());
 		gui.addShapeRenderer(shapeRenderer);
 	}
 
@@ -51,8 +38,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		batch.begin();
 		ScreenUtils.clear(Color.SLATE);
 		sea.draw(batch);
-		player1.drawShips(batch);
-		player2.drawShips(batch);
+		session.draw(batch);
 		gui.drawFont(batch);
 		batch.end();
 		// for ShapeRenderer
@@ -60,8 +46,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		shapeRenderer.setAutoShapeType(true);
 		bounds.render();
 		gui.render();
-		player1.renderShips();
-		player2.renderShips();
+		session.render();
 		shapeRenderer.end();
 	}
 
@@ -73,8 +58,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-		player1.onTouchDown(mouse, button);
-		player2.onTouchDown(mouse, button);
+		session.onTouchDown(mouse, button);
 		return true;
 	}
 
