@@ -17,8 +17,9 @@ public class Ship extends ShipBase {
 	Animation<Texture> animation;
 	Sprite sprite;
 	ShapeRenderer renderer;
-	boolean bboxState = false;
 	Set<Rectangle> cells;
+	boolean isDrawBounds = false;
+	boolean isSelected = false;
 
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
@@ -42,13 +43,13 @@ public class Ship extends ShipBase {
 	public boolean isDead() {
 		switch (type) {
 			case VerySmall:
-				return cells.size() == 2;
+				return cells.size() >= 2;
 			case Small:
-				return cells.size() == 4;
+				return cells.size() >= 4;
 			case Medium:
-				return cells.size() == 6;
+				return cells.size() >= 6;
 			case Big:
-				return cells.size() == 4;
+				return cells.size() >= 4;
 		}
 		return false;
 	}
@@ -62,7 +63,6 @@ public class Ship extends ShipBase {
 				sprite.setCenterX(this.position.x + 20);
 				sprite.setCenterY(this.position.y);
 			}
-
 		} else {
 			if (type == Type.Medium) {
 				sprite.setCenterX(this.position.x + 20);
@@ -74,13 +74,40 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public void handleClick(Vector2 mouse) {
-		if (getBounds().contains(mouse.x, mouse.y)) {
-			mouse = normalizeVector2(mouse);
-			cells.add(new Rectangle(mouse.x, mouse.y, 40, 40));
-			bboxState = true;
+	public void onTouchDown(Vector2 mouse, int type) {
+		// 0 left, 1 right
+		System.out.println(type);
+		handleInitialPosition(mouse, type);
+	}
+
+	private void autoFlipXY() {
+		direction = direction == Direction.Vertical ? Direction.Horizontal : Direction.Vertical;
+		sprite.rotate(90f);
+	}
+
+	private void handleInitialPosition(Vector2 position, int type) {
+		if (getBounds().contains(position) || isSelected) {
+			isDrawBounds = true;
+			if (isSelected) {
+				position = normalizeVector2(position);
+				sprite.setPosition(position.x - 40, position.y - 40);
+				if (type == 1)
+					autoFlipXY();
+				isSelected = false;
+			} else {
+				isSelected = true;
+			}
 		} else {
-			bboxState = false;
+			isDrawBounds = false;
+			isSelected = false;
+		}
+	}
+
+	public void handleMissile(Vector2 position) {
+		if (getBounds().contains(position)) {
+			position = normalizeVector2(position);
+			cells.add(new Rectangle(position.x, position.y, 40, 40));
+		} else {
 		}
 		if (isDead()) {
 			sprite.setColor(Color.NAVY);
@@ -95,7 +122,7 @@ public class Ship extends ShipBase {
 
 	public void autoRotation() {
 		if (direction == Direction.Horizontal)
-			sprite.rotate90(true);
+			sprite.rotate90(false);
 	}
 
 	public void setAnimation() {
@@ -118,10 +145,12 @@ public class Ship extends ShipBase {
 	}
 
 	public void renderBounds() {
-		var rect = getBounds();
-		renderer.set(ShapeType.Line);
-		renderer.setColor(Color.RED);
-		renderer.rect(rect.x, rect.y, rect.width, rect.height);
+		if (isDrawBounds) {
+			var rect = getBounds();
+			renderer.set(ShapeType.Line);
+			renderer.setColor(Color.GREEN);
+			renderer.rect(rect.x, rect.y, rect.width, rect.height);
+		}
 	}
 
 	public Rectangle getBounds() {

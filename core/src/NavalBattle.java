@@ -63,7 +63,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		player1.renderShips();
 		player2.renderShips();
 		shapeRenderer.end();
-		// scene.render();
 	}
 
 	@Override
@@ -74,8 +73,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-		player1.handleMouseClick(mouse);
-		player2.handleMouseClick(mouse);
+		player1.onTouchDown(mouse, button);
+		player2.onTouchDown(mouse, button);
 		return true;
 	}
 

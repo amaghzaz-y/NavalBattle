@@ -12,9 +12,9 @@ public class Player extends PlayerBase {
 		ships = new Array<>();
 	}
 
-	public void handleMouseClick(Vector2 mouse) {
+	public void onTouchDown(Vector2 mouse, int type) {
 		for (Ship ship : ships) {
-			ship.handleClick(mouse);
+			ship.onTouchDown(mouse, type);
 		}
 		HitsUpdate();
 	}
@@ -24,7 +24,6 @@ public class Player extends PlayerBase {
 		for (Ship ship : ships) {
 			hits += ship.touches();
 		}
-		System.out.println(getPlayerName() + ":" + hits);
 		return hits;
 	}
 
@@ -43,7 +42,7 @@ public class Player extends PlayerBase {
 	public void renderShips() {
 		for (Ship ship : ships) {
 			ship.render();
-			// ship.renderBounds();
+			ship.renderBounds();
 		}
 	}
 
