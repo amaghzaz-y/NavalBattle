@@ -49,8 +49,8 @@ public class Gui {
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		// players
-		font.draw(batch, player1.getPlayerName() + ":" + player2.HitsUpdate(), 100, 500);
-		font.draw(batch, player2.getPlayerName() + ":" + player1.HitsUpdate(), 400, 500);
+		font.draw(batch, player1.getPlayerName() + ":" + player1.getScore(), 100, 500);
+		font.draw(batch, player2.getPlayerName() + ":" + player2.getScore(), 400, 500);
 	}
 
 	public void render() {

@@ -6,10 +6,19 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player extends PlayerBase {
 	private Array<Ship> ships;
+	private int score;
 
 	Player(String name) {
 		super(name);
 		ships = new Array<>();
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int newScore) {
+		score = newScore;
 	}
 
 	public void onTouchDown(Vector2 mouse, int type) {

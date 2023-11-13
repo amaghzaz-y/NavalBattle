@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 public class Session {
 	private Player player;
 	private Player opponent;
-	private int playerScore = 0;
-	private int opponentScore = 0;
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
@@ -19,6 +17,11 @@ public class Session {
 		this.opponent.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
 		this.opponent.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 		this.opponent.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+	}
+
+	public void updateScore() {
+		opponent.setScore(player.HitsUpdate());
+		player.setScore(opponent.HitsUpdate());
 	}
 
 	public Player getPlayer() {
