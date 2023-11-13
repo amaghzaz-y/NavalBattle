@@ -77,7 +77,6 @@ public class Server {
 					pipe.println("from: " + username + " - message: " + line);
 					pipe.flush();
 					messenger.put(recipient, pipe);
-					// TODO! handler client - Game Logic
 				}
 
 			} catch (Exception e) {
