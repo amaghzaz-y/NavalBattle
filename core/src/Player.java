@@ -25,7 +25,6 @@ public class Player extends PlayerBase {
 		for (Ship ship : ships) {
 			ship.onTouchDown(mouse, type);
 		}
-		HitsUpdate();
 	}
 
 	public int HitsUpdate() {
@@ -34,6 +33,14 @@ public class Player extends PlayerBase {
 			hits += ship.touches();
 		}
 		return hits;
+	}
+
+	public Obj.PlayerObj Serialize() {
+		Array<Obj.ShipObj> shipobjs = new Array<>();
+		for (Ship ship : ships) {
+			shipobjs.add(ship.Serialize());
+		}
+		return new Obj.PlayerObj(getPlayerName(), shipobjs, score);
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {

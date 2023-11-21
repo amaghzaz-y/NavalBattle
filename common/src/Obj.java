@@ -21,10 +21,23 @@ public class Obj {
 	public static class PlayerObj {
 		public String username;
 		public Array<ShipObj> ships;
+		public int score;
 
-		public PlayerObj(String username, Array<ShipObj> ships) {
+		public PlayerObj(String username, Array<ShipObj> ships, int score) {
 			this.username = username;
 			this.ships = ships;
+			this.score = score;
+		}
+	}
+
+	public static class SessionObj {
+		public String ID;
+		public String PIN;
+		public Array<PlayerObj> players = new Array<>();
+
+		public SessionObj(PlayerObj player, PlayerObj opp) {
+			players.add(player);
+			players.add(opp);
 		}
 	}
 }

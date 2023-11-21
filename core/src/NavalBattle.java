@@ -16,11 +16,11 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Gui gui;
 	ShapeRenderer shapeRenderer;
 	Session session;
-	SocketClient client;
+	SocketClient.ClientHandler client;
+	Json json = new Json();
 
 	@Override
 	public void create() {
-		var json = new Json();
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		session = new Session("Elon", "Musk");
@@ -35,10 +35,10 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.addShapeRenderer(shapeRenderer);
 
 		try {
-			client = new SocketClient();
-			while (!client.getClient().isReady()) {
-			}
-			client.getClient().sendMessage(json.prettyPrint(session.getOpponent().Ships().get(0)));
+			var sc = new SocketClient();
+			while (!sc.getClient().isReady())
+				;
+			client = sc.getClient();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -71,6 +71,13 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 		session.onTouchDown(mouse, button);
+		try {
+			client.sendMessage(json.prettyPrint(session.getOpponent().Serialize()));
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		session.updateScore();
 		return true;
 	}
 

@@ -87,7 +87,7 @@ public class Ship extends ShipBase {
 	public void onTouchDown(Vector2 mouse, int type) {
 		// type: 0 left, 1 right
 		// handleInitialPosition(mouse, type);
-		// handleMissile(mouse);
+		handleMissile(mouse);
 	}
 
 	private void autoFlipXY() {
