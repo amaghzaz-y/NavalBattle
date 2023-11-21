@@ -60,12 +60,12 @@ public class Session {
 	}
 
 	public void draw(Batch batch) {
-		player.drawShips(batch);
-		opponent.drawShips(batch);
+		player.draw(batch);
+		opponent.draw(batch);
 	}
 
 	public void render() {
-		player.renderShips();
-		opponent.renderShips();
+		player.render();
+		opponent.render();
 	}
 }

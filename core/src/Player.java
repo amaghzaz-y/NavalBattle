@@ -42,24 +42,24 @@ public class Player extends PlayerBase {
 		}
 	}
 
-	public void drawShips(Batch batch) {
-		for (Ship ship : ships) {
-			ship.draw(batch);
-		}
-	}
-
-	public void renderShips() {
-		for (Ship ship : ships) {
-			ship.render();
-			ship.renderBounds();
-		}
-	}
-
 	public void addShip(Ship ship) {
 		ships.add(ship);
 	}
 
 	public Array<Ship> Ships() {
 		return ships;
+	}
+
+	public void draw(Batch batch) {
+		for (Ship ship : ships) {
+			ship.draw(batch);
+		}
+	}
+
+	public void render() {
+		for (Ship ship : ships) {
+			ship.render();
+			ship.renderBounds();
+		}
 	}
 }
