@@ -38,7 +38,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			client = new SocketClient();
 			while (!client.getClient().isReady()) {
 			}
-			client.getClient().sendMessage(json.prettyPrint(session.getOpponent().Ships()));
+			client.getClient().sendMessage(json.prettyPrint(session.getOpponent().Ships().get(0)));
 		} catch (Exception e) {
 			System.out.println(e);
 		}

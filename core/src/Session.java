@@ -43,6 +43,10 @@ public class Session {
 		return opponent;
 	}
 
+	public void Serialize() {
+
+	}
+
 	public void onTouchDown(Vector2 mouse, int button) {
 		if (inBounds(playerBounds, mouse))
 			player.onTouchDown(mouse, button);

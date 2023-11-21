@@ -11,12 +11,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Ship extends ShipBase {
-	float stateTime;
-	Animation<Texture> animation;
-	Sprite sprite;
-	ShapeRenderer renderer;
+	private float stateTime;
+	private Animation<Texture> animation;
+	private Sprite sprite;
+	private ShapeRenderer renderer;
 	Set<Rectangle> cells;
 	boolean isDrawBounds = false;
 	boolean isSelected = false;
@@ -253,6 +254,19 @@ public class Ship extends ShipBase {
 			default:
 				break;
 		}
+	}
+
+	public Obj.ShipObj Serialize() {
+		int x = (int) position.x / 40;
+		int y = (int) position.y / 40;
+		int dir = direction == Direction.Vertical ? 0 : 1;
+		Array<Vector2> hits = new Array<>();
+		for (Rectangle cell : cells) {
+			int cx = (int) cell.x / 40;
+			int cy = (int) cell.y / 40;
+			hits.add(new Vector2(cx, cy));
+		}
+		return new Obj.ShipObj(x, y, dir, size, hits);
 	}
 
 	public void draw(Batch batch) {
