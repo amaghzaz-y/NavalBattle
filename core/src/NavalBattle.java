@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
@@ -15,9 +16,11 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Gui gui;
 	ShapeRenderer shapeRenderer;
 	Session session;
+	SocketClient client;
 
 	@Override
 	public void create() {
+		var json = new Json();
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		session = new Session("Elon", "Musk");
@@ -30,6 +33,15 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.setPlayerOne(session.getPlayer());
 		gui.setPlayerTwo(session.getOpponent());
 		gui.addShapeRenderer(shapeRenderer);
+
+		try {
+			client = new SocketClient();
+			while (!client.getClient().isReady()) {
+			}
+			client.getClient().sendMessage(json.prettyPrint(session.getOpponent().Ships()));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Server {
 	private static final int PORT = 6700;
@@ -40,6 +41,9 @@ public class Server {
 				reader = new BufferedReader(new InputStreamReader(input));
 				var outputStream = socket.getOutputStream();
 				writer = new PrintWriter(outputStream);
+				// new start
+				messenger.put(UUID.randomUUID().toString(), writer);
+				// end
 				handleInput();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -55,28 +59,39 @@ public class Server {
 		private void handleInput() throws IOException {
 			try {
 				// username is the first thing to say
-				String username = "";
-				while (username.isEmpty()) {
-					var x = read();
-					if (x.startsWith("username:")) {
-						username = x.replace("username:", "");
-					}
-				}
-				messenger.put(username, writer);
+				// String username = "";
+				// while (username.isEmpty()) {
+				// var x = read();
+				// if (x.startsWith("username:")) {
+				// username = x.replace("username:", "");
+				// }
+				// }
+				// messenger.put(username, writer);
+				// while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound())
+				// {
+				// var line = read();
+				// String recipient = "";
+				// while (recipient.isEmpty()) {
+				// var x = read();
+				// if (x.startsWith("to:")) {
+				// recipient = x.replace("to:", "");
+				// }
+				// }
+				// System.out.println("Client " + username + ":" + line);
+				// var pipe = messenger.get(recipient);
+				// pipe.println("from: " + username + " - message: " + line);
+				// pipe.flush();
+				// messenger.put(recipient, pipe);
+				// }
+
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
 					var line = read();
-					String recipient = "";
-					while (recipient.isEmpty()) {
-						var x = read();
-						if (x.startsWith("to:")) {
-							recipient = x.replace("to:", "");
-						}
+					if (line.isEmpty())
+						continue;
+					for (PrintWriter writer : messenger.values()) {
+						writer.println(line);
+						writer.flush();
 					}
-					System.out.println("Client " + username + ":" + line);
-					var pipe = messenger.get(recipient);
-					pipe.println("from: " + username + " - message: " + line);
-					pipe.flush();
-					messenger.put(recipient, pipe);
 				}
 
 			} catch (Exception e) {

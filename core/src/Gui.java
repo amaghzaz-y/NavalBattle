@@ -47,7 +47,6 @@ public class Gui {
 		fontVerySmall.draw(batch, "Player 1: Test Message Placeholder", 670, 320);
 		fontVerySmall.draw(batch, "Player 2: Test Message Placeholder", 670, 290);
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
-		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		// players
 		font.draw(batch, player1.getPlayerName() + ":" + player1.getScore(), 100, 500);
 		font.draw(batch, player2.getPlayerName() + ":" + player2.getScore(), 400, 500);

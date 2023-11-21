@@ -20,6 +20,7 @@ public class Ship extends ShipBase {
 	Set<Rectangle> cells;
 	boolean isDrawBounds = false;
 	boolean isSelected = false;
+	// Rectangle bounds;
 
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
@@ -35,6 +36,14 @@ public class Ship extends ShipBase {
 	public void addShapeRenderer(ShapeRenderer renderer) {
 		this.renderer = renderer;
 	}
+
+	// public void setBounds(Rectangle bounds) {
+	// this.bounds = bounds;
+	// }
+
+	// public boolean inBounds(Vector2 pos) {
+	// return bounds.contains(pos);
+	// }
 
 	public int touches() {
 		return cells.size();
@@ -75,9 +84,9 @@ public class Ship extends ShipBase {
 	}
 
 	public void onTouchDown(Vector2 mouse, int type) {
-		// 0 left, 1 right
-		System.out.println(type);
-		handleInitialPosition(mouse, type);
+		// type: 0 left, 1 right
+		// handleInitialPosition(mouse, type);
+		// handleMissile(mouse);
 	}
 
 	private void autoFlipXY() {
@@ -85,6 +94,7 @@ public class Ship extends ShipBase {
 		sprite.rotate(90f);
 	}
 
+	// handles users input when positioning boats
 	private void handleInitialPosition(Vector2 position, int type) {
 		if (getBounds().contains(position) || isSelected) {
 			isDrawBounds = true;
