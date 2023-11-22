@@ -1,26 +1,28 @@
 package payloads;
 
-import com.badlogic.gdx.utils.Array;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class Session {
 	private String ID;
 	private String PIN;
-	private Array<Player> players = new Array<>();
+	private HashMap<String, Player> players;
 	private boolean ready = false;
 
 	public Session() {
 	}
 
 	public Session(Player player, Player opp) {
-		players.add(player);
-		players.add(opp);
+		players = new HashMap<>();
+		players.put(player.getUsername(), player);
+		players.put(player.getUsername(), player);
 	}
 
 	public String getID() {
 		return ID;
 	}
 
-	public Array<Player> getPlayers() {
+	public HashMap<String, Player> getPlayers() {
 		return players;
 	}
 

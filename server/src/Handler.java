@@ -15,25 +15,34 @@ public class Handler {
 		sessions = new HashMap<>();
 	}
 
-	public void AddUser(String username, PrintWriter writer) {
-		users.put(username, writer);
-	}
-
-	private void handleReadyProcess(Session session) {
-		if (session.isReady())
-			return;
-		for (Player player : session.getPlayers()) {
-			if (player.isReady())
-				continue;
-		}
-	}
-
 	public void HandleRequest(String payload) {
 		var session = getSession(payload);
 		sessions.put(session.getID(), session);
 	}
 
-	public Session getSession(String payload) {
+	private void addUser(String username, PrintWriter writer) {
+		users.put(username, writer);
+	}
+
+	private void handleReadyProcess(Session cSession) {
+		// checks and ignores if both players in session are already ready
+		if (cSession.isReady() || sessions.get(cSession.getID()).isReady())
+			return;
+		var cs = sessions.get(cSession.getID());
+		// update the local map if playres are ready
+		for (Player player : cSession.getPlayers().values()) {
+			if (player.isReady()) {
+				cs.getPlayers().put(player.getUsername(), player);
+				cs.setReady(true);
+				continue;
+			}
+			cs.setReady(false);
+		}
+		// overwrite the new update
+		sessions.put(cs.getID(), cs);
+	}
+
+	private Session getSession(String payload) {
 		return json.fromJson(Session.class, payload);
 	}
 }
