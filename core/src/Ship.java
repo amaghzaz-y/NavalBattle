@@ -256,7 +256,7 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public Obj.ShipObj Serialize() {
+	public payloads.Ship Serialize() {
 		int x = (int) position.x / 40;
 		int y = (int) position.y / 40;
 		int dir = direction == Direction.Vertical ? 0 : 1;
@@ -266,7 +266,7 @@ public class Ship extends ShipBase {
 			int cy = (int) cell.y / 40;
 			hits.add(new Vector2(cx, cy));
 		}
-		return new Obj.ShipObj(x, y, dir, size, hits);
+		return new payloads.Ship(x, y, dir, size, hits);
 	}
 
 	public void draw(Batch batch) {

@@ -35,12 +35,12 @@ public class Player extends PlayerBase {
 		return hits;
 	}
 
-	public Obj.PlayerObj Serialize() {
-		Array<Obj.ShipObj> shipobjs = new Array<>();
+	public payloads.Player Serialize() {
+		Array<payloads.Ship> shipobjs = new Array<>();
 		for (Ship ship : ships) {
 			shipobjs.add(ship.Serialize());
 		}
-		return new Obj.PlayerObj(getPlayerName(), shipobjs, score);
+		return new payloads.Player(getPlayerName(), shipobjs, score);
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {
