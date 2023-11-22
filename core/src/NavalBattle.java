@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -23,7 +25,9 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		session = new Session("Elon", "Musk");
+		var pn = UUID.randomUUID().toString().substring(0, 10);
+		var on = UUID.randomUUID().toString().substring(0, 10);
+		session = new Session(pn, on);
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();

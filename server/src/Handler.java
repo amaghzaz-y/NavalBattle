@@ -17,28 +17,31 @@ public class Handler {
 
 	public void HandleRequest(String payload, PrintWriter writer) {
 		var ctx = getSession(payload);
-		System.out.println(ctx);
 		if (!users.containsKey(ctx.getSender())) {
 			users.put(ctx.getSender(), writer);
-			writer.println("registration successful !");
-			writer.flush();
+			sendMessage(ctx.getSender(), "registered successfully !");
 		}
 		if (!sessions.containsKey(ctx.getID())) {
 			sessions.put(ctx.getID(), ctx);
-			writer.println("new session!");
-			writer.flush();
+			sendMessage(ctx.getSender(), "new session started successfully !");
 		}
-		signUser(ctx.getSender(), ctx);
+		signUser(ctx);
 		handleReadyProcess(ctx);
+		var s = sessions.get(ctx.getID());
+		sendMessage(ctx.getSender(), json.prettyPrint(s.getPlayers()));
 	}
 
-	public void signUser(String username, Session ctx) {
+	public void signUser(Session ctx) {
 		// user is already signed
-		if (sessions.get(ctx.getID()).getPlayers().containsKey(username))
+		var sender = ctx.getSender();
+		if (sessions.get(ctx.getID()).getPlayers().containsKey(sender)) {
+			sendMessage(sender, sender + " : already signed in !");
 			return;
+		}
 		var cs = sessions.get(ctx.getID());
-		cs.updatePlayer(ctx.getPlayers().get(username));
+		cs.updatePlayer(ctx.getPlayers().get(sender));
 		sessions.put(ctx.getID(), cs);
+		sendMessage(sender, "signed in successfully !");
 	}
 
 	public void handleReadyProcess(Session ctx) {
@@ -57,6 +60,12 @@ public class Handler {
 		}
 		// overwrite the new update
 		sessions.put(cs.getID(), cs);
+	}
+
+	public void sendMessage(String username, String message) {
+		var printer = users.get(username);
+		printer.println(message);
+		printer.flush();
 	}
 
 	public Session getSession(String payload) {
