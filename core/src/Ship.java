@@ -96,7 +96,7 @@ public class Ship extends ShipBase {
 	}
 
 	// handles users input when positioning boats
-	private void handleInitialPosition(Vector2 position, int type) {
+	public void handleInitialPosition(Vector2 position, int type) {
 		if (getBounds().contains(position) || isSelected) {
 			isDrawBounds = true;
 			if (isSelected) {

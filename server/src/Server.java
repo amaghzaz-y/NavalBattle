@@ -7,8 +7,6 @@ import java.net.Socket;
 
 import com.badlogic.gdx.utils.Json;
 
-import payloads.Session;
-
 public class Server {
 	private static final int PORT = 6700;
 	// public static HashMap<String, PrintWriter> messenger;
@@ -61,7 +59,6 @@ public class Server {
 
 		private void handleInput() throws IOException {
 			try {
-
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
 					var payload = read();
 					if (payload.isEmpty())
