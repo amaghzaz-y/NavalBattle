@@ -9,6 +9,7 @@ public class Session {
 	private Player opponent;
 	private Rectangle playerBounds = new Rectangle(0, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(320, 0, 320, 440);
+	private boolean turn = true;
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
@@ -35,6 +36,15 @@ public class Session {
 		return bounds.contains(mouse);
 	}
 
+	public boolean nextTurn() {
+		turn = !turn;
+		return turn;
+	}
+
+	public boolean getTurn() {
+		return turn;
+	}
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -48,10 +58,14 @@ public class Session {
 	}
 
 	public void onTouchDown(Vector2 mouse, int button) {
-		if (inBounds(playerBounds, mouse))
+		if (inBounds(playerBounds, mouse) && turn) {
 			player.onTouchDown(mouse, button);
-		if (inBounds(opponentBounds, mouse))
+			nextTurn();
+		}
+		if (inBounds(opponentBounds, mouse) && !turn) {
 			opponent.onTouchDown(mouse, button);
+			nextTurn();
+		}
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {

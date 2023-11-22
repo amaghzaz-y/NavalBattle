@@ -10,6 +10,18 @@ public class Bounds {
 		this.renderer = renderer;
 	}
 
+	public void renderTurn(boolean turn) {
+		if (turn == true) {
+			renderer.setColor(Color.GREEN);
+			renderer.set(ShapeType.Line);
+			renderer.rect(320, 0, 320, 440);
+		} else {
+			renderer.setColor(Color.RED);
+			renderer.set(ShapeType.Line);
+			renderer.rect(0, 0, 320, 440);
+		}
+	}
+
 	public void render() {
 		var height = 520;
 		renderer.setColor(Color.BLACK);
