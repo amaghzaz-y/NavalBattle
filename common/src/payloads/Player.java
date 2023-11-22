@@ -9,6 +9,9 @@ public class Player {
 	private boolean turn = false;
 	private boolean ready = false;
 
+	public Player() {
+	}
+
 	public Player(String username, Array<Ship> ships) {
 		this.username = username;
 		this.ships = ships;

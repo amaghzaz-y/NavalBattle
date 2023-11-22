@@ -4,19 +4,25 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.UUID;
+
+import com.badlogic.gdx.utils.Json;
+
+import payloads.Session;
 
 public class Server {
 	private static final int PORT = 6700;
-	public static HashMap<String, PrintWriter> messenger;
+	// public static HashMap<String, PrintWriter> messenger;
+	public static Handler handler;
+	public static Json json;
 
 	public Server() throws Exception {
 		ServerSocket serverSocket = new ServerSocket(PORT);
-		messenger = new HashMap<>();
+		// messenger = new HashMap<>();
+		handler = new Handler();
+		json = new Json();
 		try {
 			while (true) {
-				new ClientHandler(serverSocket.accept()).start();
+				new Client(serverSocket.accept()).start();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -25,12 +31,12 @@ public class Server {
 		}
 	}
 
-	private static class ClientHandler extends Thread {
+	private static class Client extends Thread {
 		private Socket socket;
 		private BufferedReader reader;
 		private PrintWriter writer;
 
-		public ClientHandler(Socket socket) throws IOException {
+		public Client(Socket socket) throws IOException {
 			this.socket = socket;
 		}
 
@@ -41,9 +47,6 @@ public class Server {
 				reader = new BufferedReader(new InputStreamReader(input));
 				var outputStream = socket.getOutputStream();
 				writer = new PrintWriter(outputStream);
-				// new start
-				messenger.put(UUID.randomUUID().toString(), writer);
-				// end
 				handleInput();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -58,42 +61,13 @@ public class Server {
 
 		private void handleInput() throws IOException {
 			try {
-				// username is the first thing to say
-				// String username = "";
-				// while (username.isEmpty()) {
-				// var x = read();
-				// if (x.startsWith("username:")) {
-				// username = x.replace("username:", "");
-				// }
-				// }
-				// messenger.put(username, writer);
-				// while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound())
-				// {
-				// var line = read();
-				// String recipient = "";
-				// while (recipient.isEmpty()) {
-				// var x = read();
-				// if (x.startsWith("to:")) {
-				// recipient = x.replace("to:", "");
-				// }
-				// }
-				// System.out.println("Client " + username + ":" + line);
-				// var pipe = messenger.get(recipient);
-				// pipe.println("from: " + username + " - message: " + line);
-				// pipe.flush();
-				// messenger.put(recipient, pipe);
-				// }
 
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
-					var line = read();
-					if (line.isEmpty())
+					var payload = read();
+					if (payload.isEmpty())
 						continue;
-					for (PrintWriter writer : messenger.values()) {
-						writer.println(line);
-						writer.flush();
-					}
+					handler.HandleRequest(payload, writer);
 				}
-
 			} catch (Exception e) {
 				reader.close();
 				writer.close();

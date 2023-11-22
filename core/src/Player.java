@@ -54,7 +54,7 @@ public class Player extends PlayerBase {
 		ready = state;
 	}
 
-	public payloads.Player Serialize() {
+	public payloads.Player toPayload() {
 		Array<payloads.Ship> shipobjs = new Array<>();
 		for (Ship ship : ships) {
 			shipobjs.add(ship.Serialize());

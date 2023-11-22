@@ -43,12 +43,14 @@ public class Session {
 		return opponent;
 	}
 
-	public void Serialize() {
-		var pp = player.Serialize();
-		var op = opponent.Serialize();
+	public payloads.Session Serialize() {
+		var pp = player.toPayload();
+		var op = opponent.toPayload();
 		var ctx = new payloads.Session(pp, op);
 		ctx.setReady(true);
 		ctx.setID("12345");
+		ctx.setSender(player.getPlayerName());
+		return ctx;
 	}
 
 	public void onTouchDown(Vector2 mouse, int button) {

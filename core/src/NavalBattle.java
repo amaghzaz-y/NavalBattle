@@ -72,13 +72,16 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 		session.onTouchDown(mouse, button);
+		session.updateScore();
 		try {
-			client.sendMessage(json.prettyPrint(session.getOpponent().Serialize()));
-			client.sendMessage(json.prettyPrint(session.getPlayer().Serialize()));
+			// System.out.println(json.toJson(session.Serialize()));
+			var x = json.toJson(session.Serialize());
+			var s = json.fromJson(payloads.Session.class, x);
+			System.out.println(s);
+			client.sendMessage(json.toJson(session.Serialize()));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		session.updateScore();
 		return true;
 	}
 

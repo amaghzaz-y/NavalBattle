@@ -10,6 +10,10 @@ public class Ship {
 	private int size;
 	private Array<Vector2> hits;
 
+	public Ship() {
+
+	}
+
 	public Ship(int x, int y, int direction, int size, Array<Vector2> hits) {
 		this.x = x;
 		this.y = y;

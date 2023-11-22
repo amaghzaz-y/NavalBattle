@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Session {
 	private String ID;
+	private String sender;
 	private HashMap<String, Player> players;
 	private boolean ready = false;
 
@@ -14,6 +15,14 @@ public class Session {
 		players = new HashMap<>();
 		players.put(player.getUsername(), player);
 		players.put(player.getUsername(), player);
+	}
+
+	public void setSender(String username) {
+		sender = username;
+	}
+
+	public String getSender() {
+		return sender;
 	}
 
 	public void setID(String id) {

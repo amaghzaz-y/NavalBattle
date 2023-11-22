@@ -6,21 +6,29 @@ import payloads.Player;
 import payloads.Session;
 
 public class Handler {
-	private Json json = new Json();
-	private HashMap<String, Session> sessions;
-	public static HashMap<String, PrintWriter> users;
+	public Json json = new Json();
+	public HashMap<String, Session> sessions;
+	public HashMap<String, PrintWriter> users;
 
 	public Handler() {
 		users = new HashMap<>();
 		sessions = new HashMap<>();
 	}
 
-	public void HandleRequest(String username, String payload) {
-		var session = getSession(payload);
-		if (!sessions.containsKey(session.getID()))
-			sessions.put(session.getID(), session);
-		signUser(username, session);
-		handleReadyProcess(session);
+	public void HandleRequest(String payload, PrintWriter writer) {
+		System.out.println("handling request +++");
+		var ctx = getSession(payload);
+		System.out.println(ctx);
+		System.out.println("registering: " + ctx.getSender());
+		if (!users.containsKey(ctx.getSender())) {
+			users.put(ctx.getID(), writer);
+			writer.println("fuck off");
+			writer.flush();
+		}
+		if (!sessions.containsKey(ctx.getID()))
+			sessions.put(ctx.getID(), ctx);
+		signUser(ctx.getSender(), ctx);
+		handleReadyProcess(ctx);
 	}
 
 	public void signUser(String username, Session ctx) {
@@ -32,11 +40,7 @@ public class Handler {
 		sessions.put(ctx.getID(), cs);
 	}
 
-	public void adddUserWriter(String username, PrintWriter writer) {
-		users.put(username, writer);
-	}
-
-	private void handleReadyProcess(Session ctx) {
+	public void handleReadyProcess(Session ctx) {
 		// checks and ignores if both players in session are already ready
 		if (ctx.isReady() || sessions.get(ctx.getID()).isReady())
 			return;
@@ -54,7 +58,9 @@ public class Handler {
 		sessions.put(cs.getID(), cs);
 	}
 
-	private Session getSession(String payload) {
-		return json.fromJson(Session.class, payload);
+	public Session getSession(String payload) {
+		var x = json.fromJson(Session.class, payload);
+		System.out.println(x);
+		return x;
 	}
 }
