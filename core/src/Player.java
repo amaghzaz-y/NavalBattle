@@ -6,7 +6,9 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player extends PlayerBase {
 	private Array<Ship> ships;
-	private int score;
+	private int score = 0;
+	private boolean turn = true;
+	private boolean ready = false;
 
 	Player(String name) {
 		super(name);
@@ -35,12 +37,32 @@ public class Player extends PlayerBase {
 		return hits;
 	}
 
+	public boolean nextTurn() {
+		turn = !turn;
+		return turn;
+	}
+
+	public boolean getTurn() {
+		return turn;
+	}
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public void setReady(boolean state) {
+		ready = state;
+	}
+
 	public payloads.Player Serialize() {
 		Array<payloads.Ship> shipobjs = new Array<>();
 		for (Ship ship : ships) {
 			shipobjs.add(ship.Serialize());
 		}
-		return new payloads.Player(getPlayerName(), shipobjs, score);
+		var payload = new payloads.Player(getPlayerName(), shipobjs, score);
+		payload.setReady(ready);
+		payload.setTurn(turn);
+		return payload;
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {

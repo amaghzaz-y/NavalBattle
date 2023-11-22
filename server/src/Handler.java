@@ -15,22 +15,34 @@ public class Handler {
 		sessions = new HashMap<>();
 	}
 
-	public void HandleRequest(String payload) {
+	public void HandleRequest(String username, String payload) {
 		var session = getSession(payload);
-		sessions.put(session.getID(), session);
+		if (!sessions.containsKey(session.getID()))
+			sessions.put(session.getID(), session);
+		signUser(username, session);
+		handleReadyProcess(session);
 	}
 
-	private void addUser(String username, PrintWriter writer) {
+	public void signUser(String username, Session ctx) {
+		// user is already signed
+		if (sessions.get(ctx.getID()).getPlayers().containsKey(username))
+			return;
+		var cs = sessions.get(ctx.getID());
+		cs.updatePlayer(ctx.getPlayers().get(username));
+		sessions.put(ctx.getID(), cs);
+	}
+
+	public void adddUserWriter(String username, PrintWriter writer) {
 		users.put(username, writer);
 	}
 
-	private void handleReadyProcess(Session cSession) {
+	private void handleReadyProcess(Session ctx) {
 		// checks and ignores if both players in session are already ready
-		if (cSession.isReady() || sessions.get(cSession.getID()).isReady())
+		if (ctx.isReady() || sessions.get(ctx.getID()).isReady())
 			return;
-		var cs = sessions.get(cSession.getID());
+		var cs = sessions.get(ctx.getID());
 		// update the local map if playres are ready
-		for (Player player : cSession.getPlayers().values()) {
+		for (Player player : ctx.getPlayers().values()) {
 			if (player.isReady()) {
 				cs.getPlayers().put(player.getUsername(), player);
 				cs.setReady(true);

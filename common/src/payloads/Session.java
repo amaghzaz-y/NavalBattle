@@ -1,11 +1,9 @@
 package payloads;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Session {
 	private String ID;
-	private String PIN;
 	private HashMap<String, Player> players;
 	private boolean ready = false;
 
@@ -18,6 +16,10 @@ public class Session {
 		players.put(player.getUsername(), player);
 	}
 
+	public void setID(String id) {
+		ID = id;
+	}
+
 	public String getID() {
 		return ID;
 	}
@@ -26,8 +28,8 @@ public class Session {
 		return players;
 	}
 
-	public String getPIN() {
-		return PIN;
+	public void updatePlayer(Player player) {
+		players.put(player.getUsername(), player);
 	}
 
 	public void setReady(boolean state) {

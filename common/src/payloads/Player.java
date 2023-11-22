@@ -40,6 +40,10 @@ public class Player {
 		return username;
 	}
 
+	public void setTurn(boolean state) {
+		turn = state;
+	}
+
 	public boolean nextTurn() {
 		turn = !turn;
 		return turn;

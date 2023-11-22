@@ -9,7 +9,6 @@ public class Session {
 	private Player opponent;
 	private Rectangle playerBounds = new Rectangle(0, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(320, 0, 320, 440);
-	private boolean turn = true;
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
@@ -24,7 +23,7 @@ public class Session {
 		this.opponent.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 		this.opponent.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		// setting boundaries
-
+		this.opponent.nextTurn();
 	}
 
 	public void updateScore() {
@@ -36,15 +35,6 @@ public class Session {
 		return bounds.contains(mouse);
 	}
 
-	public boolean nextTurn() {
-		turn = !turn;
-		return turn;
-	}
-
-	public boolean getTurn() {
-		return turn;
-	}
-
 	public Player getPlayer() {
 		return player;
 	}
@@ -54,17 +44,23 @@ public class Session {
 	}
 
 	public void Serialize() {
-
+		var pp = player.Serialize();
+		var op = opponent.Serialize();
+		var ctx = new payloads.Session(pp, op);
+		ctx.setReady(true);
+		ctx.setID("12345");
 	}
 
 	public void onTouchDown(Vector2 mouse, int button) {
-		if (inBounds(playerBounds, mouse) && turn) {
+		if (inBounds(playerBounds, mouse) && player.getTurn()) {
 			player.onTouchDown(mouse, button);
-			nextTurn();
+			player.nextTurn();
+			opponent.nextTurn();
 		}
-		if (inBounds(opponentBounds, mouse) && !turn) {
+		if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
 			opponent.onTouchDown(mouse, button);
-			nextTurn();
+			player.nextTurn();
+			opponent.nextTurn();
 		}
 	}
 

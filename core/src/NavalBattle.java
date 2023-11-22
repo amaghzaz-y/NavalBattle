@@ -57,7 +57,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setAutoShapeType(true);
 		bounds.render();
-		bounds.renderTurn(session.getTurn());
+		bounds.renderTurn(session.getPlayer().getTurn());
 		gui.render();
 		session.render();
 		shapeRenderer.end();
@@ -74,6 +74,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		session.onTouchDown(mouse, button);
 		try {
 			client.sendMessage(json.prettyPrint(session.getOpponent().Serialize()));
+			client.sendMessage(json.prettyPrint(session.getPlayer().Serialize()));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
