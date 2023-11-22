@@ -16,17 +16,18 @@ public class Handler {
 	}
 
 	public void HandleRequest(String payload, PrintWriter writer) {
-		System.out.println("handling request +++");
 		var ctx = getSession(payload);
 		System.out.println(ctx);
-		System.out.println("registering: " + ctx.getSender());
 		if (!users.containsKey(ctx.getSender())) {
-			users.put(ctx.getID(), writer);
-			writer.println("fuck off");
+			users.put(ctx.getSender(), writer);
+			writer.println("registration successful !");
 			writer.flush();
 		}
-		if (!sessions.containsKey(ctx.getID()))
+		if (!sessions.containsKey(ctx.getID())) {
 			sessions.put(ctx.getID(), ctx);
+			writer.println("new session!");
+			writer.flush();
+		}
 		signUser(ctx.getSender(), ctx);
 		handleReadyProcess(ctx);
 	}
@@ -59,8 +60,6 @@ public class Handler {
 	}
 
 	public Session getSession(String payload) {
-		var x = json.fromJson(Session.class, payload);
-		System.out.println(x);
-		return x;
+		return json.fromJson(Session.class, payload);
 	}
 }

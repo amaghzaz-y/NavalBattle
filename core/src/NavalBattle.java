@@ -74,10 +74,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		session.onTouchDown(mouse, button);
 		session.updateScore();
 		try {
-			// System.out.println(json.toJson(session.Serialize()));
-			var x = json.toJson(session.Serialize());
-			var s = json.fromJson(payloads.Session.class, x);
-			System.out.println(s);
 			client.sendMessage(json.toJson(session.Serialize()));
 		} catch (Exception e) {
 			System.out.println(e);
