@@ -21,8 +21,8 @@ public class Ship extends ShipBase {
 	Set<Rectangle> cells;
 	boolean isDrawBounds = false;
 	boolean isSelected = false;
-	// Rectangle bounds;
 
+	// Rectangle bounds;
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
 		this.position = normalizeVector2(position);
@@ -45,26 +45,32 @@ public class Ship extends ShipBase {
 	// public boolean inBounds(Vector2 pos) {
 	// return bounds.contains(pos);
 	// }
-	public void updateSelf(payloads.Ship ctx) {
+	public void setCells(Set<Rectangle> cells) {
+		this.cells = cells;
+	}
+
+	public static Ship FromPayload(payloads.Ship ctx) {
 		var dir = getDirectionFromInt(ctx.getDirection());
 		var type = getTypeFromInt(ctx.getType());
-		var pos = ctx.getPosition();
+		var rpos = ctx.getPosition();
+		var pos = new Vector2(rpos.x * 40, rpos.y * 40);
+		System.out.println(pos.toString());
 		var hits = ctx.getHits();
-		this.direction = dir;
-		this.type = type;
-		this.position = pos;
-		cells.clear();
+		Set<Rectangle> cells = new HashSet<>();
 		for (var hit : hits) {
 			var rect = new Rectangle(hit.x, hit.y, 40, 40);
 			cells.add(rect);
 		}
+		var ship = new Ship(pos, dir, type);
+		ship.setCells(cells);
+		return ship;
 	}
 
 	public int getDirectionInt() {
 		return direction == Direction.Vertical ? 0 : 1;
 	}
 
-	public Direction getDirectionFromInt(int number) {
+	public static Direction getDirectionFromInt(int number) {
 		return number == 0 ? Direction.Vertical : Direction.Horizontal;
 	}
 
@@ -82,7 +88,7 @@ public class Ship extends ShipBase {
 		return 0;
 	}
 
-	public Type getTypeFromInt(int number) {
+	public static Type getTypeFromInt(int number) {
 		switch (number) {
 			case 0:
 				return Type.VerySmall;

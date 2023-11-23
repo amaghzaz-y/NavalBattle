@@ -9,6 +9,7 @@ public class Player extends PlayerBase {
 	private int score = 0;
 	private boolean turn = true;
 	private boolean ready = false;
+	private ShapeRenderer renderer;
 
 	Player(String name) {
 		super(name);
@@ -20,13 +21,12 @@ public class Player extends PlayerBase {
 	}
 
 	public void updateSelfFromPayload(payloads.Player ctx) {
-		System.out.println("updating self :" + getPlayerName());
-		// for (int i = 0; i < ships.size; i++) {
-		// var newship = ships.get(i);
-		// var sctx = ctx.getShips().get(i);
-		// newship.updateSelf(sctx);
-		// ships.set(i, newship);
-		// }
+		ships.clear();
+		for (int i = 0; i < 4; i++) {
+			var sctx = ctx.getShips().get(i);
+			Ship ship = Ship.FromPayload(sctx);
+			ships.add(ship);
+		}
 	}
 
 	public int getScore() {
@@ -80,9 +80,8 @@ public class Player extends PlayerBase {
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {
-		for (Ship ship : ships) {
-			ship.addShapeRenderer(renderer);
-		}
+		this.renderer = renderer;
+
 	}
 
 	public void addShip(Ship ship) {
@@ -101,6 +100,7 @@ public class Player extends PlayerBase {
 
 	public void render() {
 		for (Ship ship : ships) {
+			ship.addShapeRenderer(renderer);
 			ship.render();
 			ship.renderBounds();
 		}

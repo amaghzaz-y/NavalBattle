@@ -67,17 +67,14 @@ public class Session {
 		return ctx;
 	}
 
-	public void onTouchDown(Vector2 mouse, int button) {
+	public boolean onTouchDown(Vector2 mouse, int button) {
 		if (inBounds(playerBounds, mouse) && player.getTurn()) {
 			player.onTouchDown(mouse, button);
 			player.nextTurn();
 			opponent.nextTurn();
+			return true;
 		}
-		if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
-			opponent.onTouchDown(mouse, button);
-			player.nextTurn();
-			opponent.nextTurn();
-		}
+		return false;
 	}
 
 	public void setRenderer(ShapeRenderer renderer) {
