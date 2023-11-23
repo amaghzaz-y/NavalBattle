@@ -1,60 +1,15 @@
 package payloads;
 
-import java.util.HashMap;
-
 public class Session {
-	private String ID;
-	private String sender;
-	private HashMap<String, Player> players;
-	private boolean ready = false;
-	private boolean turn;
+	public String ID;
+	public Player player;
+	public Player opponent;
 
 	public Session() {
 	}
 
 	public Session(Player player, Player opp) {
-		players = new HashMap<>();
-		players.put(player.getUsername(), player);
-		players.put(player.getUsername(), player);
-	}
-
-	public void setTurn(boolean turn) {
-		this.turn = true;
-	}
-
-	public boolean getTurn() {
-		return turn;
-	}
-
-	public void setSender(String username) {
-		sender = username;
-	}
-
-	public String getSender() {
-		return sender;
-	}
-
-	public void setID(String id) {
-		ID = id;
-	}
-
-	public String getID() {
-		return ID;
-	}
-
-	public HashMap<String, Player> getPlayers() {
-		return players;
-	}
-
-	public void updatePlayer(Player player) {
-		players.put(player.getUsername(), player);
-	}
-
-	public void setReady(boolean state) {
-		ready = true;
-	}
-
-	public boolean isReady() {
-		return ready;
+		this.player = player;
+		this.opponent = opp;
 	}
 }
