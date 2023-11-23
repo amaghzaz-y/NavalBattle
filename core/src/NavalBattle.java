@@ -44,7 +44,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			while (!sc.getClient().isReady())
 				;
 			client = sc.getClient();
-			client.sendMessage(json.toJson(session.Serialize()));
+			client.sendMessage(json.toJson(session.serialize()));
 			while (opponentName == session.getOpponent().getPlayerName()) {
 				updateScene();
 			}
@@ -59,7 +59,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			var s = json.fromJson(payloads.Session.class, payload);
 			if (s == null)
 				return;
-			session.UpdateFromPayload(s);
+			// session.UpdateFromPayload(s);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -96,7 +96,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		// if (update) {
 		session.updateScore();
 		try {
-			client.sendMessage(json.toJson(session.Serialize()));
+			client.sendMessage(json.toJson(session.serialize()));
 			updateScene();
 		} catch (Exception e) {
 			System.out.println(e);

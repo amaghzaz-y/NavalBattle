@@ -26,16 +26,9 @@ public class Session {
 		player.setScore(opponent.HitsUpdate());
 	}
 
-	public void UpdateFromPayload(payloads.Session ctx) {
-		for (var p : ctx.getPlayers().values()) {
-			// opponent
-			if (!p.getUsername().matches(player.getPlayerName())) {
-				opponent.setPlayerName(p.getUsername());
-				opponent.updateSelfFromPayload(p, true);
-			} else {
-				player.updateSelfFromPayload(p, false);
-			}
-		}
+	public void fromJson(payloads.Session ctx) {
+		opponent.setPlayerName(ctx.opponent.username);
+		player.setPlayerName(ctx.player.username);
 	}
 
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {
@@ -50,13 +43,11 @@ public class Session {
 		return opponent;
 	}
 
-	public payloads.Session Serialize() {
-		var pp = player.toPayload();
-		var op = opponent.toPayload();
+	public payloads.Session serialize() {
+		var pp = player.serialize();
+		var op = opponent.serialize();
 		var ctx = new payloads.Session(pp, op);
-		ctx.setReady(true);
-		ctx.setID("12345");
-		ctx.setSender(player.getPlayerName());
+		ctx.ID = "124";
 		return ctx;
 	}
 

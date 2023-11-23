@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class Ship extends ShipBase {
 	private float stateTime;
@@ -38,31 +37,16 @@ public class Ship extends ShipBase {
 		this.renderer = renderer;
 	}
 
-	// public void setBounds(Rectangle bounds) {
-	// this.bounds = bounds;
-	// }
-
-	// public boolean inBounds(Vector2 pos) {
-	// return bounds.contains(pos);
-	// }
 	public void setCells(Set<Rectangle> cells) {
 		this.cells = cells;
 	}
 
-	public static Ship FromPayload(payloads.Ship ctx, boolean isOpponent) {
-		var dir = getDirectionFromInt(ctx.getDirection());
-		var type = getTypeFromInt(ctx.getType());
-		var rpos = ctx.getPosition();
+	public static Ship fromJson(payloads.Ship obj, boolean isOpponent) {
+		var dir = getDirectionFromInt(obj.direction);
+		var type = getTypeFromInt(obj.type);
 		int offset = isOpponent == true ? -320 : 0;
-		var pos = new Vector2(rpos.x * 40 + offset, rpos.y * 40);
-		var hits = ctx.getHits();
-		Set<Rectangle> cells = new HashSet<>();
-		for (var hit : hits) {
-			var rect = new Rectangle(hit.x * 40 + offset, hit.y * 40, 40, 40);
-			cells.add(rect);
-		}
+		var pos = new Vector2(obj.x * 40 + offset, obj.y * 40);
 		var ship = new Ship(pos, dir, type);
-		ship.setCells(cells);
 		return ship;
 	}
 
@@ -312,18 +296,12 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public payloads.Ship Serialize() {
+	public payloads.Ship serialize() {
 		int x = (int) position.x / 40;
 		int y = (int) position.y / 40;
-		Array<Vector2> hits = new Array<>();
-		for (Rectangle cell : cells) {
-			int cx = (int) cell.x / 40;
-			int cy = (int) cell.y / 40;
-			hits.add(new Vector2(cx, cy));
-		}
 		int type = getTypeInt();
 		int dir = getDirectionInt();
-		return new payloads.Ship(x, y, dir, size, type, hits);
+		return new payloads.Ship(x, y, dir, type);
 	}
 
 	public void draw(Batch batch) {

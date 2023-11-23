@@ -20,15 +20,6 @@ public class Player extends PlayerBase {
 		setPlayerName(username);
 	}
 
-	public void updateSelfFromPayload(payloads.Player ctx, Boolean isOpponent) {
-		ships.clear();
-		for (int i = 0; i < 4; i++) {
-			var sctx = ctx.getShips().get(i);
-			Ship ship = Ship.FromPayload(sctx, isOpponent);
-			ships.add(ship);
-		}
-	}
-
 	public int getScore() {
 		return score;
 	}
@@ -68,12 +59,12 @@ public class Player extends PlayerBase {
 		ready = state;
 	}
 
-	public payloads.Player toPayload() {
+	public payloads.Player serialize() {
 		Array<payloads.Ship> shipobjs = new Array<>();
 		for (Ship ship : ships) {
-			shipobjs.add(ship.Serialize());
+			shipobjs.add(ship.serialize());
 		}
-		var payload = new payloads.Player(getPlayerName(), shipobjs, score);
+		var payload = new payloads.Player(getPlayerName(), shipobjs);
 		return payload;
 	}
 
