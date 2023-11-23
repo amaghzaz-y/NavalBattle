@@ -49,16 +49,16 @@ public class Ship extends ShipBase {
 		this.cells = cells;
 	}
 
-	public static Ship FromPayload(payloads.Ship ctx) {
+	public static Ship FromPayload(payloads.Ship ctx, boolean isOpponent) {
 		var dir = getDirectionFromInt(ctx.getDirection());
 		var type = getTypeFromInt(ctx.getType());
 		var rpos = ctx.getPosition();
-		var pos = new Vector2(rpos.x * 40, rpos.y * 40);
-		System.out.println(pos.toString());
+		int offset = isOpponent == true ? -320 : 0;
+		var pos = new Vector2(rpos.x * 40 + offset, rpos.y * 40);
 		var hits = ctx.getHits();
 		Set<Rectangle> cells = new HashSet<>();
 		for (var hit : hits) {
-			var rect = new Rectangle(hit.x, hit.y, 40, 40);
+			var rect = new Rectangle(hit.x * 40 + offset, hit.y * 40, 40, 40);
 			cells.add(rect);
 		}
 		var ship = new Ship(pos, dir, type);

@@ -28,7 +28,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		playerName = UUID.randomUUID().toString().substring(0, 10);
-		opponentName = UUID.randomUUID().toString().substring(0, 10);
+		opponentName = "Waiting... ";
 		session = new Session(playerName, opponentName);
 		bounds = new Bounds();
 		sea = new Sea();
@@ -44,6 +44,10 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			while (!sc.getClient().isReady())
 				;
 			client = sc.getClient();
+			client.sendMessage(json.toJson(session.Serialize()));
+			while (opponentName == session.getOpponent().getPlayerName()) {
+				updateScene();
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -53,6 +57,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		try {
 			var payload = client.handleInput();
 			var s = json.fromJson(payloads.Session.class, payload);
+			if (s == null)
+				return;
 			session.UpdateFromPayload(s);
 		} catch (Exception e) {
 			System.out.println(e);

@@ -13,11 +13,6 @@ public class Session {
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
 		this.opponent = new Player(opponent);
-		// default ships
-		this.opponent.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
-		this.opponent.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
-		this.opponent.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		this.opponent.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
 		this.player.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
 		this.player.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
 		this.player.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
@@ -35,12 +30,10 @@ public class Session {
 		for (var p : ctx.getPlayers().values()) {
 			// opponent
 			if (!p.getUsername().matches(player.getPlayerName())) {
-				System.out.println("Player: " + player.getPlayerName());
-				System.out.println("Opponent: " + p.getUsername());
 				opponent.setPlayerName(p.getUsername());
-				opponent.updateSelfFromPayload(p);
+				opponent.updateSelfFromPayload(p, true);
 			} else {
-				player.updateSelfFromPayload(p);
+				player.updateSelfFromPayload(p, false);
 			}
 		}
 	}
@@ -73,6 +66,12 @@ public class Session {
 			player.nextTurn();
 			opponent.nextTurn();
 			return true;
+		}
+		// for debug only
+		if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
+			opponent.onTouchDown(mouse, button);
+			player.nextTurn();
+			opponent.nextTurn();
 		}
 		return false;
 	}

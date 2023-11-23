@@ -6,8 +6,6 @@ public class Player {
 	private String username;
 	private Array<Ship> ships;
 	private int score = 0;
-	private boolean turn = false;
-	private boolean ready = false;
 
 	public Player() {
 	}
@@ -23,14 +21,6 @@ public class Player {
 		this.score = score;
 	}
 
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void setReady(boolean state) {
-		ready = state;
-	}
-
 	public Array<Ship> getShips() {
 		return ships;
 	}
@@ -43,16 +33,4 @@ public class Player {
 		return username;
 	}
 
-	public void setTurn(boolean state) {
-		turn = state;
-	}
-
-	public boolean nextTurn() {
-		turn = !turn;
-		return turn;
-	}
-
-	public boolean getTurn() {
-		return turn;
-	}
 }

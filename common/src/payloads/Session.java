@@ -7,6 +7,7 @@ public class Session {
 	private String sender;
 	private HashMap<String, Player> players;
 	private boolean ready = false;
+	private boolean turn;
 
 	public Session() {
 	}
@@ -15,6 +16,14 @@ public class Session {
 		players = new HashMap<>();
 		players.put(player.getUsername(), player);
 		players.put(player.getUsername(), player);
+	}
+
+	public void setTurn(boolean turn) {
+		this.turn = true;
+	}
+
+	public boolean getTurn() {
+		return turn;
 	}
 
 	public void setSender(String username) {

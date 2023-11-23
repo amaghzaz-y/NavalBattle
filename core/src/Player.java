@@ -20,11 +20,11 @@ public class Player extends PlayerBase {
 		setPlayerName(username);
 	}
 
-	public void updateSelfFromPayload(payloads.Player ctx) {
+	public void updateSelfFromPayload(payloads.Player ctx, Boolean isOpponent) {
 		ships.clear();
 		for (int i = 0; i < 4; i++) {
 			var sctx = ctx.getShips().get(i);
-			Ship ship = Ship.FromPayload(sctx);
+			Ship ship = Ship.FromPayload(sctx, isOpponent);
 			ships.add(ship);
 		}
 	}
@@ -74,8 +74,6 @@ public class Player extends PlayerBase {
 			shipobjs.add(ship.Serialize());
 		}
 		var payload = new payloads.Player(getPlayerName(), shipobjs, score);
-		payload.setReady(ready);
-		payload.setTurn(turn);
 		return payload;
 	}
 
