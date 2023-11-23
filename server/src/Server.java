@@ -63,7 +63,7 @@ public class Server {
 					var payload = read();
 					if (payload.isEmpty())
 						continue;
-					handler.HandleRequest(payload, writer);
+					handler.Handle(getName(), writer);
 				}
 			} catch (Exception e) {
 				reader.close();

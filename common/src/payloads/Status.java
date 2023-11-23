@@ -7,4 +7,8 @@ public class Status {
 
 	public Status() {
 	}
+
+	public Status(int status) {
+		code = status;
+	}
 }
