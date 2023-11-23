@@ -45,6 +45,56 @@ public class Ship extends ShipBase {
 	// public boolean inBounds(Vector2 pos) {
 	// return bounds.contains(pos);
 	// }
+	public void updateSelf(payloads.Ship ctx) {
+		var dir = getDirectionFromInt(ctx.getDirection());
+		var type = getTypeFromInt(ctx.getType());
+		var pos = ctx.getPosition();
+		var hits = ctx.getHits();
+		this.direction = dir;
+		this.type = type;
+		this.position = pos;
+		cells.clear();
+		for (var hit : hits) {
+			var rect = new Rectangle(hit.x, hit.y, 40, 40);
+			cells.add(rect);
+		}
+	}
+
+	public int getDirectionInt() {
+		return direction == Direction.Vertical ? 0 : 1;
+	}
+
+	public Direction getDirectionFromInt(int number) {
+		return number == 0 ? Direction.Vertical : Direction.Horizontal;
+	}
+
+	public int getTypeInt() {
+		switch (type) {
+			case VerySmall:
+				return 0;
+			case Small:
+				return 1;
+			case Medium:
+				return 2;
+			case Big:
+				return 3;
+		}
+		return 0;
+	}
+
+	public Type getTypeFromInt(int number) {
+		switch (number) {
+			case 0:
+				return Type.VerySmall;
+			case 1:
+				return Type.Small;
+			case 2:
+				return Type.Medium;
+			case 3:
+				return Type.Big;
+		}
+		return Type.VerySmall;
+	}
 
 	public int touches() {
 		return cells.size();
@@ -259,14 +309,15 @@ public class Ship extends ShipBase {
 	public payloads.Ship Serialize() {
 		int x = (int) position.x / 40;
 		int y = (int) position.y / 40;
-		int dir = direction == Direction.Vertical ? 0 : 1;
 		Array<Vector2> hits = new Array<>();
 		for (Rectangle cell : cells) {
 			int cx = (int) cell.x / 40;
 			int cy = (int) cell.y / 40;
 			hits.add(new Vector2(cx, cy));
 		}
-		return new payloads.Ship(x, y, dir, size, hits);
+		int type = getTypeInt();
+		int dir = getDirectionInt();
+		return new payloads.Ship(x, y, dir, size, type, hits);
 	}
 
 	public void draw(Batch batch) {

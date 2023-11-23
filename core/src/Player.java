@@ -19,6 +19,16 @@ public class Player extends PlayerBase {
 		setPlayerName(username);
 	}
 
+	public void updateSelfFromPayload(payloads.Player ctx) {
+		System.out.println("updating self :" + getPlayerName());
+		// for (int i = 0; i < ships.size; i++) {
+		// var newship = ships.get(i);
+		// var sctx = ctx.getShips().get(i);
+		// newship.updateSelf(sctx);
+		// ships.set(i, newship);
+		// }
+	}
+
 	public int getScore() {
 		return score;
 	}

@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Session {
 	private Player player;
 	private Player opponent;
-	private Rectangle playerBounds = new Rectangle(0, 0, 320, 440);
-	private Rectangle opponentBounds = new Rectangle(320, 0, 320, 440);
+	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
+	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
@@ -34,12 +34,13 @@ public class Session {
 	public void UpdateFromPayload(payloads.Session ctx) {
 		for (var p : ctx.getPlayers().values()) {
 			// opponent
-			System.out.println("p:" + p.getUsername());
 			if (!p.getUsername().matches(player.getPlayerName())) {
 				System.out.println("Player: " + player.getPlayerName());
 				System.out.println("Opponent: " + p.getUsername());
 				opponent.setPlayerName(p.getUsername());
-				continue;
+				opponent.updateSelfFromPayload(p);
+			} else {
+				player.updateSelfFromPayload(p);
 			}
 		}
 	}

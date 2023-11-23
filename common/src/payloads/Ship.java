@@ -7,6 +7,7 @@ public class Ship {
 	private int x;
 	private int y;
 	private int direction;
+	private int type;
 	private int size;
 	private Array<Vector2> hits;
 
@@ -14,12 +15,17 @@ public class Ship {
 
 	}
 
-	public Ship(int x, int y, int direction, int size, Array<Vector2> hits) {
+	public Ship(int x, int y, int direction, int size, int type, Array<Vector2> hits) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
 		this.size = size;
+		this.type = type;
 		this.hits = hits;
+	}
+
+	public int getType() {
+		return type;
 	}
 
 	public Array<Vector2> getHits() {
