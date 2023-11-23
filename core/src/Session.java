@@ -32,10 +32,14 @@ public class Session {
 	}
 
 	public void UpdateFromPayload(payloads.Session ctx) {
-		for (var p : ctx.getPlayers().keySet()) {
+		for (var p : ctx.getPlayers().values()) {
 			// opponent
-			if (p != player.getPlayerName() || p != opponent.getPlayerName()) {
-				opponent.setPlayerName(p);
+			System.out.println("p:" + p.getUsername());
+			if (!p.getUsername().matches(player.getPlayerName())) {
+				System.out.println("Player: " + player.getPlayerName());
+				System.out.println("Opponent: " + p.getUsername());
+				opponent.setPlayerName(p.getUsername());
+				continue;
 			}
 		}
 	}
