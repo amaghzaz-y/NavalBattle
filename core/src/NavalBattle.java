@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
+	String playerName;
+	String opponentName;
 	SpriteBatch batch;
 	Sea sea;
 	Bounds bounds;
@@ -25,24 +27,33 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		var pn = UUID.randomUUID().toString().substring(0, 10);
-		var on = UUID.randomUUID().toString().substring(0, 10);
-		session = new Session(pn, on);
+		playerName = UUID.randomUUID().toString().substring(0, 10);
+		opponentName = UUID.randomUUID().toString().substring(0, 10);
+		session = new Session(playerName, opponentName);
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
 		bounds.addShapeRenderer(shapeRenderer);
 		session.setRenderer(shapeRenderer);
 		gui = new Gui();
-		gui.setPlayerOne(session.getPlayer());
-		gui.setPlayerTwo(session.getOpponent());
+		gui.setPlayer(session.getPlayer());
+		gui.setOpponent(session.getOpponent());
 		gui.addShapeRenderer(shapeRenderer);
-
 		try {
 			var sc = new SocketClient();
 			while (!sc.getClient().isReady())
 				;
 			client = sc.getClient();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public void updateScene() {
+		try {
+			var payload = client.handleInput();
+			var s = json.fromJson(payloads.Session.class, payload);
+			session.UpdateFromPayload(s);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -79,6 +90,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		session.updateScore();
 		try {
 			client.sendMessage(json.toJson(session.Serialize()));
+			updateScene();
 		} catch (Exception e) {
 			System.out.println(e);
 		}

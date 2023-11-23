@@ -14,8 +14,8 @@ public class Gui {
 	private BitmapFont font;
 	private BitmapFont fontSmall;
 	private BitmapFont fontVerySmall;
-	private Player player1;
-	private Player player2;
+	private Player player;
+	private Player opponent;
 
 	public Gui() {
 		parameter.size = 36;
@@ -27,12 +27,12 @@ public class Gui {
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
-	public void setPlayerOne(Player player) {
-		player1 = player;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
-	public void setPlayerTwo(Player player) {
-		player2 = player;
+	public void setOpponent(Player player) {
+		this.opponent = player;
 	}
 
 	public void addShapeRenderer(ShapeRenderer renderer) {
@@ -48,8 +48,8 @@ public class Gui {
 		fontVerySmall.draw(batch, "Player 2: Test Message Placeholder", 670, 290);
 		fontSmall.draw(batch, "-> Click Here to type message", 670, 40);
 		// players
-		font.draw(batch, player1.getPlayerName() + ":" + player1.getScore(), 100, 500);
-		font.draw(batch, player2.getPlayerName() + ":" + player2.getScore(), 400, 500);
+		font.draw(batch, opponent.getPlayerName() + ":" + opponent.getScore(), 100, 500);
+		font.draw(batch, player.getPlayerName() + ":" + player.getScore(), 400, 500);
 	}
 
 	public void render() {

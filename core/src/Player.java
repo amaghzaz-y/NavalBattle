@@ -15,6 +15,10 @@ public class Player extends PlayerBase {
 		ships = new Array<>();
 	}
 
+	public void setName(String username) {
+		setPlayerName(username);
+	}
+
 	public int getScore() {
 		return score;
 	}

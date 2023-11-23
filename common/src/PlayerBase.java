@@ -21,6 +21,10 @@ public class PlayerBase {
 		score = newScore;
 	}
 
+	public void setPlayerName(String name) {
+		playerName = name;
+	}
+
 	public String getPlayerName() {
 		return playerName;
 	}

@@ -41,7 +41,7 @@ public class SocketClient {
 				var outputStream = socket.getOutputStream();
 				writer = new PrintWriter(outputStream);
 				ready = true;
-				handleInput();
+				// handleInput();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -61,13 +61,14 @@ public class SocketClient {
 			return reader.readLine();
 		}
 
-		private void handleInput() throws IOException {
+		public String handleInput() throws IOException {
 			try {
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
 					String msg = readMessage();
 					if (!msg.isEmpty()) {
 						received = msg;
-						System.out.println(received);
+						// System.out.println(received);
+						return received;
 					}
 				}
 			} catch (Exception e) {
@@ -75,6 +76,7 @@ public class SocketClient {
 				writer.close();
 				socket.close();
 			}
+			return new String();
 		}
 	}
 }

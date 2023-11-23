@@ -14,14 +14,14 @@ public class Session {
 		this.player = new Player(player);
 		this.opponent = new Player(opponent);
 		// default ships
-		this.player.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
-		this.player.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
-		this.player.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
-		this.player.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
-		this.opponent.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		this.opponent.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
-		this.opponent.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
-		this.opponent.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+		this.opponent.addShip(new Ship(new Vector2(50, 200), ShipBase.Direction.Horizontal, ShipBase.Type.VerySmall));
+		this.opponent.addShip(new Ship(new Vector2(120, 400), ShipBase.Direction.Horizontal, ShipBase.Type.Small));
+		this.opponent.addShip(new Ship(new Vector2(200, 80), ShipBase.Direction.Vertical, ShipBase.Type.Medium));
+		this.opponent.addShip(new Ship(new Vector2(250, 300), ShipBase.Direction.Horizontal, ShipBase.Type.Big));
+		this.player.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		this.player.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
+		this.player.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
+		this.player.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		// setting boundaries
 		this.opponent.nextTurn();
 	}
@@ -29,6 +29,15 @@ public class Session {
 	public void updateScore() {
 		opponent.setScore(player.HitsUpdate());
 		player.setScore(opponent.HitsUpdate());
+	}
+
+	public void UpdateFromPayload(payloads.Session ctx) {
+		for (var p : ctx.getPlayers().keySet()) {
+			// opponent
+			if (p != player.getPlayerName() || p != opponent.getPlayerName()) {
+				opponent.setPlayerName(p);
+			}
+		}
 	}
 
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {

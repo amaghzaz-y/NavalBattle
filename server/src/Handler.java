@@ -19,29 +19,25 @@ public class Handler {
 		var ctx = getSession(payload);
 		if (!users.containsKey(ctx.getSender())) {
 			users.put(ctx.getSender(), writer);
-			sendMessage(ctx.getSender(), "registered successfully !");
 		}
 		if (!sessions.containsKey(ctx.getID())) {
 			sessions.put(ctx.getID(), ctx);
-			sendMessage(ctx.getSender(), "new session started successfully !");
 		}
 		signUser(ctx);
 		handleReadyProcess(ctx);
 		var s = sessions.get(ctx.getID());
-		sendMessage(ctx.getSender(), json.prettyPrint(s.getPlayers()));
+		sendMessage(ctx.getSender(), json.toJson(s));
 	}
 
 	public void signUser(Session ctx) {
 		// user is already signed
 		var sender = ctx.getSender();
 		if (sessions.get(ctx.getID()).getPlayers().containsKey(sender)) {
-			sendMessage(sender, sender + " : already signed in !");
 			return;
 		}
 		var cs = sessions.get(ctx.getID());
 		cs.updatePlayer(ctx.getPlayers().get(sender));
 		sessions.put(ctx.getID(), cs);
-		sendMessage(sender, "signed in successfully !");
 	}
 
 	public void handleReadyProcess(Session ctx) {
