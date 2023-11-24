@@ -77,11 +77,6 @@ public class SocketClient {
 			return false;
 		}
 
-		// Waiting for update after requesting an update
-		public String WildRead() throws IOException {
-			return read();
-		}
-
 		public boolean sendMissile(Missile missile) throws IOException {
 			String request = json.toJson(missile);
 			send(request);

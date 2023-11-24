@@ -2,7 +2,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Genereic;
@@ -53,10 +52,15 @@ public class Handler {
 		}
 	}
 
+	// receives request - sends status codes
 	private void MissileHandler(Missile request, PrintWriter writer) {
 		// ignores if its not the player turn to play
-		if (!TurnPlayers.contains(request.player) && TurnPlayers.contains(request.opponent)) {
+		if (!Sessions.containsKey(request.session)) {
 			sendStatus(writer, new Status(2));
+			return;
+		}
+		if (!TurnPlayers.contains(request.player) && TurnPlayers.contains(request.opponent)) {
+			sendStatus(writer, new Status(3));
 			return;
 		}
 		// assign new turn
@@ -83,15 +87,41 @@ public class Handler {
 				return;
 			// Missile
 			case 5:
+				// sender is able to receive missile attacks
 				if (TurnPlayers.contains(request.sender)) {
 					if (Missiles.containsKey(request.session)) {
 						var missile = Missiles.get(request.session);
+						Missiles.remove(request.session);
+						sendStatus(writer, new Status(1));
 						sendMissile(request.sender, missile);
+						return;
 					}
+					// tell the player that there is a sync error
+					sendStatus(writer, new Status(2));
+					return;
 				}
+				// tell the player to wait for udpate
+				sendStatus(writer, new Status(3));
 				return;
 			// Turn
 			case 6:
+				if (TurnPlayers.contains(request.sender)) {
+					sendStatus(writer, new Status(1));
+				} else {
+					// session does not exist, therefore, too soon, or wrong session
+					if (!Sessions.containsKey(request.session)) {
+						sendStatus(writer, new Status(2));
+						return;
+					}
+					var current = Sessions.get(request.session);
+					// gives turn perm if no one has the privilege
+					if (!TurnPlayers.contains(current.opponent.username)) {
+						TurnPlayers.add(request.sender);
+						sendStatus(writer, new Status(1));
+						return;
+					}
+					sendStatus(writer, new Status(3));
+				}
 				return;
 			// Score
 			case 7:
@@ -102,6 +132,7 @@ public class Handler {
 		}
 	}
 
+	// receives request / sends status codes
 	private void SessionHandler(Session request, PrintWriter writer) {
 		if (!Sessions.containsKey(request.session))
 			Sessions.put(request.session, request);
@@ -126,7 +157,6 @@ public class Handler {
 			return;
 		}
 		sendStatus(writer, new Status(2));
-		return;
 	}
 
 	private void sendMissile(String username, Missile missile) {
