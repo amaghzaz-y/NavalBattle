@@ -47,7 +47,7 @@ public class Session {
 		var pp = player.serialize();
 		var op = opponent.serialize();
 		var ctx = new payloads.Session(pp, op);
-		ctx.ID = "124";
+		ctx.session = "124";
 		return ctx;
 	}
 
