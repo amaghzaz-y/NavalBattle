@@ -2,6 +2,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Genereic;
@@ -12,10 +13,11 @@ import payloads.Status;
 
 public class Handler {
 	public Json json = new Json();
-	// session ID, Session
-	public HashMap<String, Session> Sessions;
-	public HashMap<String, PrintWriter> Users;
-	public HashSet<String> ReadySessions;
+	public HashMap<String, Session> Sessions; // (sessionID, Session)
+	public HashMap<String, PrintWriter> Users; // (usernames, writer)
+	public HashSet<String> ReadySessions; // sessionsID
+	public HashSet<String> ReadyPlayers; // usernames
+	public HashMap<String, Array<Missile>> Missiles; // (sessionID, missiles[])
 	public int count = 0;
 
 	public Handler() {
@@ -39,15 +41,30 @@ public class Handler {
 			// Missile Handler
 			case 3:
 				var missile = json.fromJson(Missile.class, payload);
+				MissileHandler(missile, writer);
 				break;
 			// Score Handler
 			case 4:
-				var score = json.fromJson(Score.class, payload);
+				// var score = json.fromJson(Score.class, payload);s
 				break;
 			// Bad Request
 			default:
+				sendStatus(writer, new Status(2));
 				break;
 		}
+	}
+
+	private void MissileHandler(Missile request, PrintWriter writer) {
+		if (!Missiles.containsKey(request.ID))
+			Missiles.put(request.ID, new Array<>());
+		var missiles = Missiles.get(request.ID);
+		missiles.add(request);
+		Missiles.put(request.ID, missiles);
+		var res = request;
+		res.opponent = request.player;
+		res.player = request.opponent;
+		sendToPlayer(res.player, json.toJson(res));
+		sendStatus(writer, new Status(1));
 	}
 
 	private void StatusHandler(Status request, PrintWriter writer) {
@@ -120,15 +137,4 @@ public class Handler {
 		writer.flush();
 	}
 
-	// sends message to all players in the same session
-	private void broadcast(Session ctx, String message) {
-		var s = Sessions.get(ctx.ID);
-		sendToPlayer(s.player.username, message);
-		sendToPlayer(s.opponent.username, message);
-	}
-
-	// get json from session
-	private Session getSession(String payload) {
-		return json.fromJson(Session.class, payload);
-	}
 }
