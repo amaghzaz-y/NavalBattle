@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Json;
 
 import payloads.Genereic;
 import payloads.Missile;
-import payloads.Score;
 import payloads.Session;
 import payloads.Status;
 
@@ -16,8 +15,8 @@ public class Handler {
 	public HashMap<String, Session> Sessions; // (sessionID, Session)
 	public HashMap<String, PrintWriter> Users; // (usernames, writer)
 	public HashSet<String> ReadySessions; // sessionsID
-	public HashSet<String> ReadyPlayers; // usernames
-	public HashMap<String, Array<Missile>> Missiles; // (sessionID, missiles[])
+	public HashSet<String> TurnPlayers; // usernames
+	public HashMap<String, Missile> Missiles; // (sessionID, missile)
 	public int count = 0;
 
 	public Handler() {
@@ -55,47 +54,58 @@ public class Handler {
 	}
 
 	private void MissileHandler(Missile request, PrintWriter writer) {
-		if (!Missiles.containsKey(request.ID))
-			Missiles.put(request.ID, new Array<>());
-		var missiles = Missiles.get(request.ID);
-		missiles.add(request);
-		Missiles.put(request.ID, missiles);
+		// ignores if its not the player turn to play
+		if (!TurnPlayers.contains(request.player) && TurnPlayers.contains(request.opponent)) {
+			sendStatus(writer, new Status(2));
+			return;
+		}
+		// assign new turn
+		TurnPlayers.remove(request.player);
+		TurnPlayers.add(request.opponent);
+		// update missile
+		Missiles.put(request.session, request);
+		// sending corresponding requests
 		var res = request;
 		res.opponent = request.player;
 		res.player = request.opponent;
-		sendToPlayer(res.player, json.toJson(res));
 		sendStatus(writer, new Status(1));
 	}
 
 	private void StatusHandler(Status request, PrintWriter writer) {
 		switch (request.code) {
-			// Update
+			// Session
 			case 4:
-				if (ReadySessions.contains(request.ID)) {
-					sendSession(writer, Sessions.get(request.ID));
+				if (ReadySessions.contains(request.session)) {
+					sendSession(writer, Sessions.get(request.session));
 					return;
 				}
 				sendStatus(writer, new Status(3));
 				return;
-			// Turn
+			// Missile
 			case 5:
+				if (TurnPlayers.contains(request.sender)) {
+					if (Missiles.containsKey(request.session)) {
+						var missile = Missiles.get(request.session);
+						sendMissile(request.sender, missile);
+					}
+				}
 				return;
-			// Score
+			// Turn
 			case 6:
 				return;
-			// Scoreboard
+			// Score
 			case 7:
 				return;
-			// Chat
+			// ScoreBoard
 			case 8:
 				return;
 		}
 	}
 
 	private void SessionHandler(Session request, PrintWriter writer) {
-		if (!Sessions.containsKey(request.ID))
-			Sessions.put(request.ID, request);
-		var current = Sessions.get(request.ID);
+		if (!Sessions.containsKey(request.session))
+			Sessions.put(request.session, request);
+		var current = Sessions.get(request.session);
 		var username = request.player.username;
 		// registered as player or opponent
 		if (username.matches(current.player.username) || username.matches(current.opponent.username)) {
@@ -110,8 +120,8 @@ public class Handler {
 				return;
 			}
 			current.opponent = request.player;
-			Sessions.put(request.ID, current);
-			ReadySessions.add(request.ID);
+			Sessions.put(request.session, current);
+			ReadySessions.add(request.session);
 			sendStatus(writer, new Status(1));
 			return;
 		}
@@ -119,9 +129,9 @@ public class Handler {
 		return;
 	}
 
-	private void sendToPlayer(String username, String message) {
+	private void sendMissile(String username, Missile missile) {
 		var printer = Users.get(username);
-		printer.println(message);
+		printer.println(json.toJson(missile));
 		printer.flush();
 	}
 
@@ -136,5 +146,4 @@ public class Handler {
 		writer.println(paylaod);
 		writer.flush();
 	}
-
 }

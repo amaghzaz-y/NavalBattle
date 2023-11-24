@@ -1,7 +1,7 @@
 package payloads;
 
 public class Missile {
-	public String ID;
+	public String session;
 	public String player;
 	public String opponent;
 	public int X;

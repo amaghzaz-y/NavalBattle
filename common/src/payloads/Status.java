@@ -1,9 +1,21 @@
 package payloads;
 
 public class Status {
-	// 1 - Ok, 2 - No, 3 - Wait, 4 - Update, 5 - Turn,
-	// 6 - Score, 7 - ScoreBoard, 8 - Chat
-	public String ID;
+	// - Those are requests/status we send/receive to/from the server
+	// - requests without a session id are ignored by the server
+	// - helps syncing state on frontend. PS: Kind of ¯\_(ツ)_/¯ !
+	// Number - Description - Destination
+	// 1 - Ok - client
+	// 2 - No - client
+	// 3 - Wait - client
+	// 4 - Session - server
+	// 5 - Missile - server
+	// 6 - Turn - server
+	// 7 - Score - server
+	// 8 - ScoreBoard - server
+	// 9 - Chat - server
+	public String sender;
+	public String session;
 	public int code = 1;
 
 	public Status() {

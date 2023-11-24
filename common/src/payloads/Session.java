@@ -1,7 +1,7 @@
 package payloads;
 
 public class Session {
-	public String ID;
+	public String session;
 	public Player player;
 	public Player opponent;
 
