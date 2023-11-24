@@ -14,14 +14,17 @@ public class Status {
 	// 7 - Score - server
 	// 8 - ScoreBoard - server
 	// 9 - Chat - server
+	public int type; // request type
 	public String sender;
 	public String session;
 	public int code = 1;
 
 	public Status() {
+		type = 1;
 	}
 
 	public Status(int status) {
+		type = 1;
 		code = status;
 	}
 }

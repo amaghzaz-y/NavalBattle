@@ -15,6 +15,8 @@ public class SocketClient {
 	private static String received;
 	public ClientHandler client;
 	private static Json json;
+	private static String username;
+	private static String session;
 
 	public SocketClient() throws Exception {
 		json = new Json();
@@ -65,9 +67,56 @@ public class SocketClient {
 			writer.flush();
 		}
 
-		public boolean requestUpdate() throws IOException {
+		public String read() throws IOException {
+			try {
+				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
+					String msg = reader.readLine();
+					if (!msg.isEmpty()) {
+						received = msg;
+						return received;
+					}
+				}
+			} catch (Exception e) {
+				reader.close();
+				writer.close();
+				socket.close();
+			}
+			return new String();
+		}
+
+		public boolean requestMissile() throws IOException {
+			Status status = new Status();
+			status.sender = username;
+			status.session = session;
+			status.code = 5;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			status = json.fromJson(payloads.Status.class, response);
+			if (status.code == 1)
+				return true;
+			return false;
+		}
+
+		public boolean requestSession() throws IOException {
 			Status status = new Status();
 			status.code = 4;
+			status.sender = username;
+			status.session = session;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			status = json.fromJson(payloads.Status.class, response);
+			if (status.code == 1)
+				return true;
+			return false;
+		}
+
+		public boolean requestTurn() throws IOException {
+			Status status = new Status();
+			status.code = 6;
+			status.sender = username;
+			status.session = session;
 			String request = json.toJson(status);
 			send(request);
 			String response = read();
@@ -87,21 +136,11 @@ public class SocketClient {
 			return false;
 		}
 
-		public boolean requestTurnPermission() throws IOException {
-			Status status = new Status();
-			status.code = 5;
-			String request = json.toJson(status);
-			send(request);
-			String response = read();
-			status = json.fromJson(payloads.Status.class, response);
-			if (status.code == 1)
-				return true;
-			return false;
-		}
-
 		public boolean sendSession(Session s) throws IOException {
+			// handle request
 			String request = json.toJson(s);
 			send(request);
+			// handle response
 			String response = read();
 			Status status = json.fromJson(payloads.Status.class, response);
 			if (status.code == 1)
@@ -109,21 +148,11 @@ public class SocketClient {
 			return false;
 		}
 
-		public String read() throws IOException {
-			try {
-				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
-					String msg = reader.readLine();
-					if (!msg.isEmpty()) {
-						received = msg;
-						return received;
-					}
-				}
-			} catch (Exception e) {
-				reader.close();
-				writer.close();
-				socket.close();
-			}
-			return new String();
+		public Missile readMissile() throws IOException {
+			// handle response
+			String response = read();
+			Missile missile = json.fromJson(payloads.Missile.class, response);
+			return missile;
 		}
 	}
 }

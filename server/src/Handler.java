@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.utils.Json;
 
-import payloads.Genereic;
+import payloads.Generic;
 import payloads.Missile;
 import payloads.Session;
 import payloads.Status;
@@ -24,7 +24,7 @@ public class Handler {
 	}
 
 	public void Handle(String payload, PrintWriter writer) {
-		var generic = json.fromJson(Genereic.class, payload);
+		var generic = json.fromJson(Generic.class, payload);
 		switch (generic.type) {
 			// Status Handler
 			case 1:
