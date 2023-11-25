@@ -29,6 +29,14 @@ public class SocketClient {
 		}
 	}
 
+	public void setUsername(String name) {
+		username = name;
+	}
+
+	public void setSession(String id) {
+		session = id;
+	}
+
 	public ClientHandler getClient() {
 		return client;
 	}
@@ -110,9 +118,9 @@ public class SocketClient {
 			send(request);
 			String response = read();
 			status = json.fromJson(payloads.Status.class, response);
-			if (status.code == 1)
-				return true;
-			return false;
+			if (status.code == 3)
+				return false;
+			return true;
 		}
 
 		public boolean requestTurn() throws IOException {
@@ -156,6 +164,13 @@ public class SocketClient {
 			String response = read();
 			Missile missile = json.fromJson(payloads.Missile.class, response);
 			return missile;
+		}
+
+		public Session readSession() throws IOException {
+			// handle response
+			String response = read();
+			Session session = json.fromJson(payloads.Session.class, response);
+			return session;
 		}
 	}
 }

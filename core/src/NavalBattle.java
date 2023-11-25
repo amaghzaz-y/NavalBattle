@@ -30,6 +30,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		playerName = UUID.randomUUID().toString().substring(0, 4);
 		opponentName = "Waiting... ";
 		session = new Session(playerName, opponentName);
+		session.setSessionID("12345");
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();
@@ -41,12 +42,22 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.addShapeRenderer(shapeRenderer);
 		try {
 			var sc = new SocketClient();
+			sc.setUsername(playerName);
+			sc.setSession(session.getSessionID());
 			while (!sc.getClient().isReady())
 				;
 			client = sc.getClient();
 			if (client.sendSession(session.serialize())) {
 				System.out.println("session accepted");
+			} else {
+				System.exit(0);
 			}
+			while (!client.requestSession()) {
+				System.out.println("waiting for session");
+				Thread.sleep(500);
+			}
+			payloads.Session s = client.readSession();
+			System.out.println("session received :" + s.session);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

@@ -87,6 +87,7 @@ public class Handler {
 			// Session
 			case 4:
 				if (ReadySessions.contains(request.session)) {
+					sendStatus(writer, new Status(1));
 					sendSession(writer, Sessions.get(request.session));
 					return;
 				}

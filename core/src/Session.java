@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Session {
+	private String ID;
 	private Player player;
 	private Player opponent;
 	// private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
@@ -43,11 +44,19 @@ public class Session {
 		return opponent;
 	}
 
+	public void setSessionID(String id) {
+		ID = id;
+	}
+
+	public String getSessionID() {
+		return ID;
+	}
+
 	public payloads.Session serialize() {
 		var pp = player.serialize();
 		var op = opponent.serialize();
 		var ctx = new payloads.Session(pp, op);
-		ctx.session = "1245";
+		ctx.session = ID;
 		ctx.type = 2;
 		return ctx;
 	}
