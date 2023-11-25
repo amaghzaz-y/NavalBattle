@@ -2,6 +2,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.badlogic.gdx.physics.bullet.softbody.btSoftBody.eSolverPresets;
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Generic;
@@ -29,10 +30,6 @@ public class Handler {
 	}
 
 	public void Handle(String payload, PrintWriter writer) {
-		// System.out.println(payload);
-		for (String p : TurnPlayers) {
-			System.out.println("Players: " + p);
-		}
 		var generic = json.fromJson(Generic.class, payload);
 		System.out.println("REQ:" + count++ + " TYPE:" + generic.type + " SIZE:" + payload.length());
 		switch (generic.type) {
@@ -136,31 +133,35 @@ public class Handler {
 				var current = Sessions.get(request.session);
 				var player = current.player.username;
 				var opponent = current.opponent.username;
-				// no one has a turn
-				if (!TurnPlayers.contains(player) && !TurnPlayers.contains(opponent)) {
-					if (request.sender.matches(player)) {
-						TurnPlayers.add(player);
-						System.out.println("turn: giving perm to " + player);
-						sendStatus(writer, new Status(1));
-					}
-					return;
-				}
 				// sender has a turn
 				if (TurnPlayers.contains(request.sender)) {
 					System.out.println("turn: ok " + request.sender);
 					sendStatus(writer, new Status(1));
-					return;
+				} else
+				// no one has a turn
+				if (!TurnPlayers.contains(player) && !TurnPlayers.contains(opponent)) {
+					System.out.println("turn: giving perm to " + player);
+					TurnPlayers.add(player);
+					if (request.sender.matches(player)) {
+						sendStatus(writer, new Status(1));
+					} else {
+						sendStatus(writer, new Status(3));
+					}
+				} else
+				// Not having a turn
+				{
+					System.out.println("turn: no " + request.sender);
+					sendStatus(writer, new Status(3));
 				}
-				System.out.println("turn: no " + request.sender);
-				sendStatus(writer, new Status(3));
-				return;
-			// Score
+
+				// Score
 			case 7:
 				return;
 			// ScoreBoard
 			case 8:
 				return;
 		}
+
 	}
 
 	// receives request / sends status codes

@@ -59,7 +59,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			System.out.println("session received :" + s.session);
 			System.out.println("opponent :" + s.opponent.username);
 			session.updateOpponent(s);
-			// session.setTurn(client.requestTurn());
+			session.setTurn(client.requestTurn());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
