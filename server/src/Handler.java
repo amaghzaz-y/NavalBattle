@@ -2,7 +2,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.badlogic.gdx.physics.bullet.softbody.btSoftBody.eSolverPresets;
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Generic;
@@ -67,6 +66,7 @@ public class Handler {
 			sendStatus(writer, new Status(2));
 			return;
 		}
+
 		// tell player to wait
 		if (!TurnPlayers.contains(request.player)) {
 			System.out.println("player: " + request.player + " wait");
