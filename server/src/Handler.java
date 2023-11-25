@@ -30,6 +30,9 @@ public class Handler {
 
 	public void Handle(String payload, PrintWriter writer) {
 		// System.out.println(payload);
+		for (String p : TurnPlayers) {
+			System.out.println("Players: " + p);
+		}
 		var generic = json.fromJson(Generic.class, payload);
 		System.out.println("REQ:" + count++ + " TYPE:" + generic.type + " SIZE:" + payload.length());
 		switch (generic.type) {
@@ -61,23 +64,28 @@ public class Handler {
 
 	// receives request - sends status codes
 	private void MissileHandler(Missile request, PrintWriter writer) {
-		// ignores if its not the player turn to play
+		// ignores if its not the right session
 		if (!Sessions.containsKey(request.session)) {
-			System.out.println("player: " + request.player + " ignore missile");
+			System.out.println("player: " + request.player + "incorrect session -> ignore missile");
 			sendStatus(writer, new Status(2));
 			return;
 		}
-		if (!TurnPlayers.contains(request.player) && TurnPlayers.contains(request.opponent)) {
+		// tell player to wait
+		if (!TurnPlayers.contains(request.player)) {
 			System.out.println("player: " + request.player + " wait");
 			sendStatus(writer, new Status(3));
 			return;
 		}
+
 		// assign new turn
+		System.out.println("turn: remove: " + request.player);
 		TurnPlayers.remove(request.player);
+		System.out.println("turn: add: " + request.opponent);
 		TurnPlayers.add(request.opponent);
+
 		// update missile
 		Missiles.put(request.session, request);
-		System.out.println("player: " + request.player + "missile accepted");
+		System.out.println("player: " + request.player + " missile accepted");
 		// sending corresponding requests
 		// var res = request;
 		// res.opponent = request.player;
@@ -125,18 +133,26 @@ public class Handler {
 				return;
 			// Turn
 			case 6:
-				if (TurnPlayers.contains(request.sender)) {
-					sendStatus(writer, new Status(1));
-				} else {
-					var current = Sessions.get(request.session);
-					// gives turn perm if no one has the privilege
-					if (!TurnPlayers.contains(current.opponent.username)) {
-						TurnPlayers.add(request.sender);
+				var current = Sessions.get(request.session);
+				var player = current.player.username;
+				var opponent = current.opponent.username;
+				// no one has a turn
+				if (!TurnPlayers.contains(player) && !TurnPlayers.contains(opponent)) {
+					if (request.sender.matches(player)) {
+						TurnPlayers.add(player);
+						System.out.println("turn: giving perm to " + player);
 						sendStatus(writer, new Status(1));
-						return;
 					}
-					sendStatus(writer, new Status(3));
+					return;
 				}
+				// sender has a turn
+				if (TurnPlayers.contains(request.sender)) {
+					System.out.println("turn: ok " + request.sender);
+					sendStatus(writer, new Status(1));
+					return;
+				}
+				System.out.println("turn: no " + request.sender);
+				sendStatus(writer, new Status(3));
 				return;
 			// Score
 			case 7:

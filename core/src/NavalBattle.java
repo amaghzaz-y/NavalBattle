@@ -59,7 +59,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			System.out.println("session received :" + s.session);
 			System.out.println("opponent :" + s.opponent.username);
 			session.updateOpponent(s);
-			session.setTurn(client.requestTurn());
+			// session.setTurn(client.requestTurn());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -92,22 +92,28 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		try {
-			var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-			session.onTouchDown(mouse, button);
-			session.updateScore();
-			var missile = new Missile();
-			var npos = Utils.serializeClick(mouse);
-			missile.X = (int) npos.x;
-			missile.Y = (int) npos.y;
-			missile.player = session.getPlayer().getPlayerName();
-			missile.opponent = session.getOpponent().getPlayerName();
-			missile.type = 3;
-			missile.session = session.getSessionID();
-			if (client.sendMissile(missile)) {
-				System.out.println("missile sent");
-				session.setTurn(false);
+			if (client.requestTurn()) {
+				session.setTurn(true);
+				var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
+				if (!session.handleMissileClick(mouse, button))
+					return true;
+				session.updateScore();
+				var missile = new Missile();
+				var npos = Utils.serializeClick(mouse);
+				missile.X = (int) npos.x;
+				missile.Y = (int) npos.y;
+				missile.player = session.getPlayer().getPlayerName();
+				missile.opponent = session.getOpponent().getPlayerName();
+				missile.type = 3;
+				missile.session = session.getSessionID();
+				if (client.sendMissile(missile)) {
+					System.out.println("missile sent");
+				} else {
+					System.out.println("missile NOT sent");
+				}
 			} else {
-				System.out.println("missile NOT sent");
+				session.setTurn(false);
+				System.out.println("WAIT FOR TURN !!");
 			}
 		} catch (Exception e) {
 			System.out.println(e);

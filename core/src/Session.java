@@ -74,8 +74,8 @@ public class Session {
 		return ctx;
 	}
 
-	public boolean onTouchDown(Vector2 mouse, int button) {
-		if (inBounds(opponentBounds, mouse) && turn) {
+	public boolean handleMissileClick(Vector2 mouse, int button) {
+		if (inBounds(opponentBounds, mouse) && getTurn()) {
 			opponent.onTouchDown(mouse, button);
 			return true;
 		}
