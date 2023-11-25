@@ -27,7 +27,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		playerName = UUID.randomUUID().toString().substring(0, 10);
+		playerName = UUID.randomUUID().toString().substring(0, 4);
 		opponentName = "Waiting... ";
 		session = new Session(playerName, opponentName);
 		bounds = new Bounds();

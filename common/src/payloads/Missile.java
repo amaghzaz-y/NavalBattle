@@ -9,7 +9,6 @@ public class Missile {
 	public int Y;
 
 	public Missile() {
-		type = 3;
 	}
 
 	public Missile(String player, String opponent, int X, int Y) {

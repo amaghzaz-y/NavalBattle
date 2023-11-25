@@ -56,11 +56,12 @@ public class SocketClient {
 			}
 		}
 
+		// client readiness state
 		public boolean isReady() {
 			return ready;
 		}
 
-		// handle socket read
+		// handle socket messaging
 		public void send(String message) throws IOException {
 			writer.println(message);
 			writer.flush();

@@ -20,7 +20,7 @@ public class Status {
 	public int code = 1;
 
 	public Status() {
-		type = 1;
+
 	}
 
 	public Status(int status) {
