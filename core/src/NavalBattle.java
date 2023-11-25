@@ -11,11 +11,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import common.Utils;
 import payloads.Missile;
 
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
-	String playerName;
-	String opponentName;
 	SpriteBatch batch;
 	Sea sea;
 	Bounds bounds;
@@ -29,9 +28,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		playerName = UUID.randomUUID().toString().substring(0, 4);
-		opponentName = "Waiting... ";
-		session = new Session(playerName, opponentName);
+		session = new Session(UUID.randomUUID().toString().substring(0, 4), "Waiting... ");
 		session.setSessionID("12345");
 		bounds = new Bounds();
 		sea = new Sea();
@@ -44,7 +41,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.addShapeRenderer(shapeRenderer);
 		try {
 			var sc = new SocketClient();
-			sc.setUsername(playerName);
+			sc.setUsername(session.getPlayer().getPlayerName());
 			sc.setSession(session.getSessionID());
 			while (!sc.getClient().isReady())
 				;
@@ -94,11 +91,27 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-		session.onTouchDown(mouse, button);
-		session.updateScore();
-		// var missile = new Missile();
-		// client.sendMissile(new M);
+		try {
+			var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
+			session.onTouchDown(mouse, button);
+			session.updateScore();
+			var missile = new Missile();
+			var npos = Utils.serializeClick(mouse);
+			missile.X = (int) npos.x;
+			missile.Y = (int) npos.y;
+			missile.player = session.getPlayer().getPlayerName();
+			missile.opponent = session.getOpponent().getPlayerName();
+			missile.type = 3;
+			missile.session = session.getSessionID();
+			if (client.sendMissile(missile)) {
+				System.out.println("missile sent");
+				session.setTurn(false);
+			} else {
+				System.out.println("missile NOT sent");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		return true;
 	}
 

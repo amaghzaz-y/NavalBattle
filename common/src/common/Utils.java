@@ -11,6 +11,11 @@ public class Utils {
 		return new Vector2(click.x - rX, click.y - rY);
 	}
 
+	public static Vector2 serializeClick(Vector2 click) {
+		var npos = normalizeVector2(click);
+		return new Vector2(npos.x / 40, npos.y / 40);
+	}
+
 	public static ShipBase.Type getTypeFromInt(int number) {
 		switch (number) {
 			case 0:

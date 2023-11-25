@@ -63,10 +63,12 @@ public class Handler {
 	private void MissileHandler(Missile request, PrintWriter writer) {
 		// ignores if its not the player turn to play
 		if (!Sessions.containsKey(request.session)) {
+			System.out.println("player: " + request.player + " ignore missile");
 			sendStatus(writer, new Status(2));
 			return;
 		}
 		if (!TurnPlayers.contains(request.player) && TurnPlayers.contains(request.opponent)) {
+			System.out.println("player: " + request.player + " wait");
 			sendStatus(writer, new Status(3));
 			return;
 		}
@@ -75,6 +77,7 @@ public class Handler {
 		TurnPlayers.add(request.opponent);
 		// update missile
 		Missiles.put(request.session, request);
+		System.out.println("player: " + request.player + "missile accepted");
 		// sending corresponding requests
 		// var res = request;
 		// res.opponent = request.player;

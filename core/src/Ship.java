@@ -136,14 +136,11 @@ public class Ship extends ShipBase {
 	}
 
 	public boolean handleMissile(Vector2 position) {
-		System.out.println(position.x + ":" + position.y);
-
 		if (getBounds().contains(position)) {
 			position = Utils.normalizeVector2(position);
 			cells.add(new Rectangle(position.x, position.y, 40, 40));
 			return true;
 		}
-
 		return false;
 	}
 
