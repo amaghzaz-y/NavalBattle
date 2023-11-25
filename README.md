@@ -1,7 +1,8 @@
 ### Socket API/FLOW
 
-- SEND: Session -> RES: Status(OK / NO)
-- REQ: Status(Session) -> RES: STATUS(Ok) + Session / Status(WAIT)
-- REQ: Status(Turn) -> RES: Status(OK / NO / WAIT)
-- SEND: Missile -> RES: Status(OK / NO / WAIT)
-- REQ: Status(Missile) -> RES: Status(OK) + Missile / Status(NO/WAIT)
+- POST: Session -> RES: Status(OK / WAIT)
+- GET: Status(Session) -> RES: STATUS(OK) + Session / Status(WAIT)
+- GET: Status(Turn) -> RES: Status(OK / WAIT)
+- POST: Missile -> RES: Status(OK / WAIT)
+- GET: Status(Missile) -> RES: Status(OK) + Missile / Status(WAIT)
+PS: Status(NO) means bad/malformed request

@@ -125,11 +125,6 @@ public class Handler {
 				if (TurnPlayers.contains(request.sender)) {
 					sendStatus(writer, new Status(1));
 				} else {
-					// session does not exist, therefore, too soon, or wrong session
-					if (!Sessions.containsKey(request.session)) {
-						sendStatus(writer, new Status(2));
-						return;
-					}
 					var current = Sessions.get(request.session);
 					// gives turn perm if no one has the privilege
 					if (!TurnPlayers.contains(current.opponent.username)) {

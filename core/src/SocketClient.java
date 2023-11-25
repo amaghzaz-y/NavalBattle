@@ -125,6 +125,7 @@ public class SocketClient {
 
 		public boolean requestTurn() throws IOException {
 			Status status = new Status();
+			status.type = 1;
 			status.code = 6;
 			status.sender = username;
 			status.session = session;

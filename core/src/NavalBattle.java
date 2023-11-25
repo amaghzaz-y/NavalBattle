@@ -60,6 +60,12 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			System.out.println("session received :" + s.session);
 			System.out.println("opponent :" + s.opponent.username);
 			session.updateOpponent(s);
+			if (client.requestTurn()) {
+				System.out.println("My Turn Now");
+
+			} else {
+				System.out.println("NOT Turn Now");
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
