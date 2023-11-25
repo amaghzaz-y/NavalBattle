@@ -58,6 +58,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			}
 			payloads.Session s = client.readSession();
 			System.out.println("session received :" + s.session);
+			System.out.println("opponent :" + s.opponent.username);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

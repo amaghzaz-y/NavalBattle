@@ -3,6 +3,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 
 public class Session {
 	private String ID;
@@ -42,6 +43,10 @@ public class Session {
 
 	public Player getOpponent() {
 		return opponent;
+	}
+
+	public void updateOpponent(payloads.Session session) {
+		opponent.setPlayerName(session.opponent.username);
 	}
 
 	public void setSessionID(String id) {

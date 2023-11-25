@@ -76,9 +76,9 @@ public class Handler {
 		// update missile
 		Missiles.put(request.session, request);
 		// sending corresponding requests
-		var res = request;
-		res.opponent = request.player;
-		res.player = request.opponent;
+		// var res = request;
+		// res.opponent = request.player;
+		// res.player = request.opponent;
 		sendStatus(writer, new Status(1));
 	}
 
@@ -88,7 +88,16 @@ public class Handler {
 			case 4:
 				if (ReadySessions.contains(request.session)) {
 					sendStatus(writer, new Status(1));
-					sendSession(writer, Sessions.get(request.session));
+					var s = Sessions.get(request.session);
+					if (request.sender.matches(s.player.username)) {
+						sendSession(writer, s);
+					} else {
+						// reverse roles
+						Session rs = new Session(s.opponent, s.player);
+						rs.type = 2;
+						rs.session = s.session;
+						sendSession(writer, rs);
+					}
 					return;
 				}
 				sendStatus(writer, new Status(3));
