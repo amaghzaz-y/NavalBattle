@@ -10,7 +10,7 @@ public class Session {
 	private Player player;
 	private Player opponent;
 	private boolean turn;
-	// private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
+	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
 
 	public Session(String player, String opponent) {
@@ -72,6 +72,17 @@ public class Session {
 		ctx.session = ID;
 		ctx.type = 2;
 		return ctx;
+	}
+
+	public boolean receiveMissile(Vector2 mouse, int button) {
+		System.out.println(mouse.toString());
+		if (inBounds(playerBounds, mouse)) {
+			player.onTouchDown(mouse, button);
+			System.out.println("missile in bounds");
+			return true;
+		}
+		System.out.println("NOT in bounds");
+		return false;
 	}
 
 	public boolean handleMissileClick(Vector2 mouse, int button) {

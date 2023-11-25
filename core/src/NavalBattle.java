@@ -93,6 +93,10 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		try {
 			if (client.requestTurn()) {
+				if (client.requestMissile()) {
+					var missile = client.readMissile();
+					session.receiveMissile(new Vector2(missile.X * 40 + 330, missile.Y * 40 + 10), button);
+				}
 				session.setTurn(true);
 				var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 				if (!session.handleMissileClick(mouse, button))
@@ -106,14 +110,9 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 				missile.opponent = session.getOpponent().getPlayerName();
 				missile.type = 3;
 				missile.session = session.getSessionID();
-				if (client.sendMissile(missile)) {
-					System.out.println("missile sent");
-				} else {
-					System.out.println("missile NOT sent");
-				}
+				client.sendMissile(missile);
 			} else {
 				session.setTurn(false);
-				System.out.println("WAIT FOR TURN !!");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
