@@ -60,12 +60,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			System.out.println("session received :" + s.session);
 			System.out.println("opponent :" + s.opponent.username);
 			session.updateOpponent(s);
-			if (client.requestTurn()) {
-				System.out.println("My Turn Now");
-
-			} else {
-				System.out.println("NOT Turn Now");
-			}
+			session.setTurn(client.requestTurn());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -84,7 +79,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setAutoShapeType(true);
 		bounds.render();
-		bounds.renderTurn(session.getPlayer().getTurn());
+		bounds.renderTurn(session.getTurn());
 		gui.render();
 		session.render();
 		shapeRenderer.end();

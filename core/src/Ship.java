@@ -18,7 +18,7 @@ public class Ship extends ShipBase {
 	private Sprite sprite;
 	private ShapeRenderer renderer;
 	Set<Rectangle> cells;
-	boolean isDrawBounds = false;
+	boolean isDrawBounds = true;
 	boolean isSelected = false;
 
 	// Rectangle bounds;
@@ -124,10 +124,10 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public void onTouchDown(Vector2 mouse, int type) {
+	public boolean onTouchDown(Vector2 mouse, int type) {
 		// type: 0 left, 1 right
 		// handleInitialPosition(mouse, type);
-		handleMissile(mouse);
+		return handleMissile(mouse);
 	}
 
 	private void autoFlipXY() {
@@ -154,15 +154,17 @@ public class Ship extends ShipBase {
 		}
 	}
 
-	public void handleMissile(Vector2 position) {
+	public boolean handleMissile(Vector2 position) {
+		System.out.println(position.x + ":" + position.y);
 		if (getBounds().contains(position)) {
 			position = normalizeVector2(position);
 			cells.add(new Rectangle(position.x, position.y, 40, 40));
-		} else {
+			return true;
 		}
 		if (isDead()) {
 			sprite.setColor(Color.NAVY);
 		}
+		return false;
 	}
 
 	public Vector2 normalizeVector2(Vector2 click) {

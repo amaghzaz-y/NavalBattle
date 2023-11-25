@@ -7,8 +7,6 @@ import com.badlogic.gdx.utils.Array;
 public class Player extends PlayerBase {
 	private Array<Ship> ships;
 	private int score = 0;
-	private boolean turn = true;
-	private boolean ready = false;
 	private ShapeRenderer renderer;
 
 	Player(String name) {
@@ -28,10 +26,12 @@ public class Player extends PlayerBase {
 		score = newScore;
 	}
 
-	public void onTouchDown(Vector2 mouse, int type) {
+	public boolean onTouchDown(Vector2 mouse, int type) {
 		for (Ship ship : ships) {
-			ship.onTouchDown(mouse, type);
+			if (ship.onTouchDown(mouse, type))
+				return true;
 		}
+		return false;
 	}
 
 	public int HitsUpdate() {
@@ -40,23 +40,6 @@ public class Player extends PlayerBase {
 			hits += ship.touches();
 		}
 		return hits;
-	}
-
-	public boolean nextTurn() {
-		turn = !turn;
-		return turn;
-	}
-
-	public boolean getTurn() {
-		return turn;
-	}
-
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void setReady(boolean state) {
-		ready = state;
 	}
 
 	public payloads.Player serialize() {

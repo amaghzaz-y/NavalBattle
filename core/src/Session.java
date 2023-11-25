@@ -8,7 +8,8 @@ public class Session {
 	private String ID;
 	private Player player;
 	private Player opponent;
-	// private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
+	private boolean turn;
+	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
 
 	public Session(String player, String opponent) {
@@ -19,11 +20,18 @@ public class Session {
 		this.player.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 		this.player.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
 		// setting boundaries
-		this.opponent.nextTurn();
 	}
 
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {
 		return bounds.contains(mouse);
+	}
+
+	public void setTurn(boolean state) {
+		turn = state;
+	}
+
+	public boolean getTurn() {
+		return turn;
 	}
 
 	public Player getPlayer() {
@@ -66,18 +74,10 @@ public class Session {
 	}
 
 	public boolean onTouchDown(Vector2 mouse, int button) {
-		if (inBounds(opponentBounds, mouse) && player.getTurn()) {
-			player.onTouchDown(mouse, button);
-			player.nextTurn();
-			opponent.nextTurn();
+		if (inBounds(opponentBounds, mouse) && turn) {
+			opponent.onTouchDown(mouse, button);
 			return true;
 		}
-		// for debug only
-		// if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
-		// opponent.onTouchDown(mouse, button);
-		// player.nextTurn();
-		// opponent.nextTurn();
-		// }
 		return false;
 	}
 
