@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import common.PlayerBase;
+
 public class Player extends PlayerBase {
 	private Array<Ship> ships;
 	private int score = 0;

@@ -1,3 +1,5 @@
+package common;
+
 import com.badlogic.gdx.utils.Array;
 
 public class PlayerBase {
@@ -5,7 +7,7 @@ public class PlayerBase {
 	private Array<ShipBase> ships;
 	private int score;
 
-	PlayerBase(String name) {
+	protected PlayerBase(String name) {
 		this.playerName = name;
 	}
 

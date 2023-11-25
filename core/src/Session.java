@@ -3,23 +3,24 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import common.*;
 
 public class Session {
 	private String ID;
 	private Player player;
 	private Player opponent;
 	private boolean turn;
-	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
+	// private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
 		this.opponent = new Player(opponent);
-		this.player.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
+		this.player
+				.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
 		this.player.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
 		this.player.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
 		this.player.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
-		// setting boundaries
 	}
 
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {

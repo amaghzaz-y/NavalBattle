@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import payloads.Missile;
+
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	String playerName;
 	String opponentName;
@@ -95,6 +97,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 		session.onTouchDown(mouse, button);
 		session.updateScore();
+		// var missile = new Missile();
+		// client.sendMissile(new M);
 		return true;
 	}
 

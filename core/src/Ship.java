@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import common.ShipBase;
+import common.Utils;
+
 public class Ship extends ShipBase {
 	private float stateTime;
 	private Animation<Texture> animation;
@@ -24,7 +27,7 @@ public class Ship extends ShipBase {
 	// Rectangle bounds;
 	public Ship(Vector2 position, Direction direction, Type type) {
 		super(position, direction, type);
-		this.position = normalizeVector2(position);
+		this.position = Utils.normalizeVector2(position);
 		setAnimation();
 		autoScale();
 		autoPosition();
@@ -42,20 +45,12 @@ public class Ship extends ShipBase {
 	}
 
 	public static Ship NewfromPayload(payloads.Ship obj) {
-		var dir = getDirectionFromInt(obj.direction);
-		var type = getTypeFromInt(obj.type);
+		var dir = Utils.getDirectionFromInt(obj.direction);
+		var type = Utils.getTypeFromInt(obj.type);
 		int offset = -320;
 		var pos = new Vector2(obj.x * 40 + offset, obj.y * 40);
 		var ship = new Ship(pos, dir, type);
 		return ship;
-	}
-
-	public int getDirectionInt() {
-		return direction == Direction.Vertical ? 0 : 1;
-	}
-
-	public static Direction getDirectionFromInt(int number) {
-		return number == 0 ? Direction.Vertical : Direction.Horizontal;
 	}
 
 	public int getTypeInt() {
@@ -70,20 +65,6 @@ public class Ship extends ShipBase {
 				return 3;
 		}
 		return 0;
-	}
-
-	public static Type getTypeFromInt(int number) {
-		switch (number) {
-			case 0:
-				return Type.VerySmall;
-			case 1:
-				return Type.Small;
-			case 2:
-				return Type.Medium;
-			case 3:
-				return Type.Big;
-		}
-		return Type.VerySmall;
 	}
 
 	public int touches() {
@@ -140,7 +121,7 @@ public class Ship extends ShipBase {
 		if (getBounds().contains(position) || isSelected) {
 			isDrawBounds = true;
 			if (isSelected) {
-				position = normalizeVector2(position);
+				position = Utils.normalizeVector2(position);
 				sprite.setPosition(position.x - 40, position.y - 40);
 				if (type == 1)
 					autoFlipXY();
@@ -156,21 +137,14 @@ public class Ship extends ShipBase {
 
 	public boolean handleMissile(Vector2 position) {
 		System.out.println(position.x + ":" + position.y);
+
 		if (getBounds().contains(position)) {
-			position = normalizeVector2(position);
+			position = Utils.normalizeVector2(position);
 			cells.add(new Rectangle(position.x, position.y, 40, 40));
 			return true;
 		}
-		if (isDead()) {
-			sprite.setColor(Color.NAVY);
-		}
-		return false;
-	}
 
-	public Vector2 normalizeVector2(Vector2 click) {
-		int rX = (int) click.x % 40; // 40 is the cell size
-		int rY = (int) click.y % 40;
-		return new Vector2(click.x - rX, click.y - rY);
+		return false;
 	}
 
 	public void autoRotation() {
@@ -302,7 +276,7 @@ public class Ship extends ShipBase {
 		int x = (int) position.x / 40;
 		int y = (int) position.y / 40;
 		int type = getTypeInt();
-		int dir = getDirectionInt();
+		int dir = Utils.getDirectionInt(direction);
 		return new payloads.Ship(x, y, dir, type);
 	}
 
@@ -317,9 +291,11 @@ public class Ship extends ShipBase {
 		if (!isDead()) {
 			for (Rectangle cell : cells) {
 				renderer.set(ShapeType.Line);
-				renderer.setColor(Color.RED);
+				renderer.setColor(Color.WHITE);
 				renderer.rect(cell.x, cell.y, cell.width, cell.height);
 			}
+		} else {
+			sprite.setColor(Color.NAVY);
 		}
 	}
 }

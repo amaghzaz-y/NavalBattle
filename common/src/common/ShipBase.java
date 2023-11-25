@@ -1,3 +1,6 @@
+
+package common;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -25,7 +28,7 @@ public class ShipBase {
     public Direction direction = Direction.Horizontal;
     public Type type = Type.VerySmall;
 
-    ShipBase(Vector2 position, Direction directon, Type type) {
+    protected ShipBase(Vector2 position, Direction directon, Type type) {
         this.position = position;
         this.direction = directon;
         this.type = type;
