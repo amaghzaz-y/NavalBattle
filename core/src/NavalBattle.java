@@ -44,22 +44,9 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			while (!sc.getClient().isReady())
 				;
 			client = sc.getClient();
-			client.send(json.toJson(session.serialize()));
-			while (opponentName == session.getOpponent().getPlayerName()) {
-				updateScene();
+			if (client.sendSession(session.serialize())) {
+				System.out.println("session accepted");
 			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	public void updateScene() {
-		try {
-			var payload = client.read();
-			var s = json.fromJson(payloads.Session.class, payload);
-			if (s == null)
-				return;
-			// session.UpdateFromPayload(s);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -93,15 +80,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 		session.onTouchDown(mouse, button);
-		// if (update) {
 		session.updateScore();
-		try {
-			client.send(json.toJson(session.serialize()));
-			updateScene();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		// }
 		return true;
 	}
 

@@ -12,7 +12,6 @@ import payloads.Status;
 
 public class SocketClient {
 	private static final int PORT = 6700;
-	private static String received;
 	public ClientHandler client;
 	private static Json json;
 	private static String username;
@@ -72,8 +71,8 @@ public class SocketClient {
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
 					String msg = reader.readLine();
 					if (!msg.isEmpty()) {
-						received = msg;
-						return received;
+						System.out.println(msg);
+						return msg;
 					}
 				}
 			} catch (Exception e) {
@@ -89,6 +88,7 @@ public class SocketClient {
 			status.sender = username;
 			status.session = session;
 			status.code = 5;
+			status.type = 1;
 			String request = json.toJson(status);
 			send(request);
 			String response = read();
@@ -103,6 +103,7 @@ public class SocketClient {
 			status.code = 4;
 			status.sender = username;
 			status.session = session;
+			status.type = 1;
 			String request = json.toJson(status);
 			send(request);
 			String response = read();

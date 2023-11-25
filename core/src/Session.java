@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Session {
 	private Player player;
 	private Player opponent;
-	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
+	// private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
 
 	public Session(String player, String opponent) {
@@ -47,23 +47,24 @@ public class Session {
 		var pp = player.serialize();
 		var op = opponent.serialize();
 		var ctx = new payloads.Session(pp, op);
-		ctx.session = "124";
+		ctx.session = "1245";
+		ctx.type = 2;
 		return ctx;
 	}
 
 	public boolean onTouchDown(Vector2 mouse, int button) {
-		if (inBounds(playerBounds, mouse) && player.getTurn()) {
+		if (inBounds(opponentBounds, mouse) && player.getTurn()) {
 			player.onTouchDown(mouse, button);
 			player.nextTurn();
 			opponent.nextTurn();
 			return true;
 		}
 		// for debug only
-		if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
-			opponent.onTouchDown(mouse, button);
-			player.nextTurn();
-			opponent.nextTurn();
-		}
+		// if (inBounds(opponentBounds, mouse) && !player.getTurn()) {
+		// opponent.onTouchDown(mouse, button);
+		// player.nextTurn();
+		// opponent.nextTurn();
+		// }
 		return false;
 	}
 

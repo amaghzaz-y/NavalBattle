@@ -10,7 +10,7 @@ import payloads.Session;
 import payloads.Status;
 
 public class Handler {
-	public Json json = new Json();
+	public Json json;
 	public HashMap<String, Session> Sessions; // (sessionID, Session)
 	public HashMap<String, PrintWriter> Users; // (usernames, writer)
 	public HashSet<String> ReadySessions; // sessionsID
@@ -21,10 +21,14 @@ public class Handler {
 	public Handler() {
 		Users = new HashMap<>();
 		Sessions = new HashMap<>();
+		json = new Json();
+		json.setIgnoreUnknownFields(true);
 	}
 
 	public void Handle(String payload, PrintWriter writer) {
+		// System.out.println(payload);
 		var generic = json.fromJson(Generic.class, payload);
+		System.out.println("REQ:" + count++ + " TYPE:" + generic.type + " SIZE:" + payload.length());
 		switch (generic.type) {
 			// Status Handler
 			case 1:
