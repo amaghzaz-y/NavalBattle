@@ -21,6 +21,9 @@ public class Handler {
 	public Handler() {
 		Users = new HashMap<>();
 		Sessions = new HashMap<>();
+		ReadySessions = new HashSet<>();
+		TurnPlayers = new HashSet<>();
+		Missiles = new HashMap<>();
 		json = new Json();
 		json.setIgnoreUnknownFields(true);
 	}
@@ -138,12 +141,16 @@ public class Handler {
 
 	// receives request / sends status codes
 	private void SessionHandler(Session request, PrintWriter writer) {
-		if (!Sessions.containsKey(request.session))
+		if (!Sessions.containsKey(request.session)) {
 			Sessions.put(request.session, request);
+			System.out.println("session: " + request.session + " set up");
+		}
 		var current = Sessions.get(request.session);
 		var username = request.player.username;
 		// registered as player or opponent
 		if (username.matches(current.player.username) || username.matches(current.opponent.username)) {
+			Users.put(request.player.username, writer);
+			System.out.println("player: " + request.player.username + " set up");
 			sendStatus(writer, new Status(1));
 			return;
 		}
@@ -151,12 +158,15 @@ public class Handler {
 		if (!username.matches(current.player.username) && !username.matches(current.opponent.username)) {
 			// ignores if player is a third player
 			if (Users.containsKey(current.opponent.username)) {
+				System.out.println("player: " + request.player.username + " cannot join session");
 				sendStatus(writer, new Status(2));
 				return;
 			}
 			current.opponent = request.player;
-			Sessions.put(request.session, current);
-			ReadySessions.add(request.session);
+			Sessions.put(current.session, current);
+			ReadySessions.add(current.session);
+			Users.put(request.player.username, writer);
+			System.out.println("player: " + request.player.username + " set up");
 			sendStatus(writer, new Status(1));
 			return;
 		}

@@ -19,6 +19,7 @@ public class SocketClient {
 
 	public SocketClient() throws Exception {
 		json = new Json();
+		json.setIgnoreUnknownFields(true);
 		try {
 			Socket socket = new Socket("localhost", PORT);
 			client = new ClientHandler(socket);
