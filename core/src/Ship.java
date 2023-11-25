@@ -41,10 +41,10 @@ public class Ship extends ShipBase {
 		this.cells = cells;
 	}
 
-	public static Ship fromJson(payloads.Ship obj, boolean isOpponent) {
+	public static Ship NewfromPayload(payloads.Ship obj) {
 		var dir = getDirectionFromInt(obj.direction);
 		var type = getTypeFromInt(obj.type);
-		int offset = isOpponent == true ? -320 : 0;
+		int offset = -320;
 		var pos = new Vector2(obj.x * 40 + offset, obj.y * 40);
 		var ship = new Ship(pos, dir, type);
 		return ship;

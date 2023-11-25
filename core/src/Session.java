@@ -23,16 +23,6 @@ public class Session {
 		this.opponent.nextTurn();
 	}
 
-	public void updateScore() {
-		opponent.setScore(player.HitsUpdate());
-		player.setScore(opponent.HitsUpdate());
-	}
-
-	public void fromJson(payloads.Session ctx) {
-		opponent.setPlayerName(ctx.opponent.username);
-		player.setPlayerName(ctx.player.username);
-	}
-
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {
 		return bounds.contains(mouse);
 	}
@@ -46,7 +36,17 @@ public class Session {
 	}
 
 	public void updateOpponent(payloads.Session session) {
-		opponent.setPlayerName(session.opponent.username);
+		var op = session.opponent;
+		opponent.setPlayerName(op.username);
+		for (payloads.Ship s : op.ships) {
+			Ship ship = Ship.NewfromPayload(s);
+			opponent.addShip(ship);
+		}
+	}
+
+	public void updateScore() {
+		opponent.setScore(player.HitsUpdate());
+		player.setScore(opponent.HitsUpdate());
 	}
 
 	public void setSessionID(String id) {
