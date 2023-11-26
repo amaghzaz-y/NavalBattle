@@ -12,9 +12,7 @@ public class GameThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			var game = new DesktopLauncher();
-			game.main(args);
-			// handleInput();
+			DesktopLauncher.main(args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

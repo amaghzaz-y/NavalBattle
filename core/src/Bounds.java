@@ -34,6 +34,5 @@ public class Bounds {
 		renderer.set(ShapeType.Filled);
 		renderer.setColor(Color.BLACK);
 		renderer.rectLine(320, 0, 320, height, 5);
-		renderer.rectLine(640, 0, 640, height, 5);
 	}
 }

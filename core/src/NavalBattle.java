@@ -1,3 +1,4 @@
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -22,8 +23,8 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Bounds bounds;
 	Gui gui;
 	ShapeRenderer shapeRenderer;
-	Session session;
-	SocketClient.ClientHandler client;
+	static Session session;
+	static SocketClient.ClientHandler client;
 	Json json = new Json();
 
 	public NavalBattle(String username, String session, String server, String port) {
@@ -47,7 +48,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui = new Gui();
 		gui.setPlayer(session.getPlayer());
 		gui.setOpponent(session.getOpponent());
-		gui.addShapeRenderer(shapeRenderer);
 		try {
 			var sc = new SocketClient();
 			sc.setUsername(session.getPlayer().getPlayerName());
@@ -68,9 +68,32 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			System.out.println("session received :" + s.session);
 			System.out.println("opponent :" + s.opponent.username);
 			session.updateOpponent(s);
-			session.setTurn(client.requestTurn());
+			new TurnThread().start();
 		} catch (Exception e) {
 			System.out.println(e);
+		}
+	}
+
+	public static class TurnThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				while (true) {
+					if (!client.requestTurn()) {
+						session.setTurn(false);
+					} else {
+						session.setTurn(true);
+						if (client.requestMissile()) {
+							var missile = client.readMissile();
+							session.receiveMissile(new Vector2(missile.X * 40 + 330, missile.Y * 40 + 10), 0);
+						}
+					}
+					// to limit ddosing our little server :)
+					Thread.sleep(1000);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -81,14 +104,13 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		ScreenUtils.clear(Color.SLATE);
 		sea.draw(batch);
 		session.draw(batch);
-		gui.drawFont(batch);
+		gui.draw(batch);
 		batch.end();
 		// for ShapeRenderer
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setAutoShapeType(true);
 		bounds.render();
 		bounds.renderTurn(session.getTurn());
-		gui.render();
 		session.render();
 		shapeRenderer.end();
 	}
@@ -101,12 +123,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		try {
-			if (client.requestTurn()) {
-				if (client.requestMissile()) {
-					var missile = client.readMissile();
-					session.receiveMissile(new Vector2(missile.X * 40 + 330, missile.Y * 40 + 10), button);
-				}
-				session.setTurn(true);
+			if (session.getTurn()) {
 				var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 				if (!session.handleMissileClick(mouse, button))
 					return true;
@@ -120,7 +137,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 				missile.type = 3;
 				missile.session = session.getSessionID();
 				client.sendMissile(missile);
-			} else {
 				session.setTurn(false);
 			}
 		} catch (Exception e) {
