@@ -36,7 +36,7 @@ public class Hitzone {
 	}
 
 	public void render() {
-		renderer.setColor(Color.BLACK);
+		renderer.setColor(Color.BLUE);
 		renderer.set(ShapeType.Filled);
 		for (Rectangle cell : cells) {
 			renderer.rect(cell.x, cell.y, cell.width, cell.height);

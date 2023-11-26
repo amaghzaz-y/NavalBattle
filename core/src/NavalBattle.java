@@ -87,6 +87,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 							var missile = client.readMissile();
 							session.receiveMissile(new Vector2(missile.X * 40 + 330, missile.Y * 40 + 10), 0);
 						}
+						session.updateScore();
 					}
 					// to limit ddosing our little server :)
 					Thread.sleep(1000);
@@ -100,19 +101,27 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public void render() {
 		// for Sprite Batch : Textures
-		batch.begin();
 		ScreenUtils.clear(Color.SLATE);
-		sea.draw(batch);
-		session.draw(batch);
-		gui.draw(batch);
-		batch.end();
-		// for ShapeRenderer
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setAutoShapeType(true);
-		bounds.render();
-		bounds.renderTurn(session.getTurn());
-		session.render();
-		shapeRenderer.end();
+		if (session.getOpponent().getScore() < 16 && session.getPlayer().getScore() < 16) {
+			batch.begin();
+			sea.draw(batch);
+			session.draw(batch);
+			gui.draw(batch);
+			batch.end();
+			// for ShapeRenderer
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.setAutoShapeType(true);
+			session.render();
+			bounds.render();
+			bounds.renderTurn(session.getTurn());
+			shapeRenderer.end();
+		} else {
+			batch.begin();
+			sea.draw(batch);
+			gui.draw(batch);
+			session.draw(batch);
+			batch.end();
+		}
 	}
 
 	@Override
@@ -127,7 +136,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 				var mouse = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 				if (!session.handleMissileClick(mouse, button))
 					return true;
-				session.updateScore();
 				var missile = new Missile();
 				var npos = Utils.serializeClick(mouse);
 				missile.X = (int) npos.x;
