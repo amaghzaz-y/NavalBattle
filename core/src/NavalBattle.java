@@ -1,5 +1,3 @@
-import java.util.UUID;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -15,6 +13,10 @@ import common.Utils;
 import payloads.Missile;
 
 public class NavalBattle extends ApplicationAdapter implements InputProcessor {
+	String username;
+	String server;
+	String port;
+	String sessionID;
 	SpriteBatch batch;
 	Sea sea;
 	Bounds bounds;
@@ -24,12 +26,19 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	SocketClient.ClientHandler client;
 	Json json = new Json();
 
+	public NavalBattle(String username, String session, String server, String port) {
+		this.username = username;
+		this.server = server;
+		this.port = port;
+		this.sessionID = session;
+	}
+
 	@Override
 	public void create() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		session = new Session(UUID.randomUUID().toString().substring(0, 4), "Waiting... ");
-		session.setSessionID("12345");
+		session = new Session(username, "fetching... ");
+		session.setSessionID(sessionID);
 		bounds = new Bounds();
 		sea = new Sea();
 		shapeRenderer = new ShapeRenderer();

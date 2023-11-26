@@ -1,10 +1,12 @@
 
 public class GameThread extends Thread {
-	static String[] args = new String[2];
+	static String[] args = new String[4];
 
-	public GameThread(String username, String session) {
+	public GameThread(String username, String session, String server, String port) {
 		args[0] = username;
 		args[1] = session;
+		args[2] = server;
+		args[3] = port;
 	}
 
 	@Override

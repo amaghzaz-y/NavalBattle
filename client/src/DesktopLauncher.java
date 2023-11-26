@@ -8,6 +8,6 @@ public class DesktopLauncher {
 		config.setWindowedMode(960, 520);
 		config.setTitle("Naval Battle 2D - By AMAGHZAZ and LEON");
 		config.setResizable(false);
-		new Lwjgl3Application(new NavalBattle(), config);
+		new Lwjgl3Application(new NavalBattle(args[0], args[1], args[2], args[3]), config);
 	}
 }

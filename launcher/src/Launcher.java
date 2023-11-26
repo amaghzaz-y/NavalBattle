@@ -75,7 +75,7 @@ public class Launcher extends JFrame {
 			this.username = usernameInput.getText();
 			this.serverAddr = serverInput.getText();
 			this.serverPort = portInput.getText();
-			new GameThread(username, serverAddr).start();
+			new GameThread(username, "34", serverAddr, serverPort).start();
 		});
 		view.add(usernameInput);
 		view.add(serverInput);
