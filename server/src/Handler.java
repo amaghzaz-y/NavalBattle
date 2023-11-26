@@ -1,7 +1,6 @@
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 import com.badlogic.gdx.utils.Json;
 
@@ -189,6 +188,9 @@ public class Handler {
 					sendMessages(writer, messages);
 				}
 				return;
+			case 9:
+
+				return;
 		}
 
 	}
@@ -246,8 +248,18 @@ public class Handler {
 		writer.flush();
 	}
 
-	private void sendMessages(PrintWriter writer, Set<Message> messages) {
-		var paylaod = json.toJson(messages);
+	private void sendMessages(PrintWriter writer, HashSet<Message> messages) {
+		var pm = new payloads.Messages();
+		pm.messages = messages;
+		var paylaod = json.toJson(pm);
+		writer.println(paylaod);
+		writer.flush();
+	}
+
+	private void sendAllSessions(PrintWriter writer, HashSet<Session> sessions) {
+		var s = new payloads.Sessions();
+		s.sessions = sessions;
+		var paylaod = json.toJson(s);
 		writer.println(paylaod);
 		writer.flush();
 	}
