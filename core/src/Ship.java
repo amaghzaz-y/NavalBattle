@@ -21,7 +21,7 @@ public class Ship extends ShipBase {
 	private Sprite sprite;
 	private ShapeRenderer renderer;
 	Set<Rectangle> cells;
-	boolean isDrawBounds = true;
+	boolean isDrawBounds = false;
 	boolean isSelected = false;
 
 	// Rectangle bounds;
@@ -136,7 +136,6 @@ public class Ship extends ShipBase {
 	}
 
 	public boolean handleMissile(Vector2 position) {
-		// cells.add(new Rectangle(position.x, position.y, 40, 40));
 		if (getBounds().contains(position)) {
 			position = Utils.normalizeVector2(position);
 			cells.add(new Rectangle(position.x, position.y, 40, 40));
@@ -287,9 +286,9 @@ public class Ship extends ShipBase {
 
 	public void render() {
 		if (!isDead()) {
+			renderer.set(ShapeType.Line);
+			renderer.setColor(Color.RED);
 			for (Rectangle cell : cells) {
-				renderer.set(ShapeType.Line);
-				renderer.setColor(Color.WHITE);
 				renderer.rect(cell.x, cell.y, cell.width, cell.height);
 			}
 		} else {

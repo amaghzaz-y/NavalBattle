@@ -12,6 +12,7 @@ public class Session {
 	private boolean turn;
 	private Rectangle playerBounds = new Rectangle(320, 0, 320, 440);
 	private Rectangle opponentBounds = new Rectangle(0, 0, 320, 440);
+	private Hitzone zones = new Hitzone();
 
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
@@ -78,16 +79,15 @@ public class Session {
 		System.out.println(mouse.toString());
 		if (inBounds(playerBounds, mouse)) {
 			player.onTouchDown(mouse, button);
-			System.out.println("missile in bounds");
 			return true;
 		}
-		System.out.println("NOT in bounds");
 		return false;
 	}
 
 	public boolean handleMissileClick(Vector2 mouse, int button) {
 		if (inBounds(opponentBounds, mouse) && getTurn()) {
 			opponent.onTouchDown(mouse, button);
+			zones.onTouchDown(mouse);
 			return true;
 		}
 		return false;
@@ -96,6 +96,7 @@ public class Session {
 	public void setRenderer(ShapeRenderer renderer) {
 		player.setRenderer(renderer);
 		opponent.setRenderer(renderer);
+		zones.setRenderer(renderer);
 	}
 
 	public void draw(Batch batch) {
@@ -106,5 +107,6 @@ public class Session {
 	public void render() {
 		player.render();
 		opponent.render();
+		zones.render();
 	}
 }
