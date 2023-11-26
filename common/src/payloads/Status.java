@@ -11,9 +11,8 @@ public class Status {
 	// 4 - Session - server
 	// 5 - Missile - server
 	// 6 - Turn - server
-	// 7 - Score - server
-	// 8 - ScoreBoard - server
-	// 9 - Chat - server
+	// 7 - ScoreBoard - server
+	// 8 - Chat - server
 	public int type; // request type
 	public String sender;
 	public String session;

@@ -1,10 +1,12 @@
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Generic;
+import payloads.Message;
 import payloads.Missile;
 import payloads.Session;
 import payloads.Status;
@@ -16,6 +18,7 @@ public class Handler {
 	public HashSet<String> ReadySessions; // sessionsID
 	public HashSet<String> TurnPlayers; // usernames
 	public HashMap<String, Missile> Missiles; // (sessionID, missile)
+	public HashMap<String, HashSet<Message>> Messages;
 	public int count = 0;
 
 	public Handler() {
@@ -24,6 +27,7 @@ public class Handler {
 		ReadySessions = new HashSet<>();
 		TurnPlayers = new HashSet<>();
 		Missiles = new HashMap<>();
+		Messages = new HashMap<>();
 		json = new Json();
 		json.setIgnoreUnknownFields(true);
 	}
@@ -51,11 +55,29 @@ public class Handler {
 			case 4:
 				// var score = json.fromJson(Score.class, payload);s
 				break;
+			// Message Handler
+			case 5:
+				var message = json.fromJson(Message.class, payload);
+				MessageHandler(message, writer);
+				break;
 			// Bad Request
 			default:
 				sendStatus(writer, new Status(2));
 				break;
 		}
+	}
+
+	private void MessageHandler(Message request, PrintWriter writer) {
+		// ignores if its not the right session
+		if (!Sessions.containsKey(request.session)) {
+			System.out.println("incorrect session");
+			sendStatus(writer, new Status(2));
+			return;
+		}
+		var messages = Messages.get(request.session);
+		messages.add(request);
+		Messages.put(request.session, messages);
+		sendStatus(writer, new Status(1));
 	}
 
 	// receives request - sends status codes
@@ -154,11 +176,18 @@ public class Handler {
 					sendStatus(writer, new Status(3));
 				}
 
-				// Score
+				// ScoreBoard
 			case 7:
 				return;
-			// ScoreBoard
+			// Chat
 			case 8:
+				if (!Messages.containsKey(request.session)) {
+					sendStatus(writer, new Status(2));
+				} else {
+					var messages = Messages.get(request.session);
+					sendStatus(writer, new Status(1));
+					sendMessages(writer, messages);
+				}
 				return;
 		}
 
@@ -191,6 +220,7 @@ public class Handler {
 			Sessions.put(current.session, current);
 			ReadySessions.add(current.session);
 			Users.put(request.player.username, writer);
+			Messages.put(request.session, new HashSet<>());
 			System.out.println("player: " + request.player.username + " set up");
 			sendStatus(writer, new Status(1));
 			return;
@@ -212,6 +242,12 @@ public class Handler {
 
 	private void sendStatus(PrintWriter writer, Status status) {
 		var paylaod = json.toJson(status);
+		writer.println(paylaod);
+		writer.flush();
+	}
+
+	private void sendMessages(PrintWriter writer, Set<Message> messages) {
+		var paylaod = json.toJson(messages);
 		writer.println(paylaod);
 		writer.flush();
 	}
