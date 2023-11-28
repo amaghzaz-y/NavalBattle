@@ -51,11 +51,12 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 		gui.setOpponent(session.getOpponent());
 		try {
 			var socket = new SocketClient();
+			socket.setServerAddr(server, port);
 			socket.setUsername(session.getPlayer().getPlayerName());
 			socket.setSession(session.getSessionID());
+			socket.start();
 			client = socket.getClient();
-			while (!socket.getClient().isReady())
-				;
+			client.waitTillReady();
 			if (client.sendSession(session.serialize())) {
 				System.out.println("session accepted");
 			} else {

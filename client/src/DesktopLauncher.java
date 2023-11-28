@@ -14,7 +14,7 @@ public class DesktopLauncher {
 			new Lwjgl3Application(new NavalBattle(args[0], args[1], args[2], args[3]), config);
 		} else {
 			new Lwjgl3Application(
-					new NavalBattle(UUID.randomUUID().toString().substring(0, 3), "1234", "3", "#2"), config);
+					new NavalBattle(UUID.randomUUID().toString().substring(0, 3), "1234", "127.0.0.1", "6700"), config);
 		}
 	}
 }

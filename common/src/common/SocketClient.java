@@ -13,8 +13,8 @@ import payloads.Session;
 import payloads.Status;
 
 public class SocketClient {
-	private static String port = "6700";
-	private static String address = "localhost";
+	private static String ADDR = "localhost";
+	private static String PORT = "6700";
 	public ClientHandler client;
 	private static Json json;
 	private static String username;
@@ -23,8 +23,16 @@ public class SocketClient {
 	public SocketClient() throws Exception {
 		json = new Json();
 		json.setIgnoreUnknownFields(true);
+	}
+
+	public void setServerAddr(String address, String port) {
+		ADDR = address;
+		PORT = port;
+	}
+
+	public void start() {
 		try {
-			Socket socket = new Socket(address, Integer.parseInt(port));
+			Socket socket = new Socket(ADDR, Integer.parseInt(PORT));
 			client = new ClientHandler(socket);
 			client.start();
 		} catch (Exception e) {
@@ -71,6 +79,11 @@ public class SocketClient {
 		// client readiness state
 		public boolean isReady() {
 			return ready;
+		}
+
+		public void waitTillReady() {
+			while (!isReady())
+				;
 		}
 
 		// handle socket messaging
