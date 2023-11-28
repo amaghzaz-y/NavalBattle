@@ -3,14 +3,19 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.net.Socket;
 
 import javax.swing.*;
+
+import common.SocketClient;
+import common.SocketClient.ClientHandler;
 
 public class Launcher extends JFrame {
 	private String username = new String("username");
 	private String serverAddr = new String("127.0.0.1");
 	private String serverPort = new String("6700");
 	private String session = new String("1234");
+	private ClientHandler client;
 
 	public Launcher() {
 		setSize(500, 600);
@@ -59,6 +64,7 @@ public class Launcher extends JFrame {
 		add(Scene);
 		setVisible(true);
 		setLayout(new FlowLayout(1, 10, 10));
+
 	}
 
 	public static void main(String[] args) {
@@ -80,6 +86,14 @@ public class Launcher extends JFrame {
 			this.serverPort = portInput.getText();
 			this.session = sessionInput.getText();
 			new SessionThread(username, session, serverAddr, serverPort).start();
+		});
+		checkButton.addActionListener((l) -> {
+			try {
+				SocketClient socket = new SocketClient();
+				client = socket.getClient();
+			} catch (Exception e) {
+				System.err.println(e);
+			}
 		});
 		view.add(usernameInput);
 		view.add(serverInput);

@@ -13,7 +13,8 @@ import payloads.Session;
 import payloads.Status;
 
 public class SocketClient {
-	private static final int PORT = 6700;
+	private static String port = "6700";
+	private static String address = "localhost";
 	public ClientHandler client;
 	private static Json json;
 	private static String username;
@@ -23,7 +24,7 @@ public class SocketClient {
 		json = new Json();
 		json.setIgnoreUnknownFields(true);
 		try {
-			Socket socket = new Socket("localhost", PORT);
+			Socket socket = new Socket(address, Integer.parseInt(port));
 			client = new ClientHandler(socket);
 			client.start();
 		} catch (Exception e) {
