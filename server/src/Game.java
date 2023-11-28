@@ -566,8 +566,8 @@ public class Game {
             }
         }
 
-        if (scoreJoueur1 == 16 * scoreMax) return true;
-        if (scoreJoueur2 == 16 * scoreMax) return true;
+        if (scoreJoueur1 >= 16 * scoreMax) return true;
+        if (scoreJoueur2 >= 16 * scoreMax) return true;
 
         return false;
     }
