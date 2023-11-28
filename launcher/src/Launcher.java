@@ -10,6 +10,7 @@ public class Launcher extends JFrame {
 	private String username = new String("username");
 	private String serverAddr = new String("127.0.0.1");
 	private String serverPort = new String("6700");
+	private String session = new String("1234");
 
 	public Launcher() {
 		setSize(500, 600);
@@ -67,19 +68,24 @@ public class Launcher extends JFrame {
 	public JPanel ConnectView() {
 		JPanel view = new JPanel(new GridLayout(4, 1));
 		view.setPreferredSize(new Dimension(400, 200));
-		JButton connectButton = new JButton("connect");
+		JButton connectButton = new JButton("launch session");
+		JButton checkButton = new JButton("check connection");
 		JTextField usernameInput = new JTextField(this.username);
 		JTextField serverInput = new JTextField(this.serverAddr);
 		JTextField portInput = new JTextField(this.serverPort);
+		JTextField sessionInput = new JTextField(this.session);
 		connectButton.addActionListener((l) -> {
 			this.username = usernameInput.getText();
 			this.serverAddr = serverInput.getText();
 			this.serverPort = portInput.getText();
-			new GameThread(username, "34", serverAddr, serverPort).start();
+			this.session = sessionInput.getText();
+			new SessionThread(username, session, serverAddr, serverPort).start();
 		});
 		view.add(usernameInput);
 		view.add(serverInput);
 		view.add(portInput);
+		view.add(sessionInput);
+		view.add(checkButton);
 		view.add(connectButton);
 		view.setBackground(Color.black);
 		return view;

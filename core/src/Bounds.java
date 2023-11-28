@@ -26,7 +26,7 @@ public class Bounds {
 		var height = 520;
 		renderer.setColor(Color.BLACK);
 		renderer.set(ShapeType.Line);
-		for (int i = 0; i < 640; i += cellSize) {
+		for (int i = 0; i < 320; i += cellSize) {
 			for (int e = 0; e < height - 80; e += cellSize) {
 				renderer.rect(i, e, cellSize, cellSize);
 			}
