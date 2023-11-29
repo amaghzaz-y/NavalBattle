@@ -8,9 +8,12 @@ import java.net.Socket;
 
 import com.badlogic.gdx.utils.Json;
 
+import payloads.Message;
+import payloads.Messages;
 import payloads.Missile;
 import payloads.Session;
 import payloads.Status;
+import payloads.Users;
 
 public class SocketClient {
 	private static String ADDR = "localhost";
@@ -109,6 +112,32 @@ public class SocketClient {
 			return new String();
 		}
 
+		public Messages requestMessages() throws IOException {
+			Status status = new Status();
+			status.type = 1;
+			status.code = 8;
+			status.sender = username;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			var messages = json.fromJson(payloads.Messages.class, response);
+			return messages;
+		}
+
+		public boolean registerLauncher() throws IOException {
+			Status status = new Status();
+			status.sender = username;
+			status.code = 10;
+			status.type = 1;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			status = json.fromJson(payloads.Status.class, response);
+			if (status.code == 1)
+				return true;
+			return false;
+		}
+
 		public boolean requestMissile() throws IOException {
 			Status status = new Status();
 			status.sender = username;
@@ -149,6 +178,28 @@ public class SocketClient {
 			send(request);
 			String response = read();
 			status = json.fromJson(payloads.Status.class, response);
+			if (status.code == 1)
+				return true;
+			return false;
+		}
+
+		public Users requestUsers() throws IOException {
+			Status status = new Status();
+			status.type = 1;
+			status.code = 9;
+			status.sender = username;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			var users = json.fromJson(payloads.Users.class, response);
+			return users;
+		}
+
+		public boolean sendMessage(Message message) throws IOException {
+			String request = json.toJson(message);
+			send(request);
+			String response = read();
+			Status status = json.fromJson(payloads.Status.class, response);
 			if (status.code == 1)
 				return true;
 			return false;

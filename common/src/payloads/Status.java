@@ -13,9 +13,11 @@ public class Status {
 	// 6 - Turn - server
 	// 7 - ScoreBoard - server
 	// 8 - Chat - server
-	// 9 - Active Sessions - server
+	// 9 - Users - server
+	// 10 - Launcher Sessions - server
 	public int type; // request type
 	public String sender;
+
 	public String session;
 	public int code = 1;
 

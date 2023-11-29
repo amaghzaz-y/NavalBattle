@@ -4,10 +4,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.*;
+
+import com.badlogic.gdx.utils.Json;
 
 import common.SocketClient;
 import common.SocketClient.ClientHandler;
@@ -21,6 +24,7 @@ public class Launcher extends JFrame {
 	private ClientHandler client;
 	private ArrayList<Message> messages = new ArrayList<>();
 	private Vector<String> players = new Vector<>();
+	private boolean connected = false;
 
 	public Launcher() {
 		setSize(500, 600);
@@ -45,13 +49,6 @@ public class Launcher extends JFrame {
 		topbar.add(scoreboard);
 		topbar.add(sessions);
 
-		sessions.addActionListener((l) -> {
-			Scene.removeAll();
-			Scene.add(SessionView());
-			Scene.revalidate();
-			Scene.repaint();
-		});
-
 		connect.addActionListener((l) -> {
 			Scene.removeAll();
 			Scene.add(ConnectView());
@@ -59,13 +56,37 @@ public class Launcher extends JFrame {
 			Scene.repaint();
 		});
 
+		sessions.addActionListener((l) -> {
+			Scene.removeAll();
+			Scene.add(SessionView());
+			Scene.revalidate();
+			Scene.repaint();
+		});
+
 		scoreboard.addActionListener((l) -> {
+			if (!connected)
+				return;
 			Scene.removeAll();
 			Scene.add(ScoreBoardView());
 			Scene.revalidate();
 			Scene.repaint();
 		});
+
 		chat.addActionListener((l) -> {
+			if (!connected)
+				return;
+			if (!connected)
+				return;
+			try {
+				var users = client.requestUsers();
+				var msgs = client.requestMessages();
+				players.clear();
+				for (var user : users.list) {
+					players.add(user);
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 			Scene.removeAll();
 			Scene.add(ChatView());
 			Scene.revalidate();
@@ -117,7 +138,9 @@ public class Launcher extends JFrame {
 				socket.start();
 				client = socket.getClient();
 				client.waitTillReady();
+				client.registerLauncher();
 				connectButton.setEnabled(true);
+				connected = true;
 				view.add(new Label("connected to server !"));
 				view.revalidate();
 				view.repaint();
@@ -184,9 +207,14 @@ public class Launcher extends JFrame {
 		sendButton.addActionListener((l) -> {
 			var m = new Message();
 			m.sender = username;
-			m.session = session;
+			m.receiver = playersList.getSelectedValue();
 			m.type = 5;
 			m.message = messageInput.getText();
+			try {
+				client.sendMessage(m);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			messages.add(m);
 			System.out.println(playersList.getSelectedValue());
 			parent.revalidate();
