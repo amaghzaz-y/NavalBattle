@@ -3,12 +3,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.net.Socket;
+import java.awt.Label;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 import common.SocketClient;
 import common.SocketClient.ClientHandler;
+import payloads.Message;
 
 public class Launcher extends JFrame {
 	private String username = new String("username");
@@ -16,6 +18,7 @@ public class Launcher extends JFrame {
 	private String serverPort = new String("6700");
 	private String session = new String("1234");
 	private ClientHandler client;
+	private ArrayList<Message> messages = new ArrayList<>();
 
 	public Launcher() {
 		setSize(500, 600);
@@ -72,14 +75,18 @@ public class Launcher extends JFrame {
 	}
 
 	public JPanel ConnectView() {
-		JPanel view = new JPanel(new GridLayout(4, 1));
+		JPanel view = new JPanel(new GridLayout(3, 2));
 		view.setPreferredSize(new Dimension(400, 200));
+
 		JButton connectButton = new JButton("launch session");
 		JButton checkButton = new JButton("check connection");
 		JTextField usernameInput = new JTextField(this.username);
 		JTextField serverInput = new JTextField(this.serverAddr);
 		JTextField portInput = new JTextField(this.serverPort);
 		JTextField sessionInput = new JTextField(this.session);
+
+		connectButton.setEnabled(false);
+
 		connectButton.addActionListener((l) -> {
 			this.username = usernameInput.getText();
 			this.serverAddr = serverInput.getText();
@@ -87,10 +94,24 @@ public class Launcher extends JFrame {
 			this.session = sessionInput.getText();
 			new SessionThread(username, session, serverAddr, serverPort).start();
 		});
+
 		checkButton.addActionListener((l) -> {
 			try {
+				this.username = usernameInput.getText();
+				this.serverAddr = serverInput.getText();
+				this.serverPort = portInput.getText();
+				this.session = sessionInput.getText();
 				SocketClient socket = new SocketClient();
+				socket.setServerAddr(serverAddr, serverPort);
+				socket.setUsername(username);
+				socket.start();
 				client = socket.getClient();
+				client.waitTillReady();
+				connectButton.setEnabled(true);
+				view.add(new Label("connected to server !"));
+				view.revalidate();
+				view.repaint();
+				checkButton.setEnabled(false);
 			} catch (Exception e) {
 				System.err.println(e);
 			}
@@ -101,7 +122,6 @@ public class Launcher extends JFrame {
 		view.add(sessionInput);
 		view.add(checkButton);
 		view.add(connectButton);
-		view.setBackground(Color.black);
 		return view;
 	}
 
@@ -135,21 +155,47 @@ public class Launcher extends JFrame {
 		return view;
 	}
 
+	public JPanel ChatInputComponent(JPanel parent) {
+		JPanel view = new JPanel(new FlowLayout());
+		JTextField messageInput = new JTextField("Message here...");
+		JButton sendButton = new JButton("Send");
+		// Style
+		view.setPreferredSize(new Dimension(400, 50));
+		messageInput.setPreferredSize(new Dimension(285, 40));
+		sendButton.setPreferredSize(new Dimension(100, 40));
+		messageInput.setToolTipText("Write your message here!");
+
+		// Behavior
+		sendButton.addActionListener((l) -> {
+			var m = new Message();
+			m.sender = username;
+			m.session = session;
+			m.type = 5;
+			m.message = messageInput.getText();
+			messages.add(m);
+			parent.add(ChatComponent(username, m.message));
+			parent.revalidate();
+			parent.repaint();
+		});
+		view.add(messageInput);
+		view.add(sendButton);
+		return view;
+	}
+
 	public JPanel ChatComponent(String user, String message) {
-		JPanel view = new JPanel(new GridLayout(1, 2));
+		JPanel view = new JPanel(new GridLayout(1, 1));
 		view.setPreferredSize(new Dimension(400, 40));
-		JLabel userLabel = new JLabel(user);
-		JLabel messageLabel = new JLabel(message);
+		JLabel userLabel = new JLabel(String.format("[%s]: %s", user, message));
 		view.add(userLabel);
-		view.add(messageLabel);
 		return view;
 	}
 
 	public JPanel ChatView() {
 		JPanel view = new JPanel(new GridLayout(10, 0));
-		view.add(ChatComponent("User", "message"));
-		view.add(ChatComponent("User", "message"));
-		view.add(ChatComponent("User", "message"));
+		view.add(ChatInputComponent(view));
+		for (Message msg : messages) {
+			view.add(ChatComponent(msg.sender, msg.message));
+		}
 		return view;
 	}
 
