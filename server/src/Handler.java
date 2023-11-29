@@ -179,14 +179,15 @@ public class Handler {
 				// memory saving :)
 				sendMessages(writer, messages);
 				return;
+			// Users
 			case 9:
-				// Get all users
 				Users users = new Users();
 				for (var user : Users.keySet()) {
 					users.list.add(user);
 				}
 				sendAllUsers(writer, users);
 				return;
+			// Register Session
 			case 10:
 				if (Users.containsKey(request.sender)) {
 					sendStatus(writer, new Status(2));
@@ -194,6 +195,16 @@ public class Handler {
 					Users.put(request.sender, writer);
 					sendStatus(writer, new Status(1));
 				}
+				return;
+			// Get All Sessions
+			case 11:
+				HashSet<Session> lsessions = new HashSet<>();
+				for (var s : Sessions.values()) {
+					if (ReadySessions.contains(s.session))
+						continue;
+					lsessions.add(s);
+				}
+				sendAllSessions(writer, lsessions);
 				return;
 		}
 

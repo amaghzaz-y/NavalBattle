@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.*;
+
 import common.SocketClient;
 import common.SocketClient.ClientHandler;
 import payloads.Message;
+import payloads.Session;
 
 public class Launcher extends JFrame {
 	private String username = new String("username");
@@ -20,20 +22,21 @@ public class Launcher extends JFrame {
 	private String session = new String("1234");
 	private ClientHandler client;
 	private ArrayList<Message> messages = new ArrayList<>();
+	private ArrayList<Session> sessions = new ArrayList<>();
 	private Vector<String> players = new Vector<>();
 	private boolean connected = false;
+	private JPanel Scene = new JPanel();
 
 	public Launcher() {
 		setSize(500, 600);
 		setTitle("NavalBattle 2.0 Launcher");
 		setResizable(false);
-		JPanel Scene = new JPanel();
 		JPanel topbar = new JPanel();
 		JLabel logo = new JLabel("NavalBattle 2.0");
 		JButton connect = new JButton("CONNECT");
 		JButton chat = new JButton("CHAT");
 		JButton scoreboard = new JButton("SCOREBOARD");
-		JButton sessions = new JButton("SESSIONS");
+		JButton sessionsBtn = new JButton("SESSIONS");
 		JButton activePlayers = new JButton("PLAYERS");
 
 		add(topbar);
@@ -44,7 +47,7 @@ public class Launcher extends JFrame {
 		topbar.add(chat);
 		topbar.add(activePlayers);
 		topbar.add(scoreboard);
-		topbar.add(sessions);
+		topbar.add(sessionsBtn);
 
 		connect.addActionListener((l) -> {
 			Scene.removeAll();
@@ -53,7 +56,10 @@ public class Launcher extends JFrame {
 			Scene.repaint();
 		});
 
-		sessions.addActionListener((l) -> {
+		sessionsBtn.addActionListener((l) -> {
+			if (!connected)
+				return;
+			handleSessionBtn();
 			Scene.removeAll();
 			Scene.add(SessionView());
 			Scene.revalidate();
@@ -87,6 +93,18 @@ public class Launcher extends JFrame {
 		setLayout(new FlowLayout(1, 10, 10));
 	}
 
+	private void handleSessionBtn() {
+		try {
+			var ss = client.requestSessions();
+			sessions.clear();
+			sessions.addAll(ss);
+			Scene.revalidate();
+			Scene.repaint();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void updateChatView() {
 		try {
 			var users = client.requestUsers();
@@ -98,13 +116,11 @@ public class Launcher extends JFrame {
 					continue;
 				players.add(user);
 			}
-			this.revalidate();
-			this.repaint();
-			System.out.println("update");
+			Scene.revalidate();
+			Scene.repaint();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
 	}
 
 	public static void main(String[] args) {
@@ -165,18 +181,23 @@ public class Launcher extends JFrame {
 		return view;
 	}
 
-	public JPanel SessionComponent() {
+	public JPanel SessionComponent(payloads.Session session) {
 		JPanel view = new JPanel(new GridLayout(1, 5));
 		view.setPreferredSize(new Dimension(400, 40));
 		JLabel oppoentLabel = new JLabel("Opponent:");
 		JLabel sessionLabel = new JLabel("Session:");
-		JLabel opponent = new JLabel("opponent");
-		JLabel session = new JLabel("4234o86s");
+		JLabel opponent = new JLabel(session.player.username);
+		JLabel sessionID = new JLabel(session.session);
 		JButton join = new JButton("Join");
+
+		join.addActionListener((l) -> {
+			new SessionThread(username, this.session, serverAddr, serverPort).start();
+		});
+
 		view.add(oppoentLabel);
 		view.add(opponent);
 		view.add(sessionLabel);
-		view.add(session);
+		view.add(sessionID);
 		view.add(join);
 		return view;
 	}
@@ -260,9 +281,9 @@ public class Launcher extends JFrame {
 
 	public JPanel SessionView() {
 		JPanel view = new JPanel(new GridLayout(10, 0));
-		view.add(SessionComponent());
-		view.add(SessionComponent());
-		view.add(SessionComponent());
+		for (Session s : sessions) {
+			view.add(SessionComponent(s));
+		}
 		return view;
 	}
 

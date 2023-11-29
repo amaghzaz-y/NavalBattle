@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.badlogic.gdx.utils.Json;
 
 import payloads.Message;
-import payloads.Messages;
 import payloads.Missile;
 import payloads.Session;
 import payloads.Status;
@@ -188,6 +188,18 @@ public class SocketClient {
 			if (status.code == 1)
 				return true;
 			return false;
+		}
+
+		public HashSet<Session> requestSessions() throws IOException {
+			Status status = new Status();
+			status.type = 1;
+			status.code = 11;
+			status.sender = username;
+			String request = json.toJson(status);
+			send(request);
+			String response = read();
+			var sessions = json.fromJson(payloads.Sessions.class, response);
+			return sessions.sessions;
 		}
 
 		public Users requestUsers() throws IOException {
