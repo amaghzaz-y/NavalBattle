@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -19,37 +20,45 @@ public class Launcher extends JFrame {
 	private String session = new String("1234");
 	private ClientHandler client;
 	private ArrayList<Message> messages = new ArrayList<>();
+	private Vector<String> players = new Vector<>();
 
 	public Launcher() {
 		setSize(500, 600);
 		setTitle("NavalBattle 2.0 Launcher");
 		setResizable(false);
 		JPanel Scene = new JPanel();
-		Scene.setLayout(new BoxLayout(Scene, 1));
 		JPanel topbar = new JPanel();
-		topbar.setLayout(new FlowLayout());
 		JLabel logo = new JLabel("NavalBattle 2.0");
 		JButton connect = new JButton("CONNECT");
 		JButton chat = new JButton("CHAT");
 		JButton scoreboard = new JButton("SCOREBOARD");
 		JButton sessions = new JButton("SESSIONS");
+		JButton activePlayers = new JButton("PLAYERS");
+
 		add(topbar);
+		topbar.setLayout(new FlowLayout());
+		Scene.setLayout(new BoxLayout(Scene, 1));
+
 		topbar.add(connect);
 		topbar.add(chat);
+		topbar.add(activePlayers);
 		topbar.add(scoreboard);
 		topbar.add(sessions);
+
 		sessions.addActionListener((l) -> {
 			Scene.removeAll();
 			Scene.add(SessionView());
 			Scene.revalidate();
 			Scene.repaint();
 		});
+
 		connect.addActionListener((l) -> {
 			Scene.removeAll();
 			Scene.add(ConnectView());
 			Scene.revalidate();
 			Scene.repaint();
 		});
+
 		scoreboard.addActionListener((l) -> {
 			Scene.removeAll();
 			Scene.add(ScoreBoardView());
@@ -62,12 +71,13 @@ public class Launcher extends JFrame {
 			Scene.revalidate();
 			Scene.repaint();
 		});
+
 		logo.setFont(new Font("Roboto", 2, 34));
 		Scene.setBackground(Color.BLACK);
+
 		add(Scene);
 		setVisible(true);
 		setLayout(new FlowLayout(1, 10, 10));
-
 	}
 
 	public static void main(String[] args) {
@@ -116,6 +126,7 @@ public class Launcher extends JFrame {
 				System.err.println(e);
 			}
 		});
+
 		view.add(usernameInput);
 		view.add(serverInput);
 		view.add(portInput);
@@ -156,12 +167,16 @@ public class Launcher extends JFrame {
 	}
 
 	public JPanel ChatInputComponent(JPanel parent) {
-		JPanel view = new JPanel(new FlowLayout());
+		JPanel view = new JPanel(new GridLayout(2, 2));
+		JLabel label = new JLabel("Message: ");
 		JTextField messageInput = new JTextField("Message here...");
 		JButton sendButton = new JButton("Send");
+		JList<String> playersList = new JList<>(players);
+		JScrollPane scrollPane = new JScrollPane(playersList);
+
 		// Style
-		view.setPreferredSize(new Dimension(400, 50));
-		messageInput.setPreferredSize(new Dimension(285, 40));
+		view.setPreferredSize(new Dimension(400, 100));
+		messageInput.setPreferredSize(new Dimension(400, 40));
 		sendButton.setPreferredSize(new Dimension(100, 40));
 		messageInput.setToolTipText("Write your message here!");
 
@@ -173,11 +188,13 @@ public class Launcher extends JFrame {
 			m.type = 5;
 			m.message = messageInput.getText();
 			messages.add(m);
-			parent.add(ChatComponent(username, m.message));
+			System.out.println(playersList.getSelectedValue());
 			parent.revalidate();
 			parent.repaint();
 		});
+		view.add(label);
 		view.add(messageInput);
+		view.add(scrollPane);
 		view.add(sendButton);
 		return view;
 	}
@@ -185,17 +202,24 @@ public class Launcher extends JFrame {
 	public JPanel ChatComponent(String user, String message) {
 		JPanel view = new JPanel(new GridLayout(1, 1));
 		view.setPreferredSize(new Dimension(400, 40));
-		JLabel userLabel = new JLabel(String.format("[%s]: %s", user, message));
+		JLabel userLabel = new JLabel(String.format("[%s] %s", user, message));
+		userLabel.setFont(new Font("Roboto", 1, 14));
 		view.add(userLabel);
 		return view;
 	}
 
 	public JPanel ChatView() {
-		JPanel view = new JPanel(new GridLayout(10, 0));
-		view.add(ChatInputComponent(view));
+		JPanel view = new JPanel();
+		view.setLayout(new BoxLayout(view, 1));
+		Vector<String> x = new Vector<>();
 		for (Message msg : messages) {
-			view.add(ChatComponent(msg.sender, msg.message));
+			x.add(String.format("[%s] %s", msg.sender, msg.message));
 		}
+		JList<String> playersList = new JList<>(x);
+		JScrollPane scrollPane = new JScrollPane(playersList);
+		scrollPane.setPreferredSize(new Dimension(400, 400));
+		view.add(ChatInputComponent(view));
+		view.add(scrollPane);
 		return view;
 	}
 
