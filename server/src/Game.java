@@ -22,6 +22,10 @@ public class Game {
      *
      */
 
+    public Game () {
+
+    }
+
     // A changer suivant le nombre de lignes / colonnes qu'on utilise
     static int colonnes = 8;
     static int lignes = 11;
@@ -65,7 +69,7 @@ public class Game {
     }
 
     // Pour placer les bateaux dans le Board du Joueur 1
-    public static void CanPlaceBoatBoardOne (int colonneBoat, int ligneBoat, int direction, int type) {
+    public void CanPlaceBoatBoardOne (int colonneBoat, int ligneBoat, int direction, int type) {
         switch (type) {
             // 1 = Very Small (2 cases)
             case 1:
@@ -104,44 +108,8 @@ public class Game {
 
             // 2 = Small (4 cases)
             case 2:
-                // direction Verticale
-                if (direction == 0) {
-                    // On vérifie si le bateau peut être placé
-                    if (ligneBoat < 3 || ligneBoat >= lignes) return;
-                    else {
-                        // On regarde si autre chose est à l'endroit indiquer
-                        // Attention !! --> ligneBoat peut être le problème
-                        if (BoardPlayerOne [colonneBoat] [ligneBoat] != 0 ||
-                                BoardPlayerOne [colonneBoat] [ligneBoat + 1] != 0 ||
-                                BoardPlayerOne [colonneBoat] [ligneBoat + 2] != 0 ||
-                                BoardPlayerOne [colonneBoat] [ligneBoat + 3] != 0) return;
-                        else {
-                            PlaceBoatBoardOne (colonneBoat, ligneBoat, direction, type);
-                            return;
-                        }
-                    }
-                }
-                // direction Horizontale
-                else if (direction == 1) {
-                    // On vérifie si le bateau peut être placé
-                    if (colonneBoat < 0 || colonneBoat > colonnes - 4) return;
-                    else {
-                        // On regarde si autre chose est à l'endroit indiquer
-                        // Attention !! --> colonneBoat peut être le problème
-                        if (BoardPlayerOne [colonneBoat] [ligneBoat] != 0 ||
-                                BoardPlayerOne [colonneBoat + 1] [ligneBoat] != 0 ||
-                                BoardPlayerOne [colonneBoat + 2] [ligneBoat] != 0 ||
-                                BoardPlayerOne [colonneBoat + 3] [ligneBoat] != 0) return;
-                        else {
-                            PlaceBoatBoardOne (colonneBoat, ligneBoat, direction, type);
-                            return;
-                        }
-                    }
-                }
 
-                break;
-
-            // 3 = Medium (4 cases)
+                // 3 = Medium (4 cases)
             case 3:
                 // direction Verticale
                 if (direction == 0) {
@@ -232,7 +200,7 @@ public class Game {
     }
 
     // Pour placer les bateaux du joueur 1 pour le serveur
-    public static void PlaceBoatBoardOne (int x, int y, int direction, int type) {
+    public static void PlaceBoatBoardOne(int x, int y, int direction, int type) {
         int i;
 
         switch (type) {
@@ -284,7 +252,7 @@ public class Game {
     }
 
     // Pour placer les bateaux dans le Board du Joueur 1
-    public static boolean CanPlaceBoatBoardTwo (int colonneBoat, int ligneBoat, int direction, int type) {
+    public boolean CanPlaceBoatBoardTwo (int colonneBoat, int ligneBoat, int direction, int type) {
         switch (type) {
             // 1 = Very Small (2 cases)
             case 1:
@@ -323,42 +291,7 @@ public class Game {
 
             // 2 = Small (4 cases)
             case 2:
-                // direction Verticale
-                if (direction == 0) {
-                    // On vérifie si le bateau peut être placé
-                    if (ligneBoat < 3 || ligneBoat >= lignes) return false;
-                    else {
-                        // On regarde si autre chose est à l'endroit indiquer
-                        // Attention !! --> ligneBoat peut être le problème
-                        if (BoardPlayerTwo [colonneBoat] [ligneBoat] != 0 ||
-                                BoardPlayerTwo [colonneBoat] [ligneBoat + 1] != 0 ||
-                                BoardPlayerTwo [colonneBoat] [ligneBoat + 2] != 0 ||
-                                BoardPlayerTwo [colonneBoat] [ligneBoat + 3] != 0) return false;
-                        else {
-                            PlaceBoatBoardTwo (colonneBoat, ligneBoat, direction, type);
-                            return true;
-                        }
-                    }
-                }
-                // direction Horizontale
-                else if (direction == 1) {
-                    // On vérifie si le bateau peut être placé
-                    if (colonneBoat < 0 || colonneBoat > colonnes - 4) return false;
-                    else {
-                        // On regarde si autre chose est à l'endroit indiquer
-                        // Attention !! --> colonneBoat peut être le problème
-                        if (BoardPlayerTwo [colonneBoat] [ligneBoat] != 0 ||
-                                BoardPlayerTwo [colonneBoat + 1] [ligneBoat] != 0 ||
-                                BoardPlayerTwo [colonneBoat + 2] [ligneBoat] != 0 ||
-                                BoardPlayerTwo [colonneBoat + 3] [ligneBoat] != 0) return false;
-                        else {
-                            PlaceBoatBoardTwo (colonneBoat, ligneBoat, direction, type);
-                            return true;
-                        }
-                    }
-                }
 
-                break;
 
             // 3 = Medium (4 cases)
             case 3:
@@ -504,7 +437,7 @@ public class Game {
     }
 
     // Voir si le missile est possible
-    public static boolean IsMissileTouch (int player, int colonneMissile, int ligneMissile) {
+    public boolean IsMissileTouch (int player, int colonneMissile, int ligneMissile) {
         switch (player) {
             // Joueur 1
             case 1:
@@ -554,15 +487,15 @@ public class Game {
         }
     }
 
-    public static boolean EndGame () {
+    public boolean EndGame () {
         int i, j;
         int scoreJoueur1 = 0;
         int scoreJoueur2 = 0;
 
         for (i = 0; i < lignes; i++) {
             for (j = 0; j < colonnes; j++) {
-                scoreJoueur1 = BoardAttackPlayerOne[j][i];
-                scoreJoueur2 = BoardAttackPlayerTwo[j][i];
+                scoreJoueur1 = scoreJoueur1 + BoardAttackPlayerOne[j][i];
+                scoreJoueur2 = scoreJoueur2 + BoardAttackPlayerTwo[j][i];
             }
         }
 
@@ -574,7 +507,7 @@ public class Game {
 
 
     // Pour faire des tests et ainsi tester comment le programme réagit
-    public static void main(String[] args) {
+    /* public static void main(String[] args) {
 
         initializeBoards();
         // System.out.println("Board Attack P1");
@@ -590,4 +523,5 @@ public class Game {
         // printBoard(BoardPlayerTwo);
         System.out.println();
     }
+    */
 }
