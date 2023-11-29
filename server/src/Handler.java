@@ -34,7 +34,6 @@ public class Handler {
 
 	public void Handle(String payload, PrintWriter writer) {
 		var generic = json.fromJson(Generic.class, payload);
-		System.out.println(json.toJson(Messages));
 		System.out.println("REQ:" + count++ + " TYPE:" + generic.type + " SIZE:" + payload.length());
 		switch (generic.type) {
 			// Status Handler
@@ -174,6 +173,10 @@ public class Handler {
 			// Chat
 			case 8:
 				var messages = Messages.get(request.sender);
+				// clears the buffer
+				Messages.put(request.sender, new HashSet<>());
+				// sends all the messages received
+				// memory saving :)
 				sendMessages(writer, messages);
 				return;
 			case 9:

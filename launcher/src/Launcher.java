@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.*;
-
-import com.badlogic.gdx.utils.Json;
-
 import common.SocketClient;
 import common.SocketClient.ClientHandler;
 import payloads.Message;
@@ -75,18 +72,7 @@ public class Launcher extends JFrame {
 		chat.addActionListener((l) -> {
 			if (!connected)
 				return;
-			if (!connected)
-				return;
-			try {
-				var users = client.requestUsers();
-				var msgs = client.requestMessages();
-				players.clear();
-				for (var user : users.list) {
-					players.add(user);
-				}
-			} catch (Exception e) {
-				System.out.println(e);
-			}
+			updateChatView();
 			Scene.removeAll();
 			Scene.add(ChatView());
 			Scene.revalidate();
@@ -99,6 +85,26 @@ public class Launcher extends JFrame {
 		add(Scene);
 		setVisible(true);
 		setLayout(new FlowLayout(1, 10, 10));
+	}
+
+	private void updateChatView() {
+		try {
+			var users = client.requestUsers();
+			var msgs = client.requestMessages();
+			messages.addAll(msgs);
+			players.clear();
+			for (var user : users.list) {
+				if (user.matches(username))
+					continue;
+				players.add(user);
+			}
+			this.revalidate();
+			this.repaint();
+			System.out.println("update");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -202,29 +208,30 @@ public class Launcher extends JFrame {
 		messageInput.setPreferredSize(new Dimension(400, 40));
 		sendButton.setPreferredSize(new Dimension(100, 40));
 		messageInput.setToolTipText("Write your message here!");
-
 		// Behavior
 		sendButton.addActionListener((l) -> {
-			var m = new Message();
-			m.sender = username;
-			m.receiver = playersList.getSelectedValue();
-			m.type = 5;
-			m.message = messageInput.getText();
-			try {
-				client.sendMessage(m);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			messages.add(m);
-			System.out.println(playersList.getSelectedValue());
-			parent.revalidate();
-			parent.repaint();
+			handleSendButton(messageInput, playersList);
 		});
 		view.add(label);
 		view.add(messageInput);
 		view.add(scrollPane);
 		view.add(sendButton);
 		return view;
+	}
+
+	private void handleSendButton(JTextField messageInput, JList<String> playersList) {
+		var m = new Message();
+		m.sender = username;
+		m.receiver = playersList.getSelectedValue();
+		m.type = 5;
+		m.message = messageInput.getText();
+		try {
+			client.sendMessage(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		messages.add(m);
+		updateChatView();
 	}
 
 	public JPanel ChatComponent(String user, String message) {

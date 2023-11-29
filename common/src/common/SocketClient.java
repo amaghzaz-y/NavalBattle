@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Json;
 
@@ -112,7 +113,7 @@ public class SocketClient {
 			return new String();
 		}
 
-		public Messages requestMessages() throws IOException {
+		public ArrayList<Message> requestMessages() throws IOException {
 			Status status = new Status();
 			status.type = 1;
 			status.code = 8;
@@ -121,7 +122,13 @@ public class SocketClient {
 			send(request);
 			String response = read();
 			var messages = json.fromJson(payloads.Messages.class, response);
-			return messages;
+			ArrayList<Message> container = new ArrayList<>();
+			if (messages.messages == null)
+				return new ArrayList<>();
+			for (var msg : messages.messages) {
+				container.add(msg);
+			}
+			return container;
 		}
 
 		public boolean registerLauncher() throws IOException {
