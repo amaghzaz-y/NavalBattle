@@ -104,10 +104,6 @@ public class Handler {
 		// update missile
 		Missiles.put(request.session, request);
 		System.out.println("player: " + request.player + " missile accepted");
-		// sending corresponding requests
-		// var res = request;
-		// res.opponent = request.player;
-		// res.player = request.opponent;
 		sendStatus(writer, new Status(1));
 	}
 
