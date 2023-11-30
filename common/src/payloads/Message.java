@@ -6,8 +6,9 @@ public class Message {
 	public String receiver;
 	public String message;
 	public int code = 5;
+    public String session;
 
-	public Message() {
+    public Message() {
 
 	}
 }
