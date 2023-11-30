@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class Launcher extends JFrame {
 	private String username = new String("username");
 	private String serverAddr = new String("127.0.0.1");
 	private String serverPort = new String("6700");
-	private String session = new String("1234");
+	private String session = UUID.randomUUID().toString().substring(0, 8);
 	private ClientHandler client;
 	private ArrayList<Message> messages = new ArrayList<>();
 	private ArrayList<Session> sessions = new ArrayList<>();
@@ -37,7 +38,7 @@ public class Launcher extends JFrame {
 		JButton chat = new JButton("CHAT");
 		JButton scoreboard = new JButton("SCOREBOARD");
 		JButton sessionsBtn = new JButton("SESSIONS");
-		JButton activePlayers = new JButton("PLAYERS");
+		// JButton activePlayers = new JButton("PLAYERS");
 
 		add(topbar);
 		topbar.setLayout(new FlowLayout());
@@ -45,7 +46,7 @@ public class Launcher extends JFrame {
 
 		topbar.add(connect);
 		topbar.add(chat);
-		topbar.add(activePlayers);
+		// topbar.add(activePlayers);
 		topbar.add(scoreboard);
 		topbar.add(sessionsBtn);
 
@@ -187,7 +188,7 @@ public class Launcher extends JFrame {
 		JButton join = new JButton("Join");
 
 		join.addActionListener((l) -> {
-			new SessionThread(username, this.session, serverAddr, serverPort).start();
+			new SessionThread(username, session.session, serverAddr, serverPort).start();
 		});
 
 		view.add(oppoentLabel);
