@@ -9,6 +9,7 @@ import payloads.Message;
 import payloads.Missile;
 import payloads.Session;
 import payloads.Status;
+import payloads.Users;
 
 public class Handler {
 	public Json json;
@@ -17,7 +18,7 @@ public class Handler {
 	public HashSet<String> ReadySessions; // sessionsID
 	public HashSet<String> TurnPlayers; // usernames
 	public HashMap<String, Missile> Missiles; // (sessionID, missile)
-	public HashMap<String, HashSet<Message>> Messages;
+	public HashMap<String, HashSet<Message>> Messages; // (receiver, messages)
 	public int count = 0;
 
 	public Handler() {
@@ -67,22 +68,17 @@ public class Handler {
 	}
 
 	private void MessageHandler(Message request, PrintWriter writer) {
-		// ignores if it's not the right session
-		if (!Sessions.containsKey(request.session)) {
-			System.out.println("incorrect session");
-			sendStatus(writer, new Status(2));
-			return;
-		}
-		// if right session, send a message
-		var messages = Messages.get(request.session);
+		if (!Messages.containsKey(request.receiver))
+			Messages.put(request.receiver, new HashSet<>());
+		var messages = Messages.get(request.receiver);
 		messages.add(request);
-		Messages.put(request.session, messages);
+		Messages.put(request.receiver, messages);
 		sendStatus(writer, new Status(1));
 	}
 
 	// receives request - sends status codes
 	private void MissileHandler(Missile request, PrintWriter writer) {
-		// ignores if it's not the right session
+		// ignores if its not the right session
 		if (!Sessions.containsKey(request.session)) {
 			System.out.println("player: " + request.player + "incorrect session -> ignore missile");
 			sendStatus(writer, new Status(2));
@@ -171,22 +167,44 @@ public class Handler {
 					System.out.println("turn: no " + request.sender);
 					sendStatus(writer, new Status(3));
 				}
-
 				// ScoreBoard
 			case 7:
 				return;
 			// Chat
 			case 8:
-				if (!Messages.containsKey(request.session)) {
+				var messages = Messages.get(request.sender);
+				// clears the buffer
+				Messages.put(request.sender, new HashSet<>());
+				// sends all the messages received
+				// memory saving :)
+				sendMessages(writer, messages);
+				return;
+			// Users
+			case 9:
+				Users users = new Users();
+				for (var user : Users.keySet()) {
+					users.list.add(user);
+				}
+				sendAllUsers(writer, users);
+				return;
+			// Register Session
+			case 10:
+				if (Users.containsKey(request.sender)) {
 					sendStatus(writer, new Status(2));
 				} else {
-					var messages = Messages.get(request.session);
+					Users.put(request.sender, writer);
 					sendStatus(writer, new Status(1));
-					sendMessages(writer, messages);
 				}
 				return;
-			case 9:
-
+			// Get All Sessions
+			case 11:
+				HashSet<Session> lsessions = new HashSet<>();
+				for (var s : Sessions.values()) {
+					if (ReadySessions.contains(s.session))
+						continue;
+					lsessions.add(s);
+				}
+				sendAllSessions(writer, lsessions);
 				return;
 		}
 
@@ -248,7 +266,14 @@ public class Handler {
 	private void sendMessages(PrintWriter writer, HashSet<Message> messages) {
 		var pm = new payloads.Messages();
 		pm.messages = messages;
-		var paylaod = json.toJson(pm);
+		var payload = json.toJson(pm);
+		System.out.println(payload);
+		writer.println(payload);
+		writer.flush();
+	}
+
+	private void sendAllUsers(PrintWriter writer, Users users) {
+		var paylaod = json.toJson(users);
 		writer.println(paylaod);
 		writer.flush();
 	}
