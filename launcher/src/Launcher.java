@@ -131,11 +131,12 @@ public class Launcher extends JFrame {
 		JPanel view = new JPanel(new GridLayout(3, 2));
 		view.setPreferredSize(new Dimension(400, 200));
 
-		JButton connectButton = new JButton("launch game");
+		JButton connectButton = new JButton("launch session");
 		JButton checkButton = new JButton("check connection");
 		JTextField usernameInput = new JTextField(this.username);
 		JTextField serverInput = new JTextField(this.serverAddr);
 		JTextField portInput = new JTextField(this.serverPort);
+		JTextField sessionInput = new JTextField(this.session);
 
 		connectButton.setEnabled(false);
 
@@ -143,6 +144,7 @@ public class Launcher extends JFrame {
 			this.username = usernameInput.getText();
 			this.serverAddr = serverInput.getText();
 			this.serverPort = portInput.getText();
+			this.session = sessionInput.getText();
 			new SessionThread(username, session, serverAddr, serverPort).start();
 		});
 
@@ -151,6 +153,7 @@ public class Launcher extends JFrame {
 				this.username = usernameInput.getText();
 				this.serverAddr = serverInput.getText();
 				this.serverPort = portInput.getText();
+				this.session = sessionInput.getText();
 				SocketClient socket = new SocketClient();
 				socket.setServerAddr(serverAddr, serverPort);
 				socket.setUsername(username);
@@ -172,6 +175,7 @@ public class Launcher extends JFrame {
 		view.add(usernameInput);
 		view.add(serverInput);
 		view.add(portInput);
+		view.add(sessionInput);
 		view.add(checkButton);
 		view.add(connectButton);
 		return view;

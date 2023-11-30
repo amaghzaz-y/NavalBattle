@@ -1,6 +1,4 @@
 
-import java.io.IOException;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -26,17 +24,15 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 	Bounds bounds;
 	Gui gui;
 	ShapeRenderer shapeRenderer;
-	Session session;
-	SocketClient.ClientHandler client;
-	boolean turnRequest = true;
+	static Session session;
+	static SocketClient.ClientHandler client;
 	Json json = new Json();
-	boolean start = false;
 
-	public NavalBattle(String Username, String Session, String Server, String Port) {
-		username = Username;
-		server = Server;
-		port = Port;
-		sessionID = Session;
+	public NavalBattle(String username, String session, String server, String port) {
+		this.username = username;
+		this.server = server;
+		this.port = port;
+		this.sessionID = session;
 	}
 
 	@Override
@@ -60,28 +56,30 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			socket.setSession(session.getSessionID());
 			socket.start();
 			client = socket.getClient();
+			client.waitTillReady();
+			if (client.sendSession(session.serialize())) {
+				System.out.println("session accepted");
+			} else {
+				System.exit(0);
+			}
+			while (!client.requestSession()) {
+				System.out.println("waiting for session");
+				Thread.sleep(500);
+			}
+			payloads.Session s = client.readSession();
+			System.out.println("session received :" + s.session);
+			System.out.println("opponent :" + s.opponent.username);
+			session.updateOpponent(s);
+			new TurnThread().start();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
-		new TurnThread().start();
 	}
 
-	public class TurnThread extends Thread {
-
+	public static class TurnThread extends Thread {
 		@Override
 		public void run() {
 			try {
-				client.waitTillReady();
-				if (!client.sendSession(session.serialize()))
-					System.exit(0);
-				while (!client.requestSession()) {
-					Thread.sleep(500);
-				}
-				start = true;
-				while (turnRequest) {
-					Thread.sleep(100);
-					System.out.println("waiting...");
-				}
 				while (true) {
 					if (!client.requestTurn()) {
 						session.setTurn(false);
@@ -100,27 +98,12 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 				e.printStackTrace();
 			}
 		}
-
-	}
-
-	private void updateOpponent() {
-		try {
-			var s = client.readSession();
-			session.updateOpponent(s);
-			turnRequest = false;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
 	public void render() {
 		// for Sprite Batch : Textures
 		ScreenUtils.clear(Color.SLATE);
-		if (start) {
-			updateOpponent();
-			start = false;
-		}
 		if (session.getOpponent().getScore() < 16 && session.getPlayer().getScore() < 16) {
 			batch.begin();
 			sea.draw(batch);
