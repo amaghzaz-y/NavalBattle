@@ -76,7 +76,7 @@ public class SocketClient {
 				ready = true;
 				// handleInput();
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println("NOT Connected to Server !");
 			}
 		}
 

@@ -100,7 +100,6 @@ public class Session {
 	}
 
 	public boolean receiveMissile(Vector2 mouse, int button) {
-		System.out.println(mouse.toString());
 		if (inBounds(playerBounds, mouse)) {
 			player.onTouchDown(mouse, button);
 			return true;
