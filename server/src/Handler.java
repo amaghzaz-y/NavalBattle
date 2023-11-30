@@ -73,6 +73,7 @@ public class Handler {
 			sendStatus(writer, new Status(2));
 			return;
 		}
+		// if right session, send a message
 		var messages = Messages.get(request.session);
 		messages.add(request);
 		Messages.put(request.session, messages);
