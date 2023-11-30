@@ -101,7 +101,6 @@ public class SocketClient {
 				while (socket.isConnected() && !socket.isInputShutdown() && socket.isBound()) {
 					String msg = reader.readLine();
 					if (!msg.isEmpty()) {
-						System.out.println(msg);
 						return msg;
 					}
 				}

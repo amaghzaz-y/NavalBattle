@@ -97,7 +97,7 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 					Thread.sleep(1000);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println("error");
 			}
 		}
 
@@ -138,7 +138,6 @@ public class NavalBattle extends ApplicationAdapter implements InputProcessor {
 			batch.begin();
 			sea.draw(batch);
 			gui.draw(batch);
-			session.draw(batch);
 			batch.end();
 		}
 	}

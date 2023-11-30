@@ -1,9 +1,12 @@
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import common.*;
+import common.ShipBase.Direction;
 
 public class Session {
 	private String ID;
@@ -17,11 +20,19 @@ public class Session {
 	public Session(String player, String opponent) {
 		this.player = new Player(player);
 		this.opponent = new Player(opponent);
+
 		this.player
-				.addShip(new Ship(new Vector2(360, 50), ShipBase.Direction.Vertical, ShipBase.Type.VerySmall));
-		this.player.addShip(new Ship(new Vector2(580, 120), ShipBase.Direction.Vertical, ShipBase.Type.Small));
-		this.player.addShip(new Ship(new Vector2(420, 250), ShipBase.Direction.Horizontal, ShipBase.Type.Medium));
-		this.player.addShip(new Ship(new Vector2(550, 340), ShipBase.Direction.Vertical, ShipBase.Type.Big));
+				.addShip(new Ship(new Vector2(360 + random(), 40 + random()), getRandomDirection(),
+						ShipBase.Type.VerySmall));
+
+		this.player.addShip(
+				new Ship(new Vector2(580, 80 + random()), Direction.Vertical, ShipBase.Type.Small));
+
+		this.player.addShip(new Ship(new Vector2(420 + random() - 40, 200
+				+ random()), getRandomDirection(), ShipBase.Type.Medium));
+
+		this.player.addShip(
+				new Ship(new Vector2(550, 340 - random()), getRandomDirection(), ShipBase.Type.Big));
 	}
 
 	public boolean inBounds(Rectangle bounds, Vector2 mouse) {
@@ -34,6 +45,19 @@ public class Session {
 
 	public boolean getTurn() {
 		return turn;
+	}
+
+	public Direction getRandomDirection() {
+		Random rand = new Random();
+		int value = rand.nextInt(2);
+		var dir = value == 1 ? Direction.Horizontal : Direction.Vertical;
+		return dir;
+	}
+
+	public int random() {
+		Random rand = new Random();
+		int value = rand.nextInt(80);
+		return value;
 	}
 
 	public Player getPlayer() {

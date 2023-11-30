@@ -67,8 +67,12 @@ public class Player extends PlayerBase {
 	}
 
 	public void draw(Batch batch) {
-		for (Ship ship : ships) {
-			ship.draw(batch);
+		try {
+			for (Ship ship : ships) {
+				ship.draw(batch);
+			}
+		} catch (Exception e) {
+			System.out.println("empty");
 		}
 	}
 
